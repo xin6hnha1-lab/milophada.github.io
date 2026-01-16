@@ -6,25 +6,23 @@
   <title>Milo Pha Đá</title>
 
   <style>
-    /* ===== Theme variables ===== */
+    /* ===== THEME ===== */
     :root{
       --text:#e5e7eb;
       --muted:#b6c0d1;
       --card:rgba(255,255,255,.10);
-      --border:rgba(255,255,255,.12);
+      --border:rgba(255,255,255,.14);
       --accent:#38bdf8;
       --deep:#020617;
-      --overlay:rgba(2,6,23,.72);
-      --btn:rgba(255,255,255,.10);
+      --overlay:rgba(2,6,23,.62);
+      --btn:rgba(255,255,255,.14);
       --btnText:#e5e7eb;
     }
-
-    /* Light mode */
     [data-theme="light"]{
       --text:#0b1220;
       --muted:#475569;
-      --card:rgba(255,255,255,.78);
-      --border:rgba(2,6,23,.10);
+      --card:rgba(255,255,255,.82);
+      --border:rgba(2,6,23,.12);
       --accent:#0ea5e9;
       --deep:#ffffff;
       --overlay:rgba(255,255,255,.55);
@@ -37,136 +35,153 @@
       margin:0;
       min-height:100vh;
 
-      /* GIF nền */
+      /* ✅ NỀN NGOÀI (động) */
       background:url("./bg.gif") no-repeat center center fixed;
       background-size:cover;
 
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
-
       display:flex;
       justify-content:center;
-      padding:22px 14px;
+      padding:18px 14px;
     }
-
     .overlay{
       position:fixed;
       inset:0;
       background:var(--overlay);
-      backdrop-filter:blur(2px);
+      backdrop-filter: blur(2px);
       z-index:-1;
     }
 
-    .wrap{
-      width:100%;
-      max-width:440px;
-    }
+    .wrap{width:100%; max-width:440px;}
 
+    /* nút theme */
     .topbar{
       display:flex;
       justify-content:flex-end;
-      margin-bottom:14px;
+      margin:6px 0 12px;
     }
-
     .toggle{
       border:1px solid var(--border);
       background:var(--btn);
       color:var(--btnText);
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:700;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:800;
       cursor:pointer;
       display:flex;
-      align-items:center;
       gap:8px;
+      align-items:center;
       user-select:none;
+      box-shadow:0 10px 25px rgba(0,0,0,.25);
     }
     .toggle:active{transform:scale(.99)}
 
+    /* ===== CARD ===== */
     .card{
-      width:100%;
       background:var(--card);
       border:1px solid var(--border);
       border-radius:22px;
-      padding:22px;
-      backdrop-filter:blur(14px);
-      box-shadow:0 20px 55px rgba(0,0,0,.35);
-      position:relative;
       overflow:hidden;
+      backdrop-filter: blur(14px);
+      box-shadow:0 20px 60px rgba(0,0,0,.38);
+      position:relative;
     }
-
-    /* glow nhẹ */
-    .card::before{
+    /* khung GIF động bên trong card (giống hình bạn gửi) */
+    .cover{
+      height:170px;
+      background:url("./cover.gif") no-repeat center;
+      background-size:cover;
+      position:relative;
+    }
+    /* overlay nhẹ trên cover để chữ/viền đẹp */
+    .cover::after{
       content:"";
       position:absolute;
-      inset:-90px;
-      background:
-        radial-gradient(circle at 30% 10%, rgba(56,189,248,.18), transparent 55%),
-        radial-gradient(circle at 80% 30%, rgba(129,140,248,.18), transparent 55%);
-      pointer-events:none;
+      inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.35));
     }
 
-    /* ===== Avatar area ===== */
-    .avatarWrap{
-      width:112px;
-      height:112px;
-      border-radius:50%;
-      margin:-66px auto 10px;
+    /* phần thân card */
+    .content{
+      padding:60px 22px 22px; /* chừa chỗ cho avatar */
       position:relative;
-      z-index:1;
+    }
 
-      /* nền riêng cho avatar */
-      background:
-        radial-gradient(circle at 30% 20%, rgba(56,189,248,.55), rgba(129,140,248,.25) 55%, rgba(0,0,0,0) 70%),
-        radial-gradient(circle at 70% 80%, rgba(14,165,233,.35), rgba(0,0,0,0) 60%);
-      box-shadow:0 14px 40px rgba(0,0,0,.35);
+    /* ===== AVATAR (không bị cắt + có vòng động) ===== */
+    .avatarBox{
+      position:absolute;
+      left:50%;
+      top:170px;              /* bám theo chiều cao cover */
+      transform:translate(-50%,-50%);
+      width:132px;
+      height:132px;
+      border-radius:50%;
       display:grid;
       place-items:center;
+      z-index:5;
     }
 
-    .avatarRing{
-      width:104px;
-      height:104px;
+    /* vòng chạy động */
+    .avatarBox::before{
+      content:"";
+      position:absolute;
+      inset:-6px;
       border-radius:50%;
-      padding:4px;
-
-      /* viền gradient */
-      background:conic-gradient(from 180deg, #38bdf8, #818cf8, #38bdf8);
+      background:conic-gradient(
+        from 0deg,
+        rgba(56,189,248,1),
+        rgba(129,140,248,1),
+        rgba(56,189,248,1)
+      );
+      animation: spin 2.8s linear infinite;
+      filter: blur(.2px);
     }
+
+    /* lớp “mask” để vòng nhìn gọn */
+    .avatarBox::after{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:50%;
+      background:rgba(2,6,23,.55);
+      border:1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(6px);
+    }
+
+    @keyframes spin{to{transform:rotate(360deg)}}
 
     .avatar{
-      width:100%;
-      height:100%;
+      position:relative;
+      z-index:6;
+      width:118px;
+      height:118px;
       border-radius:50%;
-      display:block;
       object-fit:cover;
-      border:4px solid rgba(2,6,23,.65);
-      background:rgba(0,0,0,.15);
+      border:4px solid rgba(255,255,255,.22);
+      box-shadow:0 12px 35px rgba(0,0,0,.35);
+      background:rgba(0,0,0,.12);
     }
 
     h1{
       text-align:center;
-      margin:10px 0 6px;
+      margin:0 0 6px;
       font-size:26px;
-      position:relative;
-      z-index:1;
+      letter-spacing:.2px;
     }
     .sub{
       text-align:center;
       color:var(--muted);
       font-size:14px;
-      position:relative;
-      z-index:1;
+      margin-bottom:14px;
     }
 
     .chips{
       display:flex;
-      gap:8px;
       justify-content:center;
       flex-wrap:wrap;
-      margin:14px 0 6px;
-      position:relative;
-      z-index:1;
+      gap:8px;
+      margin-bottom:16px;
     }
     .chip{
       background:rgba(255,255,255,.12);
@@ -177,30 +192,30 @@
       color:var(--text);
     }
 
-    .block{margin-top:18px; position:relative; z-index:1;}
-    .block h2{font-size:16px; margin:0 0 10px;}
-    ul{padding-left:18px; margin:0;}
-    li{margin-bottom:8px;}
+    .block{margin-top:18px}
+    .block h2{font-size:16px; margin:0 0 10px}
+    ul{margin:0; padding-left:18px}
+    li{margin-bottom:8px}
 
     .game{
       display:flex;
       justify-content:space-between;
-      gap:10px;
       align-items:center;
+      gap:10px;
       background:rgba(255,255,255,.06);
       border:1px solid var(--border);
       padding:12px;
       border-radius:14px;
       margin-bottom:10px;
     }
-    .game small{color:var(--muted); font-size:12px;}
+    .game small{color:var(--muted); font-size:12px}
     .tag{
-      font-size:12px;
       background:var(--accent);
       color:var(--deep);
-      padding:5px 10px;
+      padding:6px 11px;
       border-radius:999px;
-      font-weight:800;
+      font-size:12px;
+      font-weight:900;
       white-space:nowrap;
     }
 
@@ -216,7 +231,7 @@
       margin-top:10px;
       transition:.2s ease;
     }
-    .links a:hover{background:var(--accent); color:var(--deep);}
+    .links a:hover{background:var(--accent); color:var(--deep)}
   </style>
 </head>
 
@@ -225,83 +240,84 @@
 
   <div class="wrap">
     <div class="topbar">
-      <button class="toggle" id="themeBtn" type="button">🌙 Dark</button>
+      <button class="toggle" id="themeBtn" type="button">🌙 Dark Mode</button>
     </div>
 
     <div class="card">
-      <!-- Avatar có nền + viền + ảnh thật -->
-      <div class="avatarWrap">
-        <div class="avatarRing">
-          <img class="avatar" src="./avatar.jpg" alt="Avatar">
-        </div>
+      <!-- ✅ GIF trong card -->
+      <div class="cover"></div>
+
+      <!-- ✅ Avatar đè lên cover + vòng động -->
+      <div class="avatarBox">
+        <img class="avatar" src="./avatar.jpg" alt="Avatar">
       </div>
 
-      <h1>Milo Pha Đá (Nhạt boy)</h1>
-      <div class="sub">IT Student • Software Engineering</div>
+      <div class="content">
+        <h1>Milo Pha Đá (Nhạt boy)</h1>
+        <div class="sub">IT Student • Software Engineering</div>
 
-      <div class="chips">
-        <div class="chip">📍 Hồ Chí Minh</div>
-        <div class="chip">🎂 19</div>
-        <div class="chip">💻 Dev vibes</div>
-      </div>
-
-      <div class="block">
-        <h2>Giới thiệu</h2>
-        <ul>
-          <li>🏃‍♂️ Chạy Ngay Đi</li>
-          <li>🐧 Chạy Vào Trái Tim Em</li>
-          <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
-        </ul>
-      </div>
-
-      <div class="block">
-        <h2>Game mình hay chơi</h2>
-
-        <div class="game">
-          <div>🕹 Roblox<br><small>chill / sandbox</small></div>
-          <span class="tag">casual</span>
+        <div class="chips">
+          <div class="chip">📍 Hồ Chí Minh</div>
+          <div class="chip">🎂 19</div>
+          <div class="chip">💻 Dev vibes</div>
         </div>
 
-        <div class="game">
-          <div>🎯 Valorant<br><small>FPS / tryhard</small></div>
-          <span class="tag">rank</span>
+        <div class="block">
+          <h2>Giới thiệu</h2>
+          <ul>
+            <li>🏃‍♂️ Chạy Ngay Đi</li>
+            <li>🐧 Chạy Vào Trái Tim Em</li>
+            <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+          </ul>
         </div>
 
-        <div class="game">
-          <div>♟ TFT<br><small>auto chess</small></div>
-          <span class="tag">brain</span>
-        </div>
-      </div>
+        <div class="block">
+          <h2>Game mình hay chơi</h2>
 
-      <div class="block links">
-        <h2>Liên hệ</h2>
-        <a href="https://www.facebook.com/milo.pha.a" target="_blank" rel="noopener">🌐 Facebook</a>
-        <a href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
+          <div class="game">
+            <div>🕹 Roblox<br><small>chill / sandbox</small></div>
+            <span class="tag">casual</span>
+          </div>
+
+          <div class="game">
+            <div>🎯 Valorant<br><small>FPS / tryhard</small></div>
+            <span class="tag">rank</span>
+          </div>
+
+          <div class="game">
+            <div>♟ TFT<br><small>auto chess</small></div>
+            <span class="tag">brain</span>
+          </div>
+        </div>
+
+        <div class="block links">
+          <h2>Liên hệ</h2>
+          <a href="https://www.facebook.com/milo.pha.a" target="_blank" rel="noopener">🌐 Facebook</a>
+          <a href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ✅ Dark / Light mode (lưu lại bằng localStorage)
+    // ✅ Dark / Light (lưu lại)
     const root = document.documentElement;
     const btn = document.getElementById("themeBtn");
 
     function setTheme(theme){
       if(theme === "light"){
         root.setAttribute("data-theme","light");
-        btn.textContent = "☀️ Light";
+        btn.textContent = "☀️ Light Mode";
       }else{
         root.removeAttribute("data-theme");
-        btn.textContent = "🌙 Dark";
+        btn.textContent = "🌙 Dark Mode";
       }
       localStorage.setItem("theme", theme);
     }
 
-    // init
     const saved = localStorage.getItem("theme") || "dark";
     setTheme(saved);
 
-    // toggle
     btn.addEventListener("click", () => {
       const cur = localStorage.getItem("theme") || "dark";
       setTheme(cur === "dark" ? "light" : "dark");
