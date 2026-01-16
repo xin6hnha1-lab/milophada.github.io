@@ -1,131 +1,194 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Milo Pha Đá</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Milo Pha Đá</title>
 
-<style>
-:root {
-  --bg: #0f172a;
-  --card: rgba(255,255,255,0.08);
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --accent: #38bdf8;
-}
+  <style>
+    :root {
+      --card: rgba(255, 255, 255, 0.10);
+      --text: #e5e7eb;
+      --muted: #b6c0d1;
+      --accent: #38bdf8;
+      --deep: #020617;
+    }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #1e3a8a, #020617);
-  font-family: system-ui, sans-serif;
-  color: var(--text);
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
+    * { box-sizing: border-box; }
 
-.card {
-  width: 100%;
-  max-width: 420px;
-  background: var(--card);
-  border-radius: 20px;
-  padding: 20px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 20px 50px rgba(0,0,0,.4);
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
 
-.avatar {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#38bdf8,#818cf8);
-  display: grid;
-  place-items: center;
-  font-size: 42px;
-  margin: -60px auto 10px;
-  border: 4px solid #020617;
-}
+      /* ✅ GIF nền động */
+      background: url("./bg.gif") no-repeat center center fixed;
+      background-size: cover;
 
-h1 {
-  text-align: center;
-  margin: 10px 0 5px;
-}
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 22px 14px;
+    }
 
-.sub {
-  text-align: center;
-  color: var(--muted);
-  font-size: 14px;
-}
+    /* ✅ lớp phủ để chữ nổi + chuyên nghiệp */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
 
-.chips {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 12px 0;
-}
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 22px;
+      padding: 22px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
 
-.chip {
-  background: rgba(255,255,255,.1);
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-}
+    /* glow nhẹ cho “pro” */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      background: radial-gradient(circle at 30% 10%, rgba(56,189,248,0.18), transparent 55%),
+                  radial-gradient(circle at 80% 30%, rgba(129,140,248,0.18), transparent 55%);
+      pointer-events: none;
+    }
 
-.block {
-  margin-top: 20px;
-}
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      display: grid;
+      place-items: center;
+      font-size: 44px;
+      margin: -62px auto 10px;
+      border: 4px solid rgba(2, 6, 23, 0.9);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      position: relative;
+      z-index: 1;
+    }
 
-.block h2 {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
+    h1 {
+      text-align: center;
+      margin: 10px 0 6px;
+      font-size: 26px;
+      position: relative;
+      z-index: 1;
+    }
 
-ul {
-  padding-left: 18px;
-}
+    .sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
 
-li {
-  margin-bottom: 6px;
-}
+    .chips {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 14px 0 6px;
+      position: relative;
+      z-index: 1;
+    }
 
-.game {
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255,255,255,.05);
-  padding: 10px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
+    .chip {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text);
+    }
 
-.tag {
-  font-size: 12px;
-  background: var(--accent);
-  color: #020617;
-  padding: 4px 10px;
-  border-radius: 999px;
-}
+    .block {
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
 
-.links a {
-  display: block;
-  text-align: center;
-  padding: 10px;
-  border-radius: 12px;
-  background: rgba(255,255,255,.08);
-  color: var(--text);
-  text-decoration: none;
-  margin-top: 8px;
-}
+    .block h2 {
+      font-size: 16px;
+      margin: 0 0 10px;
+      letter-spacing: 0.2px;
+    }
 
-.links a:hover {
-  background: var(--accent);
-  color: #020617;
-}
-</style>
+    ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: rgba(229,231,235,0.95);
+    }
+
+    .game {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 12px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .game small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tag {
+      font-size: 12px;
+      background: var(--accent);
+      color: var(--deep);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .links a {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      text-decoration: none;
+      margin-top: 10px;
+      transition: 0.2s ease;
+    }
+
+    .links a:active {
+      transform: scale(0.99);
+    }
+
+    .links a:hover {
+      background: var(--accent);
+      color: var(--deep);
+    }
+  </style>
 </head>
 
 <body>
+  <div class="overlay"></div>
+
   <div class="card">
     <div class="avatar">😼</div>
 
@@ -151,25 +214,25 @@ li {
       <h2>Game mình hay chơi</h2>
 
       <div class="game">
-        <div>🕹 Roblox<br><small class="muted">chill / sandbox</small></div>
+        <div>🕹 Roblox<br><small>chill / sandbox</small></div>
         <span class="tag">casual</span>
       </div>
 
       <div class="game">
-        <div>🎯 Valorant<br><small class="muted">FPS / tryhard</small></div>
+        <div>🎯 Valorant<br><small>FPS / tryhard</small></div>
         <span class="tag">rank</span>
       </div>
 
       <div class="game">
-        <div>♟ TFT<br><small class="muted">auto chess</small></div>
+        <div>♟ TFT<br><small>auto chess</small></div>
         <span class="tag">brain</span>
       </div>
     </div>
 
     <div class="block links">
       <h2>Liên hệ</h2>
-      <a href="https://www.facebook.com/milo.pha.a" target="_blank">🌐 Facebook</a>
-      <a href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord: quan_boy</a>
+      <a href="https://www.facebook.com/milo.pha.a" target="_blank" rel="noopener">🌐 Facebook</a>
+      <a href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
     </div>
   </div>
 </body>
