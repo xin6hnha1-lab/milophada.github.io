@@ -18,11 +18,13 @@
       --btn:rgba(255,255,255,.14);
       --btnText:#e5e7eb;
       --shadow:0 22px 65px rgba(0,0,0,.40);
+
+      --radius:22px;
     }
     [data-theme="light"]{
       --text:#0b1220;
       --muted:#475569;
-      --card:rgba(255,255,255,.86);
+      --card:rgba(255,255,255,.88);
       --border:rgba(2,6,23,.12);
       --accent:#0ea5e9;
       --deep:#ffffff;
@@ -57,9 +59,10 @@
       z-index:-1;
     }
 
+    /* ✅ wrapper: mobile nhỏ, PC rộng hơn */
     .wrap{
       width:100%;
-      max-width:440px;
+      max-width: 980px; /* PC sẽ vừa đủ, hết trống */
     }
 
     /* ===================== TOPBAR ===================== */
@@ -88,16 +91,16 @@
     .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:22px;
+      border-radius:var(--radius);
       overflow:hidden;
       backdrop-filter: blur(14px);
       box-shadow:var(--shadow);
       position:relative;
     }
 
-    /* ✅ NỀN TRONG CARD (GIF) */
+    /* cover (GIF trong card) */
     .cover{
-      height:170px;
+      height:190px;
       background:url("./cover.gif") no-repeat center;
       background-size:cover;
       position:relative;
@@ -106,45 +109,34 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.40));
+      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.42));
     }
 
-    /* ===================== AVATAR (NO OVERLAP BUG) ===================== */
-    /* Avatar được đặt "cố định" trong vùng riêng => không đè chữ */
+    /* avatar zone (không đè chữ) */
     .avatarZone{
       display:flex;
       justify-content:center;
-      margin-top:-56px; /* nhô lên khỏi cover tí cho đẹp */
+      margin-top:-60px;
       position:relative;
       z-index:2;
-      padding-bottom:10px;
+      padding-bottom:12px;
     }
-
     .avatarBox{
-      width:132px;
-      height:132px;
+      width:136px;
+      height:136px;
       border-radius:50%;
       display:grid;
       place-items:center;
       position:relative;
     }
-
-    /* vòng động */
     .avatarBox::before{
       content:"";
       position:absolute;
       inset:-6px;
       border-radius:50%;
-      background:conic-gradient(
-        from 0deg,
-        rgba(56,189,248,1),
-        rgba(129,140,248,1),
-        rgba(56,189,248,1)
-      );
+      background:conic-gradient(from 0deg, #38bdf8, #818cf8, #38bdf8);
       animation:spin 2.8s linear infinite;
     }
-
-    /* mask */
     .avatarBox::after{
       content:"";
       position:absolute;
@@ -154,14 +146,12 @@
       border:1px solid rgba(255,255,255,.18);
       backdrop-filter: blur(6px);
     }
-
     @keyframes spin{to{transform:rotate(360deg)}}
-
     .avatar{
       position:relative;
       z-index:3;
-      width:118px;
-      height:118px;
+      width:122px;
+      height:122px;
       border-radius:50%;
       object-fit:cover;
       border:4px solid rgba(255,255,255,.22);
@@ -169,32 +159,26 @@
       background:rgba(0,0,0,.12);
     }
 
-    /* ===================== CONTENT ===================== */
-    .content{
-      padding:10px 22px 22px; /* ✅ không cần padding-top bự nữa */
-      position:relative;
-      z-index:1;
-    }
-
-    h1{
+    /* ===================== HEADER TEXT ===================== */
+    .header{
+      padding: 0 18px 12px;
       text-align:center;
-      margin:6px 0 6px;
-      font-size:26px;
+    }
+    .header h1{
+      margin: 0 0 6px;
+      font-size: 28px;
       letter-spacing:.2px;
     }
     .sub{
-      text-align:center;
       color:var(--muted);
       font-size:14px;
       margin-bottom:14px;
     }
-
     .chips{
       display:flex;
       justify-content:center;
       flex-wrap:wrap;
       gap:8px;
-      margin-bottom:16px;
     }
     .chip{
       background:rgba(255,255,255,.12);
@@ -205,8 +189,26 @@
       color:var(--text);
     }
 
-    .block{margin-top:18px}
-    .block h2{font-size:16px; margin:0 0 10px}
+    /* ===================== MAIN GRID ===================== */
+    .main{
+      padding: 0 18px 22px;
+      display: grid;
+      grid-template-columns: 1fr; /* mobile: 1 cột */
+      gap: 14px;
+    }
+
+    .panel{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .panel h2{
+      margin:0 0 10px;
+      font-size:16px;
+    }
+
     ul{margin:0; padding-left:18px}
     li{margin-bottom:8px}
 
@@ -245,6 +247,23 @@
       transition:.2s ease;
     }
     .links a:hover{background:var(--accent); color:var(--deep)}
+
+    /* ===================== RESPONSIVE (PC) ===================== */
+    @media (min-width: 900px){
+      body{ padding: 26px 18px; }
+      .cover{ height: 230px; }
+
+      /* Card rộng hơn + đẹp trên PC */
+      .header{ padding: 0 28px 14px; }
+      .main{
+        padding: 0 28px 28px;
+        grid-template-columns: 1fr 1fr; /* ✅ PC: 2 cột */
+        gap: 16px;
+      }
+
+      .panel{ padding: 16px; }
+      .header h1{ font-size: 32px; }
+    }
   </style>
 </head>
 
@@ -259,24 +278,25 @@
     <div class="card">
       <div class="cover"></div>
 
-      <!-- ✅ Avatar nằm trong zone riêng => không đè tên nữa -->
       <div class="avatarZone">
         <div class="avatarBox">
           <img class="avatar" src="./avatar.jpg" alt="Avatar">
         </div>
       </div>
 
-      <div class="content">
+      <div class="header">
         <h1>Milo Pha Đá (Nhạt boy)</h1>
         <div class="sub">IT Student • Software Engineering</div>
 
         <div class="chips">
           <div class="chip">📍 Hồ Chí Minh</div>
           <div class="chip">🎂 19</div>
-          <div class="chip">💻 Dev vibes</div>
+          <div class="chip">💻 Gamer</div>
         </div>
+      </div>
 
-        <div class="block">
+      <div class="main">
+        <div class="panel">
           <h2>Giới thiệu</h2>
           <ul>
             <li>🏃‍♂️ Chạy Ngay Đi</li>
@@ -285,7 +305,7 @@
           </ul>
         </div>
 
-        <div class="block">
+        <div class="panel">
           <h2>Game mình hay chơi</h2>
 
           <div class="game">
@@ -298,13 +318,13 @@
             <span class="tag">rank</span>
           </div>
 
-          <div class="game">
+          <div class="game" style="margin-bottom:0;">
             <div>♟ TFT<br><small>auto chess</small></div>
             <span class="tag">brain</span>
           </div>
         </div>
 
-        <div class="block links">
+        <div class="panel links" style="grid-column: 1 / -1;">
           <h2>Liên hệ</h2>
           <a href="https://www.facebook.com/milo.pha.a" target="_blank" rel="noopener">🌐 Facebook</a>
           <a href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
