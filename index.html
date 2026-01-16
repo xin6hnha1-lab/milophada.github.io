@@ -1,442 +1,176 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Milo Pha Đá</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milo Pha Đá</title>
 
-  <style>
-    :root{
-      --bg:#0b1220;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.06);
-      --text:#eaf1ff;
-      --muted: rgba(234,241,255,.7);
-      --border: rgba(255,255,255,.14);
-      --shadow: 0 18px 55px rgba(0,0,0,.35);
-      --accent:#7aa7ff;
-      --chip: rgba(122,167,255,.18);
-      --good:#23a55a;
-      --idle:#f0b232;
-      --dnd:#f23f43;
-      --off:#80848e;
-    }
+<style>
+:root {
+  --bg: #0f172a;
+  --card: rgba(255,255,255,0.08);
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #38bdf8;
+}
 
-    [data-theme="light"]{
-      --bg:#f4fbff;
-      --card: rgba(255,255,255,.85);
-      --card2: rgba(255,255,255,.7);
-      --text:#0b1220;
-      --muted: rgba(11,18,32,.65);
-      --border: rgba(11,18,32,.12);
-      --shadow: 0 18px 55px rgba(10,30,60,.18);
-      --accent:#2b6cff;
-      --chip: rgba(43,108,255,.12);
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1e3a8a, #020617);
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(122,167,255,.35), transparent 55%),
-        radial-gradient(1000px 600px at 90% 30%, rgba(255,125,205,.30), transparent 55%),
-        radial-gradient(900px 500px at 40% 95%, rgba(95,255,217,.25), transparent 55%),
-        var(--bg);
-      min-height:100vh;
-      padding:18px;
-    }
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+}
 
-    .topbar{
-      max-width:980px;
-      margin:0 auto 12px;
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:10px;
-    }
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#38bdf8,#818cf8);
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+  margin: -60px auto 10px;
+  border: 4px solid #020617;
+}
 
-    .toggle{
-      border:1px solid var(--border);
-      background:var(--card2);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:999px;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      font-weight:600;
-      font-size:14px;
-    }
+h1 {
+  text-align: center;
+  margin: 10px 0 5px;
+}
 
-    .wrap{max-width:980px; margin:0 auto;}
-    .card{
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:18px;
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
+.sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
 
-    .cover{
-      height:190px;
-      background:
-        linear-gradient(120deg, rgba(122,167,255,.7), rgba(255,125,205,.55), rgba(95,255,217,.55));
-      position:relative;
-    }
-    .cover:after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(600px 200px at 20% 30%, rgba(255,255,255,.35), transparent 60%);
-      opacity:.9;
-    }
+.chips {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
 
-    .header{
-      padding:16px 16px 6px;
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-    }
+.chip {
+  background: rgba(255,255,255,.1);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
 
-    .avatar{
-      width:86px; height:86px;
-      border-radius:50%;
-      border:3px solid var(--border);
-      background: rgba(0,0,0,.15);
-      display:grid; place-items:center;
-      position:relative;
-      flex: 0 0 auto;
-      overflow:hidden;
-    }
+.block {
+  margin-top: 20px;
+}
 
-    .avatar img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-    }
+.block h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
 
-    .dot{
-      position:absolute;
-      right:6px; bottom:6px;
-      width:14px; height:14px;
-      border-radius:50%;
-      border:3px solid var(--card);
-      background: var(--off);
-    }
-    .dot.online{background:var(--good)}
-    .dot.idle{background:var(--idle)}
-    .dot.dnd{background:var(--dnd)}
-    .dot.offline{background:var(--off)}
+ul {
+  padding-left: 18px;
+}
 
-    h1{margin:0; font-size:22px; line-height:1.15}
-    .sub{margin:6px 0 0; color:var(--muted); font-weight:600}
+li {
+  margin-bottom: 6px;
+}
 
-    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-    .chip{
-      background:var(--chip);
-      border:1px solid var(--border);
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:700;
-    }
+.game {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255,255,255,.05);
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
 
-    .grid{
-      padding:12px 16px 16px;
-      display:grid;
-      gap:12px;
-    }
+.tag {
+  font-size: 12px;
+  background: var(--accent);
+  color: #020617;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
 
-    .block{
-      border:1px solid var(--border);
-      background:var(--card2);
-      border-radius:14px;
-      padding:14px;
-    }
-    .block h2{
-      margin:0 0 10px;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
+.links a {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  text-decoration: none;
+  margin-top: 8px;
+}
 
-    .intro-list{
-      list-style:none;
-      padding:0; margin:0;
-      display:grid; gap:8px;
-    }
-    .intro-list li{
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.08);
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:700;
-    }
-    [data-theme="light"] .intro-list li{ background: rgba(255,255,255,.8); }
-
-    .muted{color:var(--muted); font-weight:600; font-size:13px}
-
-    .discord-box{
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:12px;
-      background: rgba(88,101,242,.12);
-    }
-
-    .row{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px;
-    }
-
-    .badge{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.10);
-      font-weight:800;
-      font-size:12px;
-    }
-
-    .game-list{display:grid; gap:10px}
-    .game-item{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.08);
-    }
-    [data-theme="light"] .game-item{ background: rgba(255,255,255,.8); }
-
-    .left{display:flex; align-items:center; gap:10px}
-    .icon{
-      width:38px; height:38px;
-      display:grid; place-items:center;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.10);
-      font-size:18px;
-    }
-    .name{font-weight:900}
-    .tag{
-      font-size:12px;
-      font-weight:900;
-      border-radius:999px;
-      padding:6px 10px;
-      border:1px solid var(--border);
-      background: rgba(122,167,255,.16);
-      white-space:nowrap;
-    }
-
-    .links{
-      display:flex; flex-wrap:wrap; gap:10px;
-    }
-    .link{
-      text-decoration:none;
-      color:var(--text);
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.08);
-      padding:10px 12px;
-      border-radius:999px;
-      font-weight:800;
-    }
-    [data-theme="light"] .link{ background: rgba(255,255,255,.85); }
-
-    .hint{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    @media (min-width: 760px){
-      .grid{ grid-template-columns: 1.2fr .8fr; }
-      .rightcol{ display:grid; gap:12px; }
-    }
-  </style>
+.links a:hover {
+  background: var(--accent);
+  color: #020617;
+}
+</style>
 </head>
 
 <body>
-  <div class="topbar">
-    <button class="toggle" id="themeBtn">🌙 Dark Mode</button>
-  </div>
+  <div class="card">
+    <div class="avatar">😼</div>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="cover"></div>
+    <h1>Milo Pha Đá (Nhạt boy)</h1>
+    <div class="sub">IT Student • Software Engineering</div>
 
-      <div class="header">
-        <div class="avatar">
-          <!-- Avatar mặc định (khỏi upload ảnh) -->
-          <img id="avatarImg" alt="avatar"
-               src="https://images.unsplash.com/photo-1520975987065-6dfee3d8b0f3?auto=format&fit=crop&w=256&q=70" />
-          <span class="dot idle" id="statusDot" title="status"></span>
-        </div>
+    <div class="chips">
+      <div class="chip">📍 Hồ Chí Minh</div>
+      <div class="chip">🎂 19</div>
+      <div class="chip">💻 Dev vibes</div>
+    </div>
 
-        <div class="title">
-          <h1>Milo Pha Đá (Nhạt boy)</h1>
-          <p class="sub">IT Student • Software Engineering</p>
+    <div class="block">
+      <h2>Giới thiệu</h2>
+      <ul>
+        <li>🏃‍♂️ Chạy Ngay Đi</li>
+        <li>🐧 Chạy Vào Trái Tim Em</li>
+        <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+      </ul>
+    </div>
 
-          <div class="chips">
-            <span class="chip">📍 Hồ Chí Minh</span>
-            <span class="chip">🎂 Tuổi: 19</span>
-            <span class="chip">💻 Dev vibes</span>
-          </div>
-        </div>
+    <div class="block">
+      <h2>Game mình hay chơi</h2>
+
+      <div class="game">
+        <div>🕹 Roblox<br><small class="muted">chill / sandbox</small></div>
+        <span class="tag">casual</span>
       </div>
 
-      <div class="grid">
-        <div>
-          <section class="block">
-            <h2>Giới thiệu</h2>
-            <ul class="intro-list">
-              <li>🏃‍♂️ Chạy Ngay Đi 🏃‍♂️</li>
-              <li>🐧 Chạy Vào Trái Tim Em 🐧</li>
-              <li>😵 Đùa Thôi Anh Làm Gì Có Em 😵</li>
-            </ul>
-          </section>
+      <div class="game">
+        <div>🎯 Valorant<br><small class="muted">FPS / tryhard</small></div>
+        <span class="tag">rank</span>
+      </div>
 
-          <section class="block" style="margin-top:12px;">
-            <h2>Game mình hay chơi</h2>
-            <div class="game-list">
-              <div class="game-item">
-                <div class="left">
-                  <div class="icon">🕹</div>
-                  <div>
-                    <div class="name">Roblox</div>
-                    <div class="muted">chill / sandbox</div>
-                  </div>
-                </div>
-                <span class="tag">casual</span>
-              </div>
-
-              <div class="game-item">
-                <div class="left">
-                  <div class="icon">🎯</div>
-                  <div>
-                    <div class="name">Valorant</div>
-                    <div class="muted">FPS / tryhard</div>
-                  </div>
-                </div>
-                <span class="tag">rank</span>
-              </div>
-
-              <div class="game-item">
-                <div class="left">
-                  <div class="icon">♟</div>
-                  <div>
-                    <div class="name">TFT</div>
-                    <div class="muted">strategy / auto chess</div>
-                  </div>
-                </div>
-                <span class="tag">brain</span>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="rightcol">
-          <section class="block">
-            <h2>Discord Status</h2>
-            <div class="discord-box" id="discordBox">
-              <div class="muted">🟣 Đang tải Discord status...</div>
-            </div>
-            <div class="hint">Tip: Nếu Discord không tải do mạng/blocked, vẫn bấm link Discord bên dưới được nha 🫶</div>
-          </section>
-
-          <section class="block">
-            <h2>Liên hệ</h2>
-            <div class="links">
-              <a class="link" target="_blank" rel="noopener"
-                 href="https://www.facebook.com/milo.pha.a">🌐 Facebook</a>
-
-              <a class="link" target="_blank" rel="noopener"
-                 href="https://discord.com/users/910327589309145109">🎮 Discord: quan_boy</a>
-            </div>
-          </section>
-        </div>
+      <div class="game">
+        <div>♟ TFT<br><small class="muted">auto chess</small></div>
+        <span class="tag">brain</span>
       </div>
     </div>
+
+    <div class="block links">
+      <h2>Liên hệ</h2>
+      <a href="https://www.facebook.com/milo.pha.a" target="_blank">🌐 Facebook</a>
+      <a href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord: quan_boy</a>
+    </div>
   </div>
-
-  <script>
-    // ===== THEME =====
-    const body = document.body;
-    const themeBtn = document.getElementById("themeBtn");
-
-    function applyTheme(t){
-      body.setAttribute("data-theme", t);
-      localStorage.setItem("theme", t);
-      themeBtn.textContent = (t === "dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
-    }
-
-    const saved = localStorage.getItem("theme") || "dark";
-    applyTheme(saved);
-
-    themeBtn.addEventListener("click", () => {
-      const cur = body.getAttribute("data-theme") || "dark";
-      applyTheme(cur === "dark" ? "light" : "dark");
-    });
-
-    // ===== DISCORD STATUS (Lanyard) =====
-    const DISCORD_USER_ID = "910327589309145109";
-    const API = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
-
-    const discordBox = document.getElementById("discordBox");
-    const statusDot = document.getElementById("statusDot");
-    const avatarImg = document.getElementById("avatarImg");
-
-    function statusToText(s){
-      if(s === "online") return "Đang online";
-      if(s === "idle") return "Đang rảnh";
-      if(s === "dnd") return "Đừng làm phiền";
-      return "Offline";
-    }
-
-    function setDot(s){
-      statusDot.className = "dot " + (s || "offline");
-    }
-
-    async function fetchStatus(){
-      try{
-        const res = await fetch(API, { cache: "no-store" });
-        const json = await res.json();
-
-        if(!json || !json.success) throw new Error("API fail");
-
-        const data = json.data;
-        const user = data.discord_user;
-        const st = data.discord_status || "offline";
-
-        // set avatar theo discord (nếu có)
-        if(user && user.id){
-          if(user.avatar){
-            const ext = user.avatar.startsWith("a_") ? "gif" : "png";
-            avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=256`;
-          }
-        }
-
-        setDot(st);
-
-        // hiển thị gọn gàng
-        discordBox.innerHTML = `
-          <div class="row">
-            <div>
-              <div style="font-weight:900;">🟣 Discord</div>
-              <div class="muted">Status: <b>${statusToText(st)}</b></div>
-            </div>
-            <span class="badge">${st}</span>
-          </div>
-        `;
-      }catch(e){
-        setDot("offline");
-        discordBox.innerHTML = `
-          <div class="muted">⚠️ Không tải được Discord status (mạng/cors). Nhưng link Discord vẫn dùng ngon nha 🫶</div>
-        `;
-      }
-    }
-
-    fetchStatus();
-    setInterval(fetchStatus, 30000);
-  </script>
 </body>
 </html>
