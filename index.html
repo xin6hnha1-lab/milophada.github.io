@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile</title>
+
+  <link rel="stylesheet" href="load.css" />
+  <script defer src="discord-status.js"></script>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      body.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+
+      const text = document.getElementById("theme-text");
+      text.textContent = next === "dark" ? "Light Mode" : "Dark Mode";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.body.setAttribute("data-theme", savedTheme);
+      document.getElementById("theme-text").textContent =
+        savedTheme === "dark" ? "Light Mode" : "Dark Mode";
+    });
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="theme-text">Dark Mode</span>
+  </button>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="cover">
+        <img src="./png/dep.gif" alt="cover" />
+      </div>
+
+      <div class="header">
+        <div class="avatar">
+          <!-- ✅ Đổi avatar.jpg thành tên ảnh avatar của bạn -->
+          <img id="mainAvatarImg" src="avatar.jpg" alt="avatar" />
+          <span id="mainStatusIndicator" class="dot dot-idle" title="status"></span>
+        </div>
+
+        <div class="title">
+          <h1>Milo Pha Đá (Nhạt boy)</h1>
+          <p class="sub">IT Student • Software Engineering</p>
+
+          <div class="chips">
+            <span class="chip">📍 Hồ Chí Minh</span>
+            <span class="chip">🎂 Tuổi: 19</span>
+            <span class="chip">💻 Dev vibes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ GIỚI THIỆU kiểu như ảnh bạn gửi -->
+      <section class="block">
+        <h2>Giới thiệu</h2>
+
+        <ul class="intro-list">
+          <li>🏃‍♂️ Chạy Ngay Đi 🏃‍♂️</li>
+          <li>🐧 Chạy Vào Trái Tim Em 🐧</li>
+          <li>😵 Đùa Thôi Anh Làm Gì Có Em 😵</li>
+        </ul>
+
+        
+      </section>
+
+      <!-- Discord Status (optional) -->
+      <section class="block">
+        <h2>Discord Status</h2>
+        <div id="discordStatus" class="discord-box">
+          <div class="muted">🟣 Đang tải Discord status...</div>
+        </div>
+      </section>
+
+      <!-- ✅ GAME -->
+      <section class="block">
+        <h2>Game mình hay chơi</h2>
+
+        <div class="game-list">
+          <div class="game-item">
+            <div class="left">
+              <div class="icon">🕹</div>
+              <div>
+                <div class="name">Roblox</div>
+                <div class="muted">chill / sandbox</div>
+              </div>
+            </div>
+            <span class="tag">casual</span>
+          </div>
+
+          <div class="game-item">
+            <div class="left">
+              <div class="icon">🎯</div>
+              <div>
+                <div class="name">Valorant</div>
+                <div class="muted">FPS / tryhard</div>
+              </div>
+            </div>
+            <span class="tag">rank</span>
+          </div>
+
+          <div class="game-item">
+            <div class="left">
+              <div class="icon">♟</div>
+              <div>
+                <div class="name">TFT</div>
+                <div class="muted">strategy / auto chess</div>
+              </div>
+            </div>
+            <span class="tag">brain</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ✅ SOCIAL (không có Gmail) -->
+      <section class="block">
+        <h2>Liên hệ</h2>
+
+        <div class="links">
+          <a class="link" href="https://www.facebook.com/milo.pha.a" target="_blank">🌐 Facebook</a>
+          <a class="link"
+   href="https://discord.com/users/910327589309145109"
+   target="_blank" rel="noopener">
+  🎮 Discord: quan_boy
+</a>
+ Discord: quan_boy</a>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
