@@ -163,15 +163,27 @@
     }
     body.light .avatar{ border-color: rgba(255,255,255,.95); }
 
-    .avatar-frame{
-      pointer-events: none;
-      position:absolute;
-      inset:-8px;
-      border-radius: 999px;
-      border: 2px solid rgba(78,161,255,.35);
-      box-shadow: 0 0 0 6px rgba(78,161,255,.10);
-    }
+  .avatar-frame{
+  pointer-events: none;
+  position: absolute;
+  inset: -10px;                 /* khung to hơn avatar */
+  border-radius: 999px;
 
+  /* viền ngoài trắng */
+  border: 3px solid rgba(255,255,255,.85);
+
+  /* vòng glow kiểu Discord */
+  box-shadow:
+    0 0 0 6px rgba(78,161,255,.35),
+    0 12px 28px rgba(0,0,0,.4);
+
+  /* ánh sáng nhẹ cho khung */
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255,255,255,.18),
+    transparent 60%
+  );
+}
     .who{
       min-width: 260px;
       flex: 1 1 280px;
