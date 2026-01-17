@@ -43,16 +43,14 @@
       padding:28px 14px 60px;
     }
 
-    /* IMPORTANT: tránh xoay chữ dọc do ai đó lỡ set writing-mode/rotate */
+    /* chống mọi kiểu xoay chữ */
     body, .wrap, .card, .panel, .section-title, .music, .tus{
       writing-mode: horizontal-tb !important;
       transform: none !important;
       rotate: 0deg !important;
     }
 
-    .wrap{
-      width:min(1040px, 100%);
-    }
+    .wrap{ width:min(1040px, 100%); }
 
     .card{
       border:1px solid var(--stroke);
@@ -74,8 +72,9 @@
       position:absolute;
       top:16px; right:16px;
       display:flex; gap:10px;
-      z-index:50;
+      z-index:80;
     }
+
     .btn{
       border:1px solid var(--stroke);
       background: var(--btn);
@@ -84,11 +83,13 @@
       border-radius:14px;
       cursor:pointer;
       user-select:none;
+      font-weight:800;
     }
     .btn:active{ transform: scale(.98); }
+    .btn[disabled]{ cursor:not-allowed; opacity:.55; }
 
     .header{
-      padding:18px 22px 18px;
+      padding:18px 22px 10px;
       display:grid;
       grid-template-columns: 230px 1fr;
       gap:18px;
@@ -104,7 +105,7 @@
     .title .sub{
       margin-top:6px;
       color: var(--muted);
-      font-weight:600;
+      font-weight:700;
       font-size:14px;
     }
     .title .quote{
@@ -129,7 +130,81 @@
       background: var(--pill);
       font-size:13px;
       color: var(--text);
+      font-weight:700;
     }
+
+    /* ===== MUSIC (đặt ngay dưới title, trước phần Giới thiệu) ===== */
+    .music{
+      margin:6px 22px 14px;
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      border-radius:18px;
+      padding:14px;
+    }
+    .music-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .music-left h3{
+      margin:0;
+      font-size:16px;
+      font-weight:900;
+    }
+    .music-sub{
+      margin-top:6px;
+      color: var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    /* Tên bài nhạc nổi bật + mode màu */
+    .musicTitle{
+      margin-top:2px;
+      font-size:20px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      line-height:1.2;
+      text-shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+    .title-white{ color: #ffffff; }
+    .title-black{ color: #0b1220; }
+    .title-rainbow{
+      background: linear-gradient(90deg,
+        #ff004c, #ff8a00, #ffe600, #3dff00, #00ffd5, #007bff, #a400ff, #ff004c
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbowMove 4s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,.22));
+    }
+    @keyframes rainbowMove{
+      0%{ background-position: 0% 50%; }
+      100%{ background-position: 200% 50%; }
+    }
+
+    .music-controls{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+      user-select:none;
+    }
+    [data-theme="light"] .chip{
+      background: rgba(11,18,32,.06);
+    }
+
+    audio{ width:100%; }
 
     .grid{
       display:grid;
@@ -146,10 +221,10 @@
     .section-title{
       margin:0 0 10px;
       font-size:16px;
-      font-weight:800;
+      font-weight:900;
     }
     ul{ margin:0; padding-left:18px; }
-    li{ margin:6px 0; color: var(--text); }
+    li{ margin:6px 0; }
 
     .links{
       display:grid;
@@ -163,7 +238,7 @@
       border-radius:16px;
       padding:14px 12px;
       text-align:center;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       color: var(--text);
       text-decoration:none;
@@ -172,24 +247,6 @@
       justify-content:center;
       gap:10px;
     }
-
-    .music{
-      margin:0 22px 18px;
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius:18px;
-      padding:14px;
-    }
-    .music .row{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      margin-top:10px;
-      flex-wrap:wrap;
-    }
-    .music-title{
-      font-weight:900;
-    }
-    audio{ width:100%; }
 
     .tus{
       margin:0 22px 22px;
@@ -203,6 +260,12 @@
       flex-wrap:wrap;
       margin-bottom:10px;
     }
+    .admin-note{
+      color: var(--muted);
+      font-size:13px;
+      margin-top:4px;
+      font-weight:600;
+    }
     .tus-list a{
       display:block;
       padding:10px 12px;
@@ -214,14 +277,13 @@
       margin-top:10px;
       word-break: break-all;
     }
-
-    .admin-note{
-      color: var(--muted);
-      font-size:13px;
-      margin-top:4px;
+    .tus-del{
+      margin-top:8px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
     }
 
-    /* Mobile */
     @media (max-width:860px){
       .header{ grid-template-columns: 1fr; }
       .grid{ grid-template-columns: 1fr; }
@@ -245,7 +307,6 @@
         <div class="avatar-wrap">
           <div class="ring"></div>
           <img class="avatar" src="avatar.jpg" alt="avatar">
-          <!-- Nếu có frame.png thì dùng (đúng tên file bro đang có) -->
           <img class="frame" src="frame.png" alt="frame">
         </div>
 
@@ -257,9 +318,28 @@
           <div class="pills">
             <div class="pill">📍 Hồ Chí Minh</div>
             <div class="pill">🎂 19</div>
-            <div class="pill">💻 Dev vibes</div>
+            <div class="pill">🎮 gamer</div>
           </div>
         </div>
+      </div>
+
+      <!-- MUSIC: đặt trên phần Giới thiệu -->
+      <div class="music">
+        <div class="music-top">
+          <div class="music-left">
+            <h3>🎵 Nhạc tôi nghe</h3>
+            <div class="musicTitle title-rainbow" id="musicTitle">Ai ngoài anh</div>
+            <!-- (đã bỏ 2 dòng chữ bro không muốn) -->
+            <div class="music-sub" id="musicStatus"></div>
+          </div>
+
+          <div class="music-controls">
+            <button class="btn" id="editMusicTitle" type="button">✏️ Đổi tên</button>
+            <div class="chip" id="colorBtn" title="Đổi màu tên nhạc">🎨 Màu: 7 sắc</div>
+          </div>
+        </div>
+
+        <audio id="player" controls preload="auto"></audio>
       </div>
 
       <div class="grid">
@@ -293,21 +373,6 @@
         <a class="linkbtn" id="dcBtn" href="https://discord.com" target="_blank" rel="noreferrer">🎮 Discord</a>
       </div>
 
-      <div class="music">
-        <h3 class="section-title">🎵 Nhạc tôi nghe</h3>
-        <div class="admin-note">File phải tên <b>music.mp3</b> nằm cùng chỗ với index.html</div>
-
-        <audio id="player" controls preload="auto"></audio>
-
-        <div class="row">
-          <div>
-            <div class="music-title" id="musicTitle">Tên bài của tôi</div>
-            <div class="admin-note" id="musicStatus">Sẵn sàng 🎧</div>
-          </div>
-          <button class="btn" id="editMusicTitle" type="button">✏️ Đổi tên</button>
-        </div>
-      </div>
-
       <div class="tus">
         <div class="tus-head">
           <div>
@@ -322,15 +387,15 @@
   </div>
 
   <script>
-    // ====== Helpers
     const $ = (id) => document.getElementById(id);
 
-    // ====== Theme
+    // ===== Theme
     const root = document.documentElement;
     function setTheme(t){
       root.setAttribute("data-theme", t);
       localStorage.setItem("theme", t);
       $("themeBtn").textContent = (t === "light") ? "🌞 Light" : "🌙 Dark";
+      // nếu đang dùng màu BLACK mà theme dark thì vẫn ok, user chọn mà
     }
     setTheme(localStorage.getItem("theme") || "dark");
     $("themeBtn").addEventListener("click", () => {
@@ -338,18 +403,16 @@
       setTheme(cur === "dark" ? "light" : "dark");
     });
 
-    // ====== Admin (NOTE: bảo mật thật sự thì không thể 100% trên GitHub Pages)
-    // Đây chỉ là "khóa UI" để người khác không bấm thêm/xóa được.
+    // ===== Admin (UI lock)
     const ADMIN_KEY = "admin_ok";
+    const ADMIN_PASS = "079268";
     function isAdmin(){ return localStorage.getItem(ADMIN_KEY) === "1"; }
 
     function updateAdminUI(){
       const ok = isAdmin();
       $("adminBtn").textContent = ok ? "🔓 Admin ON" : "🔒 Admin";
       $("addLinkBtn").disabled = !ok;
-      $("addLinkBtn").style.opacity = ok ? "1" : ".55";
 
-      // nút xóa trong list
       document.querySelectorAll("[data-del]").forEach(btn => {
         btn.style.display = ok ? "inline-flex" : "none";
       });
@@ -362,8 +425,7 @@
         return;
       }
       const pw = prompt("Nhập mật khẩu admin:");
-      // đổi mật khẩu ở đây:
-      if (pw === "1234") {
+      if (pw === ADMIN_PASS) {
         localStorage.setItem(ADMIN_KEY, "1");
         updateAdminUI();
       } else {
@@ -371,26 +433,28 @@
       }
     });
 
-    // ====== Music (fix đường dẫn cho mọi kiểu repo/path)
+    // ===== Music load (no status text)
     const player = $("player");
     const status = $("musicStatus");
 
     function loadMusic(){
-      status.textContent = "Đang load nhạc...";
+      // Ẩn status luôn (bro muốn bỏ chữ)
+      status.textContent = "";
       const url = new URL("music.mp3", window.location.href);
       url.searchParams.set("v", Date.now()); // anti-cache
       player.src = url.toString();
       player.load();
     }
-
-    player.addEventListener("canplay", () => status.textContent = "OK rồi, bấm Play 🎧");
-    player.addEventListener("error", () => status.textContent = "Lỗi load nhạc (check file music.mp3) 💀");
-
+    player.addEventListener("error", () => {
+      // vẫn không hiện status, chỉ log nhẹ
+      console.log("Music load error: kiểm tra music.mp3");
+    });
     loadMusic();
 
-    // Music title
+    // ===== Music title (editable)
     const titleEl = $("musicTitle");
-    titleEl.textContent = localStorage.getItem("music_title") || "Tên bài của tôi";
+    titleEl.textContent = localStorage.getItem("music_title") || "Ai ngoài anh";
+
     $("editMusicTitle").addEventListener("click", () => {
       const next = prompt("Nhập tên bài mới:", titleEl.textContent);
       if (!next) return;
@@ -398,46 +462,75 @@
       localStorage.setItem("music_title", next);
     });
 
-    // ====== Tus links
+    // ===== Title color mode: white / black / rainbow
+    const COLOR_KEY = "music_title_color";
+    const colorBtn = $("colorBtn");
+    const modes = ["rainbow", "white", "black"];
+
+    function applyColorMode(mode){
+      titleEl.classList.remove("title-rainbow", "title-white", "title-black");
+      if (mode === "rainbow"){
+        titleEl.classList.add("title-rainbow");
+        colorBtn.textContent = "🎨 Màu: 7 sắc";
+      } else if (mode === "white"){
+        titleEl.classList.add("title-white");
+        colorBtn.textContent = "🎨 Màu: Trắng";
+      } else {
+        titleEl.classList.add("title-black");
+        colorBtn.textContent = "🎨 Màu: Đen";
+      }
+      localStorage.setItem(COLOR_KEY, mode);
+    }
+
+    applyColorMode(localStorage.getItem(COLOR_KEY) || "rainbow");
+
+    colorBtn.addEventListener("click", () => {
+      const cur = localStorage.getItem(COLOR_KEY) || "rainbow";
+      const next = modes[(modes.indexOf(cur) + 1) % modes.length];
+      applyColorMode(next);
+    });
+
+    // ===== Tus links (clickable, no copy needed)
     const tusKey = "tus_links";
+
     function getLinks(){
       try { return JSON.parse(localStorage.getItem(tusKey) || "[]"); }
       catch { return []; }
     }
-    function setLinks(arr){
-      localStorage.setItem(tusKey, JSON.stringify(arr));
-    }
+    function setLinks(arr){ localStorage.setItem(tusKey, JSON.stringify(arr)); }
+
     function renderLinks(){
       const list = $("tusList");
       list.innerHTML = "";
       const arr = getLinks();
+
       if (arr.length === 0){
         list.innerHTML = `<div class="admin-note">Chưa có link nào 😴</div>`;
-      } else {
-        arr.forEach((it, idx) => {
-          const a = document.createElement("a");
-          a.href = it.url;
-          a.target = "_blank";
-          a.rel = "noreferrer";
-          a.textContent = `${it.title} — ${it.url}`;
-          list.appendChild(a);
-
-          const del = document.createElement("button");
-          del.className = "btn";
-          del.style.marginTop = "8px";
-          del.style.display = isAdmin() ? "inline-flex" : "none";
-          del.dataset.del = "1";
-          del.textContent = "🗑️ Xóa";
-          del.onclick = () => {
-            const arr2 = getLinks();
-            arr2.splice(idx, 1);
-            setLinks(arr2);
-            renderLinks();
-            updateAdminUI();
-          };
-          list.appendChild(del);
-        });
+        return;
       }
+
+      arr.forEach((it, idx) => {
+        const a = document.createElement("a");
+        a.href = it.url;
+        a.target = "_blank";
+        a.rel = "noreferrer";
+        a.textContent = `${it.title} — ${it.url}`;
+        list.appendChild(a);
+
+        const del = document.createElement("button");
+        del.className = "btn tus-del";
+        del.dataset.del = "1";
+        del.textContent = "🗑️ Xóa";
+        del.style.display = isAdmin() ? "inline-flex" : "none";
+        del.onclick = () => {
+          const arr2 = getLinks();
+          arr2.splice(idx, 1);
+          setLinks(arr2);
+          renderLinks();
+          updateAdminUI();
+        };
+        list.appendChild(del);
+      });
     }
 
     $("addLinkBtn").addEventListener("click", () => {
