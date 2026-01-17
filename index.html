@@ -497,7 +497,8 @@
               <h3 style="margin:0;">📝 Đây là nơi check các tus của tôi</h3>
               <div class="hint">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
             </div>
-            <button class="btn" id="addTusBtn" style="display:none;">➕ Thêm link</button>
+            <button id="addTusBtn" class="btn admin-only" style="display:none;">➕ Thêm link</button>
+
           </div>
 
           <div class="tusList" id="tusList"></div>
@@ -716,6 +717,11 @@
 
     function enterAdmin(){
       isAdmin = true;
+      document.querySelectorAll(".admin-only").forEach(el => el.style.display = "");
+      isAdmin = false;
+document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+
+
       $("loginBox").style.display = "none";
       $("adminBox").style.display = "block";
       $("addTusBtn").style.display = "inline-flex";
@@ -844,6 +850,10 @@ $("togglePass").addEventListener("click", () => {
     }
 
     $("addTusBtn").addEventListener("click", () => {
+  if (!isAdmin) return alert("Chỉ Admin mới thêm/xóa được nha 🔒");
+  // ... phần code add tus giữ nguyên bên dưới
+});
+
       if(!isAdmin) return;
       const title = prompt("Tên tus (vd: Tus AV):", "Tus mới");
       if(title === null) return;
