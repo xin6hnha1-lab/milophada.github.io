@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <link rel="stylesheet" href="effect.css?v=2" />
+  <link rel="stylesheet" href="effect.css?v=9" />
 
   <style>
     :root{
@@ -41,53 +41,53 @@
       overflow:hidden;
     }
 
-    /* ✅ COVER */
+    /* COVER */
     .cover{
       width:100%;
-      height:min(42vh, 380px);
-      min-height:220px;
-      background:url("cover.gif") center top / cover no-repeat;
+      height:min(42vh, 360px);
+      min-height:210px;
+      background:url("cover.gif") center top/cover no-repeat;
       position:relative;
     }
     .cover::after{
       content:"";
       position:absolute; inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.18));
+      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.20));
       pointer-events:none;
     }
 
-    /* ✅ Header zone kiểu Facebook: dành sẵn chỗ cho avatar => không bao giờ đè chữ */
+    /* PROFILE ZONE */
     .profile{
       position:relative;
-      padding:18px 22px 22px;
-      padding-top:110px; /* ✅ chỗ đứng cho avatar */
+      padding:16px 22px 22px;
     }
 
-    .header{
-      display:flex;
-      align-items:flex-start;
-      gap:22px;
+    /* FB layout: avatar trái + info phải */
+    .top{
+      display:grid;
+      grid-template-columns: 210px 1fr;
+      gap:18px;
+      align-items:end;
+      margin-top:-72px; /* ✅ kéo lên sát cover như Facebook */
     }
 
-    /* ✅ Avatar đặt ABSOLUTE trên profile zone, không ảnh hưởng chữ */
+    /* Avatar block */
     .avatar-slot{
-      position:absolute;
-      left:22px;
-      top:-86px; /* avatar nổi lên cover */
-      width:210px;
-      height:210px;
+      display:flex;
+      justify-content:flex-start;
+      padding-left:6px;
     }
 
+    /* Info block */
     .info{
-      margin-left:240px; /* chừa chỗ avatar bên trái */
       min-width:0;
+      padding-bottom:6px;
     }
 
     .name{
       margin:0;
       font-size:34px;
-      line-height:1.15;
-      letter-spacing:.2px;
+      line-height:1.12;
       text-shadow:0 2px 14px rgba(0,0,0,.25);
       white-space:nowrap;
       overflow:hidden;
@@ -101,7 +101,7 @@
     .quote{
       margin-top:8px;
       font-size:14px;
-      color:rgba(229,231,235,.88);
+      color:rgba(229,231,235,.9);
       font-style:italic;
     }
 
@@ -110,6 +110,7 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
     .chip{
       padding:7px 12px;
@@ -121,8 +122,9 @@
       backdrop-filter: blur(8px);
     }
 
+    /* CONTENT */
     .grid{
-      margin-top:18px;
+      margin-top:16px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:14px;
@@ -195,25 +197,18 @@
       border-color:rgba(56,189,248,.35);
     }
 
-    /* ✅ Mobile: center như Facebook */
+    /* MOBILE */
     @media (max-width: 820px){
       body{ padding:16px; }
       .cover{ height:220px; }
 
-      .profile{
-        padding:16px;
-        padding-top:130px; /* chừa chỗ avatar ở giữa */
+      .top{
+        grid-template-columns: 1fr;
+        justify-items:center;
         text-align:center;
+        margin-top:-88px;
       }
-
-      .avatar-slot{
-        left:50%;
-        transform:translateX(-50%);
-        top:-96px;
-      }
-
-      .header{ display:block; }
-      .info{ margin-left:0; }
+      .avatar-slot{ justify-content:center; padding-left:0; }
 
       .name{
         font-size:26px;
@@ -232,16 +227,16 @@
       <div class="cover"></div>
 
       <div class="profile">
-        <!-- ✅ Avatar fixed position (không đè chữ) -->
-        <div class="avatar-slot">
-          <div class="avatar-wrap">
-            <img src="avatar.jpg" class="avatar" alt="avatar">
-            <img src="frame.png" class="frame" alt="effect">
-            <span class="ring"></span>
+        <div class="top">
+          <div class="avatar-slot">
+            <!-- Avatar + effect (effect.css lo phần animation) -->
+            <div class="avatar-wrap">
+              <img src="avatar.jpg" class="avatar" alt="avatar">
+              <img src="frame.png" class="frame" alt="effect">
+              <span class="ring"></span>
+            </div>
           </div>
-        </div>
 
-        <div class="header">
           <div class="info">
             <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
             <div class="sub">IT Student • Software Engineering</div>
