@@ -1,200 +1,30 @@
-<!doctype html>
-<html lang="vi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Milo Pha Đá</title>
-
-<link rel="stylesheet" href="effect.css">
-
-<style>
-:root{
-  --bg:#0b1220;
-  --card:rgba(255,255,255,.12);
-  --text:#e8f0ff;
-  --muted:rgba(232,240,255,.7);
+/* ===== RAINBOW (MƯỢT + KHÔNG PHÁ INPUT/AUDIO) ===== */
+.rainbow-target{
+  background: linear-gradient(90deg,
+    #ff3b3b,#ff8c2f,#ffe94a,#35e17a,#36b9ff,#7a5cff,#ff4fd8
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-body{
-  margin:0;
-  font-family:system-ui;
-  color:var(--text);
-  background:var(--bg);
+/* Chỉ animate trên máy có chuột (desktop). Điện thoại sẽ KHÔNG animate => hết lag */
+@media (hover:hover) and (pointer:fine){
+  .rainbow-on .rainbow-target{
+    animation: rainbowMove 3.8s linear infinite;
+  }
 }
 
-/* ===== BACKGROUND (CHỈ 1 CÁI) ===== */
-.bg{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  background:url("bg.gif") center/cover no-repeat;
-  filter:blur(2px);
-  opacity:.35;
+@keyframes rainbowMove{
+  from{ background-position: 0% 50%; }
+  to{ background-position: 200% 50%; }
 }
 
-/* ===== HEADER ===== */
-.wrap{max-width:1100px;margin:auto;padding:14px}
-.card{background:var(--card);border-radius:22px;overflow:hidden}
-
-.cover{width:100%;height:220px;object-fit:cover}
-
-.header-inner{
-  position:relative;
-  padding:80px 16px 16px 160px;
+/* Không cho rainbow phá input/textarea/select/audio */
+input, textarea, select, option, audio, button{
+  background: initial !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  color: inherit !important;
 }
-
-/* ===== AVATAR ===== */
-.avatar-wrap{
-  position:absolute;
-  left:24px;
-  top:-60px;
-  width:120px;
-  height:120px;
-}
-
-.avatar{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  object-fit:cover;
-  position:relative;
-  z-index:2;
-}
-
-.avatar-frame{
-  position:absolute;
-  inset:-10px;
-  z-index:1;
-  pointer-events:none;
-}
-
-/* ===== TEXT ===== */
-.name{font-size:26px;font-weight:900}
-.subtitle{color:var(--muted)}
-.quote{font-style:italic;color:var(--muted)}
-
-/* ===== GRID ===== */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:14px;
-}
-@media(max-width:800px){
-  .grid{grid-template-columns:1fr}
-  .header-inner{padding-left:16px;padding-top:90px}
-}
-
-/* ===== BUTTON ===== */
-.top-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-}
-.btn{
-  padding:8px 14px;
-  border-radius:999px;
-  background:#0006;
-  cursor:pointer;
-}
-
-/* ===== ADMIN MODAL ===== */
-.modal{
-  position:fixed;
-  inset:0;
-  background:#0008;
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-.modal.show{display:flex}
-
-.modal-card{
-  background:#111c;
-  padding:16px;
-  width:95%;
-  max-width:800px;
-  max-height:90vh;
-  overflow:auto;
-  border-radius:20px;
-}
-</style>
-</head>
-
-<body>
-<div class="bg"></div>
-
-<div class="wrap">
-
-  <div class="top-actions">
-    <div class="btn" id="btnTheme">🌙 Dark</div>
-    <div class="btn" id="btnAdmin">🔒 Admin</div>
-  </div>
-
-  <div class="card">
-    <img src="cover.gif" class="cover">
-
-    <div class="header-inner">
-      <div class="avatar-wrap">
-        <img src="avatar.jpg" class="avatar">
-        <img src="frame.png" class="avatar-frame">
-      </div>
-
-      <div>
-        <div class="name rainbow-target">Milo Pha Đá (Nhat boy)</div>
-        <div class="subtitle rainbow-target">IT Student • Software Engineering</div>
-        <div class="quote rainbow-target">“Một góc nhỏ trên Internet của Milo.”</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card" style="padding:14px">
-      <b class="rainbow-target">🎧 Nhạc tôi nghe</b>
-      <audio controls src="music.mp3" style="width:100%"></audio>
-    </div>
-
-    <div class="card" style="padding:14px">
-      <b class="rainbow-target">📌 Giới thiệu</b>
-      <p class="rainbow-target">Chạy Ngay Đi • Chạy Vào Trái Tim Em • Đùa Thôi 😳</p>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ADMIN ===== -->
-<div class="modal" id="adminModal">
-  <div class="modal-card">
-    <h3 class="rainbow-target">Admin Panel</h3>
-    <input id="adminPass" placeholder="Nhập mật khẩu">
-    <button onclick="login()">Đăng nhập</button>
-
-    <div id="adminContent" style="display:none">
-      <hr>
-      <label>Rainbow</label>
-      <select onchange="toggleRainbow(this.value)">
-        <option value="0">Tắt</option>
-        <option value="1">Bật</option>
-      </select>
-    </div>
-  </div>
-</div>
-
-<script>
-const PASS="079268";
-
-btnAdmin.onclick=()=>adminModal.classList.add("show");
-adminModal.onclick=e=>{if(e.target===adminModal)adminModal.classList.remove("show")}
-
-function login(){
-  if(adminPass.value===PASS){
-    adminContent.style.display="block";
-    alert("Admin ON");
-  }else alert("Sai pass");
-}
-
-function toggleRainbow(v){
-  document.body.classList.toggle("rainbow-on",v==="1");
-}
-</script>
-</body>
-</html>
