@@ -1,20 +1,20 @@
 /* Avatar + frame overlay */
 .avatar-wrap{
   position:relative;
-  width:152px;
-  height:152px;
+  width:196px;
+  height:196px;
   flex:0 0 auto;
 }
 
 .avatar{
   position:absolute;
-  inset:16px;
-  width:120px;
-  height:120px;
+  inset:22px;
+  width:152px;
+  height:152px;
   border-radius:50%;
   object-fit:cover;
   z-index:2;
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
 }
 
 .frame{
@@ -24,22 +24,18 @@
   height:100%;
   z-index:3;
   pointer-events:none;
-  filter: drop-shadow(0 0 10px rgba(120,180,255,.45));
+  filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
 }
 
-/* Discord-ish “remix nhẹ”: 2 vòng rung nhẹ + blur glow */
+/* vòng gợn sóng theo khung to hơn */
 .ring{
   position:absolute;
-  inset:-8px;
+  inset:-10px;
   border-radius:50%;
   z-index:1;
   pointer-events:none;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(56,189,248,.35), transparent 45%),
-    radial-gradient(circle at 70% 70%, rgba(99,102,241,.28), transparent 50%);
   filter: blur(6px);
   opacity:.85;
-  animation: ringPulse 2.8s ease-in-out infinite;
 }
 
 .ring::before,
