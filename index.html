@@ -2,350 +2,370 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Milo Pha Đá</title>
-
-  <!-- Optional: giữ file effect.css của mày (nếu có) -->
-  <link rel="stylesheet" href="effect.css" />
 
   <style>
     :root{
-      --bg: #cfe6ff;
-      --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.58);
-      --text: #0c1b2a;
-      --muted: rgba(12,27,42,.70);
-      --border: rgba(0,0,0,.10);
-      --shadow: 0 18px 45px rgba(0,0,0,.18);
+      --bg: rgba(255,255,255,.55);
+      --card: rgba(255,255,255,.55);
+      --card2: rgba(255,255,255,.45);
+      --text: #0c1722;
+      --muted: rgba(12,23,34,.65);
+      --line: rgba(255,255,255,.45);
+      --shadow: 0 18px 50px rgba(0,0,0,.18);
       --radius: 22px;
-      --btn: rgba(12,27,42,.10);
-      --btnText: #0c1b2a;
-      --accent: #3b82f6;
+      --btn: rgba(255,255,255,.55);
+      --btn2: rgba(0,0,0,.10);
+      --accent: #2f7df6;
+      --danger: #ff4d4d;
     }
     body.dark{
-      --bg: #071320;
-      --card: rgba(12,20,30,.72);
-      --card2: rgba(12,20,30,.55);
+      --bg: rgba(15,22,32,.55);
+      --card: rgba(22,30,44,.62);
+      --card2: rgba(22,30,44,.50);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
-      --border: rgba(255,255,255,.12);
-      --shadow: 0 22px 55px rgba(0,0,0,.45);
-      --btn: rgba(255,255,255,.10);
-      --btnText: rgba(255,255,255,.92);
-      --accent: #60a5fa;
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 22px 60px rgba(0,0,0,.42);
+      --btn: rgba(22,30,44,.72);
+      --btn2: rgba(255,255,255,.10);
+      --accent: #7bb0ff;
+      --danger: #ff6b6b;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       overflow-x:hidden;
+      background: #7cc7ff;
     }
 
-    /* background gif */
-    .bg{
-      position:fixed; inset:0;
+    /* BG GIF full */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
       background: url("bg.gif") center/cover no-repeat;
-      filter: saturate(1.05);
-      transform: scale(1.02);
+      filter: blur(0px);
+      transform: translateZ(0);
       z-index:-2;
     }
-    .bg::after{
+    /* soft overlay */
+    body::after{
       content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.18));
+      position:fixed;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.05));
       z-index:-1;
-    }
-    body.dark .bg::after{
-      background: linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.55));
+      pointer-events:none;
     }
 
     .wrap{
-      width:min(980px, 100%);
-      margin: 18px auto;
-      padding: 0 12px 28px;
+      width:min(1100px, 94vw);
+      margin: 18px auto 40px;
+      padding-bottom: 24px;
     }
 
     /* top actions */
     .top-actions{
+      position: sticky;
+      top: 10px;
+      z-index: 50;
       display:flex;
       justify-content:flex-end;
       gap:10px;
-      margin: 6px 2px 12px;
-      position:sticky;
-      top: 10px;
-      z-index: 50;
+      padding: 8px 0;
+      pointer-events:none; /* IMPORTANT: tránh overlay ăn click */
     }
-    .pill{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.18);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: var(--btnText);
+    .btn{
+      pointer-events:auto; /* enable click */
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--btn), rgba(255,255,255,.25));
+      color: var(--text);
       border-radius: 999px;
       padding: 10px 14px;
-      font-weight: 900;
-      display:flex;
+      display:inline-flex;
       align-items:center;
       gap:10px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.08);
       cursor:pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,.12);
       user-select:none;
-      transition: transform .08s ease, opacity .2s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-weight: 650;
     }
-    .pill:active{ transform: scale(.98); }
-    .pill small{ opacity:.75; font-weight:800; }
+    .btn:active{ transform: scale(.98); }
 
     /* main card */
     .card{
-      border: 1px solid var(--border);
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: var(--bg);
+      border:1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
+    /* header */
     .cover{
-      height: 240px;
       position:relative;
+      height: 260px;
       background: #000;
+      overflow:hidden;
     }
     .cover img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
-      filter: saturate(1.05) contrast(1.03);
+      transform: translateZ(0);
+    }
+    .profile-row{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 18px;
+      padding: 16px 18px 18px;
+      align-items:center;
     }
 
-    .profileRow{
-      display:flex;
-      gap:16px;
-      padding: 14px 16px 16px;
-      align-items:flex-end;
-      flex-wrap:wrap;
-    }
-
+    /* avatar frame */
     .avatarWrap{
-      width: 122px;
-      height: 122px;
-      margin-top: -60px;
-      border-radius: 999px;
       position:relative;
-      flex: 0 0 auto;
+      width: 140px;
+      height: 140px;
+      margin-top: -70px; /* overlap cover */
+      margin-left: 8px;
+      flex: none;
     }
-    .avatarFrame{
-      position:absolute; inset:-14px;
+    .avatarWrap .avatar{
+      position:absolute;
+      inset: 18px;
+      border-radius: 999px;
+      object-fit: cover;
+      width: calc(100% - 36px);
+      height: calc(100% - 36px);
+      border: 3px solid rgba(255,255,255,.75);
+      background: rgba(0,0,0,.15);
+    }
+    .avatarWrap::after{
+      content:"";
+      position:absolute;
+      inset:0;
       background: url("frame.png") center/contain no-repeat;
       pointer-events:none;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,.22));
-    }
-    .avatar{
-      width: 100%;
-      height: 100%;
-      border-radius: 999px;
-      border: 4px solid rgba(255,255,255,.75);
-      object-fit:cover;
-      display:block;
-      box-shadow: 0 14px 28px rgba(0,0,0,.22);
-      background:#000;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.25));
     }
 
-    .who{
-      min-width: 220px;
-      flex: 1 1 240px;
+    .title h1{
+      margin:0;
+      font-size: clamp(22px, 3.6vw, 34px);
+      line-height:1.12;
+      letter-spacing:.2px;
     }
-    .name{
-      font-size: 30px;
-      line-height: 1.1;
-      font-weight: 1000;
-      letter-spacing: .2px;
-      margin:0 0 6px;
-    }
-    .sub{
-      margin:0 0 6px;
+    .title .sub{
+      margin-top:6px;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 600;
     }
-    .quote{
-      margin: 0;
-      color: var(--muted);
+    .title .quote{
+      margin-top:8px;
       font-style: italic;
-      font-weight: 700;
+      color: var(--muted);
     }
 
     .chips{
-      display:flex; gap:8px; flex-wrap:wrap;
-      margin-top: 10px;
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
     }
     .chip{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.18);
-      padding: 8px 10px;
+      border:1px solid var(--line);
+      background: var(--card2);
+      padding: 8px 12px;
       border-radius: 999px;
-      font-weight: 900;
-      color: var(--btnText);
+      font-weight: 650;
       display:inline-flex;
       align-items:center;
       gap:8px;
-      font-size: 13px;
-    }
-    body.dark .chip{
-      background: rgba(255,255,255,.08);
+      color: var(--text);
     }
 
-    /* grid sections */
+    /* grid content */
     .grid{
+      padding: 14px 16px 18px;
       display:grid;
       grid-template-columns: 1.2fr .8fr;
-      gap: 12px;
-      padding: 12px 16px 16px;
+      gap: 14px;
     }
-    @media (max-width: 860px){
-      .cover{ height: 220px; }
-      .grid{ grid-template-columns: 1fr; }
-      .avatarWrap{ margin-top:-66px; }
-      .name{ font-size: 28px; }
-      .top-actions{ top: 6px; }
-    }
-
     .panel{
-      border: 1px solid var(--border);
-      background: var(--card2);
+      background: var(--card);
+      border:1px solid var(--line);
       border-radius: 18px;
-      padding: 12px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.08);
+      padding: 14px;
+      min-height: 120px;
     }
-    .h{
-      font-weight:1000;
+    .panel h3{
+      margin:0 0 10px;
       font-size: 16px;
-      margin: 0 0 6px;
     }
-    .hint{
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 13px;
-      margin: 0 0 10px;
-      line-height: 1.35;
-    }
-
-    .list{
-      margin:0;
-      padding-left: 18px;
-      display:grid;
-      gap: 6px;
-      font-weight: 850;
-    }
-    .list li{ line-height: 1.35; }
+    .muted{ color: var(--muted); }
 
     /* music */
     .musicTitle{
-      font-weight: 1000;
-      font-size: 14px;
-      margin-bottom: 8px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
+      font-weight: 800;
+      font-size: 22px;
+      margin: 4px 0 2px;
+      background: linear-gradient(90deg, #ff3b30, #ffcc00, #34c759, #0a84ff, #af52de);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .musicTitle b{ font-size: 18px; }
-    audio{ width: 100%; }
+    .musicBox audio{ width:100%; }
 
-    /* buttons row */
-    .btnRow{
+    /* games */
+    .gameList{ display:flex; flex-direction:column; gap:10px; }
+    .gameItem{
+      display:flex; align-items:center; justify-content:space-between;
+      border:1px solid var(--line);
+      background: var(--card2);
+      border-radius: 14px;
+      padding: 10px 12px;
+      gap: 10px;
+    }
+    .gameItem .left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .gameItem .name{ font-weight:800; }
+    .gameItem .desc{ font-size: 12.5px; color: var(--muted); }
+    .pill{
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.35);
+      white-space:nowrap;
+    }
+    body.dark .pill{ background: rgba(0,0,0,.18); }
+
+    /* contacts */
+    .contactsRow{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-top: 10px;
     }
-    .btn{
-      flex: 1 1 140px;
-      border: 1px solid var(--border);
-      background: var(--btn);
-      color: var(--btnText);
+    .contactBtn{
+      flex:1;
+      min-width: 140px;
+      text-align:center;
+      border:1px solid var(--line);
+      background: var(--card2);
       border-radius: 14px;
       padding: 10px 12px;
-      font-weight: 1000;
+      font-weight: 800;
       cursor:pointer;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      transition: transform .08s ease, opacity .2s ease;
-      text-decoration:none;
+      user-select:none;
     }
-    .btn:active{ transform: scale(.99); }
+    .contactBtn:active{ transform: scale(.99); }
 
     /* tus */
     .tusBox{
-      margin-top: 12px;
-      border: 1px dashed var(--border);
-      border-radius: 16px;
-      padding: 12px;
+      margin-top: 14px;
+      padding: 14px 16px 18px;
     }
     .tusHead{
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom: 8px;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
     }
-    .tusItems{
-      display:grid;
-      gap: 8px;
+    .tusList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
     .tusItem{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.14);
+      border:1px solid var(--line);
+      background: var(--card2);
+      border-radius: 16px;
       padding: 10px 12px;
-      border-radius: 14px;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
+      gap: 12px;
     }
-    body.dark .tusItem{ background: rgba(255,255,255,.06); }
     .tusItem a{
-      color: var(--btnText);
-      font-weight: 950;
+      color: var(--text);
       text-decoration:none;
+      font-weight: 800;
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
-      max-width: 78%;
+      max-width: 75%;
     }
-    .miniBtn{
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.08);
-      color: var(--btnText);
+    .tusItem .small{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight:700;
+    }
+    .dangerBtn{
+      border:1px solid rgba(255,0,0,.25);
+      background: rgba(255,0,0,.10);
+      color: var(--text);
       border-radius: 12px;
       padding: 8px 10px;
-      font-weight: 1000;
       cursor:pointer;
+      font-weight:800;
     }
-    body.dark .miniBtn{ background: rgba(255,255,255,.08); }
 
     /* schedule */
-    table{ color: var(--btnText); }
-    th,td{ vertical-align: top; }
-    .tag{
-      display:inline-flex;
+    .scheduleGrid{
+      display:grid;
+      grid-template-columns: repeat(7, minmax(140px, 1fr));
+      gap: 10px;
+      overflow:auto;
+      padding-bottom: 4px;
+    }
+    .dayCol{
+      border:1px solid var(--line);
+      background: var(--card2);
+      border-radius: 16px;
+      padding: 10px;
+      min-height: 120px;
+    }
+    .dayTitle{
+      font-weight: 900;
+      margin-bottom: 8px;
+      display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.14);
-      font-weight: 950;
+    }
+    .slot{
+      border:1px dashed var(--line);
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 8px;
       font-size: 13px;
-      margin-right: 8px;
-      margin-top: 6px;
+    }
+    .slot b{ font-weight: 900; }
+    .slot .tag{
+      font-weight:900;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      margin-left:6px;
     }
 
     /* modal */
@@ -356,339 +376,719 @@
       display:none;
       align-items:center;
       justify-content:center;
-      padding: 14px;
-      z-index: 999;
+      padding: 18px;
+      z-index: 200;
     }
     .overlay.show{ display:flex; }
     .modal{
-      width:min(880px, 100%);
-      border: 1px solid var(--border);
+      width:min(820px, 96vw);
       background: var(--card);
-      border-radius: 18px;
+      border:1px solid var(--line);
+      border-radius: 22px;
       box-shadow: var(--shadow);
-      padding: 14px;
-      position:relative;
-      max-height: min(86vh, 820px);
-      overflow:auto;
-
-      /* FIX “chữ văng” */
-      line-height: 1.35;
+      overflow:hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
-    .modal *{
-      letter-spacing: 0 !important;
-      word-break: break-word;
+    .modalHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 14px;
+      border-bottom:1px solid var(--line);
+      font-weight: 900;
     }
-    .close{
-      position:sticky;
-      top: 0;
-      float:right;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.08);
-      color: var(--btnText);
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-weight: 1000;
+    .x{
       cursor:pointer;
+      border:1px solid var(--line);
+      background: var(--btn);
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-weight: 900;
     }
-    body.dark .close{ background: rgba(255,255,255,.08); }
-
-    .modalGrid{
+    .modalBody{
+      padding: 14px;
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 12px;
     }
-    @media (max-width: 860px){
-      .modalGrid{ grid-template-columns: 1fr; }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
     }
-
-    label{
-      display:block;
-      font-weight: 1000;
-      margin-bottom: 6px;
-    }
-    input,textarea,select{
+    .field label{ font-weight: 900; }
+    .field input, .field select, .field textarea{
       width:100%;
-      padding: 11px 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.35);
+      color: var(--text);
       border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.18);
-      color: var(--btnText);
+      padding: 10px 12px;
       outline:none;
-      font-weight: 850;
+      font-weight: 700;
     }
-    body.dark input, body.dark textarea, body.dark select{
-      background: rgba(255,255,255,.08);
+    body.dark .field input, body.dark .field select, body.dark .field textarea{
+      background: rgba(0,0,0,.18);
     }
-    textarea{ min-height: 88px; resize: vertical; }
+    .full{ grid-column: 1 / -1; }
 
     .rowBtns{
       display:flex;
-      gap: 10px;
+      gap:10px;
       flex-wrap:wrap;
-      margin-top: 10px;
+      justify-content:flex-end;
+      padding: 12px 14px 14px;
+      border-top:1px solid var(--line);
     }
     .primary{
-      background: rgba(59,130,246,.18);
-      border-color: rgba(59,130,246,.35);
-      color: var(--btnText);
+      background: linear-gradient(180deg, rgba(47,125,246,.95), rgba(47,125,246,.75));
+      color:white;
+      border: 1px solid rgba(255,255,255,.25);
     }
-    .danger{
-      background: rgba(239,68,68,.16);
-      border-color: rgba(239,68,68,.35);
-      color: var(--btnText);
+    .secondary{
+      background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.35));
+      border: 1px solid var(--line);
+    }
+    body.dark .secondary{ background: rgba(255,255,255,.10); }
+
+    /* rainbow */
+    @keyframes hueSpin{ from{ filter:hue-rotate(0deg); } to{ filter:hue-rotate(360deg);} }
+    body.rainbow *{
+      animation: hueSpin 6s linear infinite;
+    }
+    body.rainbow .no-rainbow, body.rainbow .no-rainbow *{
+      animation:none !important;
+      filter:none !important;
     }
 
-    /* rainbow text toggle */
-    .rainbow{
-      background: linear-gradient(90deg,#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#007aff,#af52de,#ff3b30);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: rb 3.5s linear infinite;
-      font-weight: 1000;
+    /* responsive */
+    @media (max-width: 860px){
+      .profile-row{ grid-template-columns: 1fr; }
+      .avatarWrap{ margin-top: -78px; margin-left: 6px; }
+      .grid{ grid-template-columns: 1fr; }
+      .modalBody{ grid-template-columns: 1fr; }
+      .cover{ height: 220px; }
     }
-    @keyframes rb{
-      0%{ background-position:0% 50%; }
-      100%{ background-position:100% 50%; }
-    }
-
-    .rainbowOff .rainbow{
-      color: var(--btnText) !important;
-      background: none !important;
-      -webkit-background-clip: border-box !important;
-      background-clip: border-box !important;
-      animation: none !important;
-    }
-
-    .footerSpace{ height: 26px; }
   </style>
 </head>
 
-<body class="rainbowOff">
-  <div class="bg"></div>
-
+<body>
   <div class="wrap">
-    <div class="top-actions">
-      <button class="pill" id="btnTheme" type="button" aria-label="Toggle theme">
-        <span id="themeIcon">🌙</span>
-        <span id="themeText">Dark</span>
-      </button>
-
-      <button class="pill" id="btnAdmin" type="button" aria-label="Admin">
-        <span id="adminIcon">🔒</span>
-        <span id="adminText">Admin</span>
-        <small id="adminState">OFF</small>
-      </button>
+    <div class="top-actions no-rainbow">
+      <button class="btn" id="btnTheme" aria-label="toggle theme">🌙 <span id="themeText">Dark</span></button>
+      <button class="btn" id="btnAdmin" aria-label="open admin">🔒 <span id="adminText">Admin</span></button>
     </div>
 
-    <main class="card">
+    <div class="card">
       <div class="cover">
         <img src="cover.gif" alt="cover" />
       </div>
 
-      <div class="profileRow">
-        <div class="avatarWrap">
+      <div class="profile-row">
+        <div class="avatarWrap no-rainbow">
           <img class="avatar" src="avatar.jpg" alt="avatar" />
-          <div class="avatarFrame"></div>
         </div>
 
-        <div class="who">
-          <h1 class="name rainbow" id="nameText">Milo Pha Đá (Nhat boy)</h1>
-          <p class="sub rainbow" id="subText">IT Student • Software Engineering</p>
-          <p class="quote rainbow" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</p>
+        <div class="title">
+          <h1 id="nameText">Milo Pha Đá (Nhạt boy)</h1>
+          <div class="sub" id="subText">IT Student • Software Engineering</div>
+          <div class="quote" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</div>
 
           <div class="chips">
-            <span class="chip rainbow" id="chipLoc">📍 Hồ Chí Minh</span>
-            <span class="chip rainbow" id="chipAge">🎂 19</span>
-            <span class="chip rainbow" id="chipTag">🎮 gamer</span>
+            <div class="chip" id="chipCity">📍 Hồ Chí Minh</div>
+            <div class="chip" id="chipAge">🎂 19</div>
+            <div class="chip" id="chipTag">🎮 gamer</div>
           </div>
         </div>
       </div>
 
       <div class="grid">
-        <section class="panel">
-          <div class="musicTitle">
-            <span class="rainbow">🎧 Nhạc tôi nghe</span>
-            <b class="rainbow" id="musicName">Ai ngoài anh</b>
-          </div>
-          <div class="hint rainbow">Bấm Play để nghe 🎧</div>
-          <audio controls preload="none">
-            <source src="music.mp3" type="audio/mpeg" />
-          </audio>
-        </section>
+        <div class="panel musicBox">
+          <h3>🎧 Nhạc tôi nghe</h3>
+          <div class="muted">Đang nghe:</div>
+          <div class="musicTitle" id="musicTitle">Ai ngoài anh</div>
+          <div class="muted">Bấm Play để nghe 🎧</div>
+          <div style="height:10px"></div>
+          <audio id="player" controls src="music.mp3"></audio>
+        </div>
 
-        <section class="panel">
-          <div class="h rainbow">📌 Giới thiệu</div>
-          <div class="hint rainbow">Thêm nội dung dưới cho đỡ trống nè bro 🫶</div>
-          <ul class="list" id="introList">
-            <li class="rainbow">✨ Chạy Ngay Đi</li>
-            <li class="rainbow">🧸 Chạy Vào Trái Tim Em</li>
-            <li class="rainbow">😵 Đùa Thôi Anh Làm Gì Có Em</li>
-          </ul>
-        </section>
-
-        <section class="panel">
-          <div class="h rainbow">🎮 Game mình hay chơi</div>
-          <div class="hint rainbow" id="gameHint">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
-
-          <div class="tag rainbow" id="gameRoblox">🧩 Roblox <span style="opacity:.7;font-weight:900">chill / sandbox</span></div>
-          <div class="tag rainbow" id="gameValorant">🎯 Valorant <span style="opacity:.7;font-weight:900">FPS / tryhard</span></div>
-          <div class="tag rainbow" id="gameTFT">♟️ TFT <span style="opacity:.7;font-weight:900">auto chess</span></div>
-        </section>
-
-        <section class="panel">
-          <div class="h rainbow">🔗 Liên hệ</div>
-          <div class="hint rainbow">Bấm là mở link luôn.</div>
-          <div class="btnRow">
-            <a class="btn rainbow" id="btnFb" href="#" target="_blank" rel="noreferrer">🌐 Facebook</a>
-            <a class="btn rainbow" id="btnDc" href="#" target="_blank" rel="noreferrer">💬 Discord</a>
-          </div>
-
-          <div class="tusBox">
-            <div class="tusHead">
-              <div>
-                <div class="h rainbow">🧾 Đây là nơi check các tus của tôi</div>
-                <div class="hint rainbow">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
-              </div>
-              <button class="miniBtn" id="btnAddTus" type="button" style="display:none">➕ Thêm tus</button>
-            </div>
-            <div class="tusItems" id="tusItems"></div>
-          </div>
-        </section>
-
-        <!-- schedule section -->
-        <section class="panel" id="scheduleSection">
-          <div class="h rainbow">📅 Lịch bận / rảnh</div>
-          <div class="hint rainbow">Admin chỉnh lịch, người xem chỉ xem. (Chuẩn mobile + không văng chữ 😤)</div>
-
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <span class="chip rainbow" id="todayChip">📍 Hôm nay: ...</span>
-            <span class="chip rainbow" id="freeChip">✅ Rảnh: ...</span>
-          </div>
-
-          <div style="margin-top:12px; overflow:auto; border-radius:16px; border:1px solid var(--border)">
-            <table style="width:100%; border-collapse:collapse; min-width:650px">
-              <thead>
-                <tr style="background:rgba(0,0,0,.10)">
-                  <th style="text-align:left; padding:12px" class="rainbow">Thứ</th>
-                  <th style="text-align:left; padding:12px" class="rainbow">Bận</th>
-                  <th style="text-align:left; padding:12px" class="rainbow">Việc</th>
-                  <th style="text-align:left; padding:12px" class="rainbow">Rảnh</th>
-                </tr>
-              </thead>
-              <tbody id="scheduleTable"></tbody>
-            </table>
-          </div>
-
-          <div class="hint" style="margin-top:10px">
-            ➤ Format giờ: <b>HH:MM-HH:MM</b> (vd <b>13:00-15:30</b>)
-          </div>
-        </section>
-      </div>
-
-      <div class="footerSpace"></div>
-    </main>
-  </div>
-
-  <!-- Admin modal -->
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <button class="close" id="btnClose" type="button">✖</button>
-
-      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <div class="h rainbow" style="margin:0">🔐 Admin Panel</div>
-        <div class="chip" id="adminBadge">Admin: OFF</div>
-      </div>
-
-      <div class="hint rainbow">Password demo: <b id="passDemo">079268</b> (mày đổi trong code được)</div>
-
-      <div class="modalGrid">
-        <div>
-          <label class="rainbow">Mật khẩu admin</label>
-          <input id="passInput" placeholder="Nhập pass..." type="password" />
-          <div class="rowBtns">
-            <button class="btn primary rainbow" id="btnLogin" type="button">✅ Bật Admin</button>
-            <button class="btn danger rainbow" id="btnLogout" type="button">🚪 Thoát Admin</button>
+        <div class="panel">
+          <h3>📌 Giới thiệu</h3>
+          <div class="muted" id="aboutText">Thêm nội dung dưới đây cho đỡ trống nè bro 🫶</div>
+          <div style="height:10px"></div>
+          <div id="aboutList" class="muted">
+            • ✨ Chạy Ngay Đi<br/>
+            • 🧸 Chạy Vào Trái Tim Em<br/>
+            • 😭 Đùa Thôi Anh Làm Gì Có Em
           </div>
         </div>
 
-        <div>
-          <label class="rainbow">Rainbow chữ</label>
+        <div class="panel">
+          <h3>🎮 Game mình hay chơi</h3>
+          <div class="gameList" id="gameList"></div>
+          <div style="height:8px"></div>
+          <div class="muted">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
+        </div>
+
+        <div class="panel">
+          <h3>🔗 Liên hệ</h3>
+          <div class="contactsRow no-rainbow">
+            <div class="contactBtn" id="btnFacebook">🌐 Facebook</div>
+            <div class="contactBtn" id="btnDiscord">🎮 Discord</div>
+          </div>
+          <div style="height:10px"></div>
+          <div class="muted" id="contactHint">Bấm để mở link trực tiếp.</div>
+        </div>
+      </div>
+
+      <div class="tusBox">
+        <div class="tusHead">
+          <div>
+            <b>📝 Đây là nơi check các tus của tôi</b><br/>
+            <span class="muted">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</span>
+          </div>
+          <button class="btn no-rainbow" id="btnAddTus">➕ Thêm tus</button>
+        </div>
+
+        <div class="tusList" id="tusList"></div>
+      </div>
+
+      <div class="tusBox">
+        <div class="tusHead">
+          <div>
+            <b>📅 Lịch bận / rảnh</b><br/>
+            <span class="muted">Admin set thời gian bận/rảnh + việc muốn làm.</span>
+          </div>
+          <button class="btn no-rainbow" id="btnEditSchedule">⚙️ Chỉnh lịch</button>
+        </div>
+
+        <div class="scheduleGrid" id="scheduleGrid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN MODAL -->
+  <div class="overlay no-rainbow" id="overlay">
+    <div class="modal">
+      <div class="modalHead">
+        <div>🔐 Admin Panel</div>
+        <button class="x" id="btnClose">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="field full">
+          <label>Mật khẩu admin</label>
+          <input id="passInput" type="password" placeholder="Nhập pass..." />
+          <div class="muted">Pass demo: <b>079268</b> (vào rồi đổi pass được)</div>
+        </div>
+
+        <div class="field">
+          <label>Facebook (dán link profile)</label>
+          <input id="fbInput" placeholder="https://facebook.com/..." />
+        </div>
+        <div class="field">
+          <label>Discord ID (chỉ cần ID)</label>
+          <input id="dcInput" placeholder="9103..." />
+        </div>
+
+        <div class="field">
+          <label>Link Roblox (tài khoản)</label>
+          <input id="rbInput" placeholder="Dán link (có thể để trống)" />
+        </div>
+        <div class="field">
+          <label>Link Valorant (tài khoản / tracker)</label>
+          <input id="valoInput" placeholder="Dán link (có thể để trống)" />
+        </div>
+
+        <div class="field">
+          <label>Link TFT (tài khoản / tracker)</label>
+          <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+        </div>
+        <div class="field">
+          <label>Tên bài nhạc hiển thị</label>
+          <input id="musicInput" placeholder="Ví dụ: Ai ngoài anh" />
+        </div>
+
+        <div class="field">
+          <label>Rainbow chữ</label>
           <select id="rainbowSelect">
             <option value="off">Tắt</option>
             <option value="on">Bật</option>
           </select>
-
-          <div class="hint rainbow" style="margin-top:8px">
-            Bật lên thì chữ 7 sắc đổi màu liên tục 💅
-          </div>
+          <div class="muted">Bật là toàn web đổi màu liên tục 🌈</div>
         </div>
 
-        <div>
-          <label class="rainbow">Link Facebook (profile)</label>
-          <input id="fbInput" placeholder="https://facebook.com/..." />
-        </div>
-        <div>
-          <label class="rainbow">Discord ID (chỉ cần ID)</label>
-          <input id="dcInput" placeholder="1234567890..." />
-          <div class="hint rainbow">Tự build link: discord.com/users/&lt;ID&gt;</div>
+        <div class="field">
+          <label>Đổi mật khẩu admin (tuỳ chọn)</label>
+          <input id="newPassInput" placeholder="Để trống nếu không đổi" />
         </div>
 
-        <div>
-          <label class="rainbow">Link Roblox (tài khoản)</label>
-          <input id="rbInput" placeholder="https://www.roblox.com/users/..." />
-        </div>
-        <div>
-          <label class="rainbow">Link Valorant (tracker...)</label>
-          <input id="vaInput" placeholder="Dán link (có thể để trống)" />
+        <div class="field full">
+          <label>Thêm tus mới (Admin only)</label>
+          <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
+          <input id="tusLink" placeholder="Dán link tus Facebook..." />
+          <div class="muted">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
         </div>
 
-        <div>
-          <label class="rainbow">Link TFT (tracker...)</label>
-          <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+        <div class="field full">
+          <label>Chỉnh lịch bận / rảnh (Admin only)</label>
+          <div class="muted">Format 1 dòng = <b>Thời gian | Việc | bận/rảnh</b> (ví dụ: <b>08:00-10:00 | Học PRF | bận</b>)</div>
+          <textarea id="scheduleEditor" rows="10" placeholder="Mon:&#10;08:00-10:00 | Học PRF | bận&#10;19:00-21:00 | Gym | bận&#10;&#10;Tue: ..."></textarea>
         </div>
-        <div>
-          <label class="rainbow">Tên bài nhạc hiển thị</label>
-          <input id="musicInput" placeholder="Ví dụ: Ai ngoài anh" />
-        </div>
+      </div>
 
-        <div style="grid-column:1/-1">
-          <label class="rainbow">➕ Thêm tus mới</label>
-          <div class="modalGrid" style="margin-top:0">
-            <div>
-              <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
-            </div>
-            <div>
-              <input id="tusLink" placeholder="Dán link tus Facebook..." />
-            </div>
-          </div>
-
-          <div class="rowBtns">
-            <button class="btn primary rainbow" id="btnSaveSettings" type="button">💾 Lưu cài đặt</button>
-            <button class="btn rainbow" id="btnSaveTus" type="button">➕ Lưu tus</button>
-          </div>
-
-          <div class="hint rainbow" style="margin-top:8px">
-            Tus sẽ hiện cho mọi người bấm mở trực tiếp.
-          </div>
-        </div>
-
-        <div style="grid-column:1/-1">
-          <label class="rainbow">📅 Chỉnh lịch bận / rảnh</label>
-          <textarea id="scheduleInput" placeholder='Mỗi dòng 1 ngày:
-Thứ 2 | 08:00-11:30 | Học / Lab | 12:30-23:00
-Thứ 3 | 13:00-17:00 | Dự án | 08:00-12:00, 17:30-23:00'></textarea>
-          <div class="hint rainbow">Admin paste/sửa xong bấm <b>Lưu cài đặt</b> là áp dụng.</div>
-        </div>
+      <div class="rowBtns">
+        <button class="btn secondary" id="btnLogout">🚪 Thoát Admin</button>
+        <button class="btn primary" id="btnSave">💾 Lưu cài đặt</button>
       </div>
     </div>
   </div>
 
   <script>
-    // =======================
-    // ✅ CONFIG + STORAGE
-    // =======================
-    const KEY = "milo_site_v4";
-    const PASS_ADMIN = "079268"; // đổi pass ở đ
+    // =========================
+    // STORAGE + DEFAULTS
+    // =========================
+    const DEFAULT = {
+      theme: "light",
+      admin: false,
+      adminPass: "079268",
+      rainbow: false,
+
+      facebook: "https://facebook.com/milo.pha.da",
+      discordId: "910327589309145109",
+
+      musicTitle: "Ai ngoài anh",
+
+      links: {
+        roblox: "",
+        valorant: "",
+        tft: ""
+      },
+
+      tus: [
+        { name: "Tus mẫu 1", link: "https://facebook.com/" }
+      ],
+
+      schedule: {
+        Mon: [
+          { time: "08:00-10:00", task: "Học", status: "bận" },
+          { time: "20:00-22:00", task: "Rảnh chơi game", status: "rảnh" },
+        ],
+        Tue: [],
+        Wed: [],
+        Thu: [],
+        Fri: [],
+        Sat: [],
+        Sun: []
+      }
+    };
+
+    const KEY = "milo_profile_v3";
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return structuredClone(DEFAULT);
+        const parsed = JSON.parse(raw);
+
+        // merge safe
+        return {
+          ...structuredClone(DEFAULT),
+          ...parsed,
+          links: { ...structuredClone(DEFAULT.links), ...(parsed.links||{}) },
+          schedule: { ...structuredClone(DEFAULT.schedule), ...(parsed.schedule||{}) },
+          tus: Array.isArray(parsed.tus) ? parsed.tus : structuredClone(DEFAULT.tus)
+        };
+      }catch(e){
+        return structuredClone(DEFAULT);
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+
+    // =========================
+    // DOM
+    // =========================
+    const $ = (id)=>document.getElementById(id);
+
+    const btnTheme = $("btnTheme");
+    const btnAdmin = $("btnAdmin");
+    const themeText = $("themeText");
+    const adminText = $("adminText");
+
+    const overlay = $("overlay");
+    const btnClose = $("btnClose");
+
+    const fbInput = $("fbInput");
+    const dcInput = $("dcInput");
+    const rbInput = $("rbInput");
+    const valoInput = $("valoInput");
+    const tftInput = $("tftInput");
+    const musicInput = $("musicInput");
+    const passInput = $("passInput");
+    const newPassInput = $("newPassInput");
+    const rainbowSelect = $("rainbowSelect");
+
+    const btnSave = $("btnSave");
+    const btnLogout = $("btnLogout");
+
+    const btnFacebook = $("btnFacebook");
+    const btnDiscord = $("btnDiscord");
+
+    const musicTitle = $("musicTitle");
+
+    const gameList = $("gameList");
+    const tusList = $("tusList");
+    const btnAddTus = $("btnAddTus");
+
+    const tusName = $("tusName");
+    const tusLink = $("tusLink");
+
+    const scheduleGrid = $("scheduleGrid");
+    const btnEditSchedule = $("btnEditSchedule");
+    const scheduleEditor = $("scheduleEditor");
+
+    // =========================
+    // RENDER
+    // =========================
+    function applyTheme(){
+      const isDark = state.theme === "dark";
+      document.body.classList.toggle("dark", isDark);
+      themeText.textContent = isDark ? "Light" : "Dark";
+    }
+
+    function applyRainbow(){
+      document.body.classList.toggle("rainbow", !!state.rainbow);
+    }
+
+    function buildDiscordUrl(id){
+      const clean = (id||"").trim();
+      if(!clean) return "";
+      return "https://discord.com/users/" + clean;
+    }
+
+    function renderContacts(){
+      $("contactHint").textContent = "Bấm để mở link trực tiếp.";
+
+      btnFacebook.onclick = ()=>{
+        if(state.facebook) window.open(state.facebook, "_blank", "noopener");
+      };
+      btnDiscord.onclick = ()=>{
+        const url = buildDiscordUrl(state.discordId);
+        if(url) window.open(url, "_blank", "noopener");
+      };
+    }
+
+    function renderGames(){
+      const games = [
+        { key:"roblox", icon:"🧸", name:"Roblox", desc:"chill / sandbox", tag:"casual" },
+        { key:"valorant", icon:"🎯", name:"Valorant", desc:"FPS / tryhard", tag:"rank" },
+        { key:"tft", icon:"🧠", name:"TFT", desc:"auto chess", tag:"brain" },
+      ];
+
+      gameList.innerHTML = "";
+      games.forEach(g=>{
+        const link = state.links[g.key] || "";
+        const item = document.createElement("div");
+        item.className = "gameItem";
+        item.innerHTML = `
+          <div class="left">
+            <div class="name">${g.icon} ${g.name}</div>
+            <div class="desc">${g.desc}${link ? " • có link" : ""}</div>
+          </div>
+          <div class="pill">${g.tag}</div>
+        `;
+        item.style.cursor = link ? "pointer" : "default";
+        if(link){
+          item.addEventListener("click", ()=> window.open(link, "_blank", "noopener"));
+        }
+        gameList.appendChild(item);
+      });
+    }
+
+    function renderMusic(){
+      musicTitle.textContent = state.musicTitle || "Nhạc";
+    }
+
+    function renderTus(){
+      tusList.innerHTML = "";
+      const list = Array.isArray(state.tus) ? state.tus : [];
+
+      if(list.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.textContent = "Chưa có tus nào. Admin thêm vào là xịn liền 😎";
+        tusList.appendChild(empty);
+        return;
+      }
+
+      list.forEach((t, idx)=>{
+        const row = document.createElement("div");
+        row.className = "tusItem";
+
+        const left = document.createElement("div");
+        left.style.minWidth = "0";
+        left.innerHTML = `
+          <div><a href="${t.link||"#"}" target="_blank" rel="noopener">${t.name||"Tus"}</a></div>
+          <div class="small">${t.link||""}</div>
+        `;
+
+        const right = document.createElement("div");
+
+        if(state.admin){
+          const del = document.createElement("button");
+          del.className = "dangerBtn";
+          del.textContent = "🗑️ Xoá";
+          del.onclick = ()=>{
+            state.tus.splice(idx,1);
+            saveState();
+            renderTus();
+          };
+          right.appendChild(del);
+        }else{
+          right.innerHTML = `<span class="small">🔒</span>`;
+        }
+
+        row.appendChild(left);
+        row.appendChild(right);
+        tusList.appendChild(row);
+      });
+    }
+
+    const DAY_ORDER = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const DAY_VI = {Mon:"Thứ 2",Tue:"Thứ 3",Wed:"Thứ 4",Thu:"Thứ 5",Fri:"Thứ 6",Sat:"Thứ 7",Sun:"CN"};
+
+    function renderSchedule(){
+      scheduleGrid.innerHTML = "";
+      DAY_ORDER.forEach(d=>{
+        const col = document.createElement("div");
+        col.className = "dayCol";
+        col.innerHTML = `<div class="dayTitle">${DAY_VI[d]} <span class="muted">${(state.schedule[d]||[]).length} mục</span></div>`;
+        const items = state.schedule[d] || [];
+        if(items.length === 0){
+          const p = document.createElement("div");
+          p.className = "muted";
+          p.textContent = "Trống 😴";
+          col.appendChild(p);
+        }else{
+          items.forEach(s=>{
+            const slot = document.createElement("div");
+            slot.className = "slot";
+            const st = (s.status||"").toLowerCase().includes("bận") ? "bận" : "rảnh";
+            slot.innerHTML = `
+              <div><b>${s.time||"?"}</b> <span class="tag">${st}</span></div>
+              <div class="muted">${s.task||""}</div>
+            `;
+            col.appendChild(slot);
+          });
+        }
+        scheduleGrid.appendChild(col);
+      });
+    }
+
+    // =========================
+    // ADMIN MODAL
+    // =========================
+    function openAdmin(){
+      // fill inputs
+      fbInput.value = state.facebook || "";
+      dcInput.value = state.discordId || "";
+      rbInput.value = state.links.roblox || "";
+      valoInput.value = state.links.valorant || "";
+      tftInput.value = state.links.tft || "";
+      musicInput.value = state.musicTitle || "";
+      rainbowSelect.value = state.rainbow ? "on" : "off";
+
+      // schedule editor text
+      scheduleEditor.value = buildScheduleText();
+
+      passInput.value = "";
+      newPassInput.value = "";
+      overlay.classList.add("show");
+    }
+
+    function closeAdmin(){
+      overlay.classList.remove("show");
+    }
+
+    function buildScheduleText(){
+      // Mon:\n08:00-10:00 | Học | bận\n...
+      let out = "";
+      DAY_ORDER.forEach(d=>{
+        out += d + ":\n";
+        const items = state.schedule[d] || [];
+        items.forEach(it=>{
+          out += `${it.time||""} | ${it.task||""} | ${it.status||""}\n`;
+        });
+        out += "\n";
+      });
+      return out.trim();
+    }
+
+    function parseScheduleText(text){
+      // returns schedule object
+      const lines = (text||"").split("\n");
+      const sch = {Mon:[],Tue:[],Wed:[],Thu:[],Fri:[],Sat:[],Sun:[]};
+      let cur = null;
+
+      for(const raw of lines){
+        const line = raw.trim();
+        if(!line) continue;
+
+        const dayMatch = line.replace(/\s/g,"").replace(":","").toLowerCase();
+        const map = {mon:"Mon",tue:"Tue",wed:"Wed",thu:"Thu",fri:"Fri",sat:"Sat",sun:"Sun"};
+        if(map[dayMatch]){
+          cur = map[dayMatch];
+          continue;
+        }
+        if(!cur) continue;
+
+        // time | task | status
+        const parts = line.split("|").map(s=>s.trim());
+        const time = parts[0] || "";
+        const task = parts[1] || "";
+        const status = (parts[2] || "bận").toLowerCase().includes("r") ? "rảnh" : (parts[2]||"bận");
+        if(time || task){
+          sch[cur].push({ time, task, status });
+        }
+      }
+      return sch;
+    }
+
+    function requireAdminOrAsk(){
+      if(state.admin) return true;
+      // open admin and focus pass
+      openAdmin();
+      setTimeout(()=>passInput.focus(), 150);
+      return false;
+    }
+
+    function setAdmin(on){
+      state.admin = !!on;
+      adminText.textContent = state.admin ? "Admin ON" : "Admin";
+      saveState();
+      renderTus();
+    }
+
+    // =========================
+    // EVENTS
+    // =========================
+    btnTheme.addEventListener("click", ()=>{
+      state.theme = (state.theme === "dark") ? "light" : "dark";
+      saveState();
+      applyTheme();
+    });
+
+    btnAdmin.addEventListener("click", ()=>{
+      openAdmin();
+    });
+
+    btnClose.addEventListener("click", closeAdmin);
+    overlay.addEventListener("click", (e)=>{
+      if(e.target === overlay) closeAdmin();
+    });
+
+    btnLogout.addEventListener("click", ()=>{
+      setAdmin(false);
+      closeAdmin();
+    });
+
+    btnSave.addEventListener("click", ()=>{
+      const pass = passInput.value.trim();
+
+      // if not admin yet => validate pass to enable admin
+      if(!state.admin){
+        if(pass !== state.adminPass){
+          alert("Sai pass rồi bro 💀");
+          passInput.focus();
+          return;
+        }
+        setAdmin(true);
+      }
+
+      // now admin can save settings
+      state.facebook = fbInput.value.trim();
+      state.discordId = dcInput.value.trim();
+
+      state.links.roblox = rbInput.value.trim();
+      state.links.valorant = valoInput.value.trim();
+      state.links.tft = tftInput.value.trim();
+
+      state.musicTitle = musicInput.value.trim() || "Nhạc";
+
+      state.rainbow = (rainbowSelect.value === "on");
+
+      // change pass if provided
+      const newP = newPassInput.value.trim();
+      if(newP){
+        state.adminPass = newP;
+      }
+
+      // add tus if filled
+      const tn = tusName.value.trim();
+      const tl = tusLink.value.trim();
+      if(tn && tl){
+        state.tus.unshift({ name: tn, link: tl });
+        tusName.value = "";
+        tusLink.value = "";
+      }
+
+      // schedule
+      state.schedule = parseScheduleText(scheduleEditor.value);
+
+      saveState();
+      applyTheme();
+      applyRainbow();
+      renderContacts();
+      renderGames();
+      renderMusic();
+      renderTus();
+      renderSchedule();
+      adminText.textContent = state.admin ? "Admin ON" : "Admin";
+
+      alert("Đã lưu cài đặt ✅");
+      closeAdmin();
+    });
+
+    btnAddTus.addEventListener("click", ()=>{
+      if(!requireAdminOrAsk()) return;
+      openAdmin();
+      tusName.scrollIntoView({behavior:"smooth", block:"center"});
+      setTimeout(()=>tusName.focus(), 200);
+    });
+
+    btnEditSchedule.addEventListener("click", ()=>{
+      if(!requireAdminOrAsk()) return;
+      openAdmin();
+      scheduleEditor.scrollIntoView({behavior:"smooth", block:"center"});
+      setTimeout(()=>scheduleEditor.focus(), 200);
+    });
+
+    // =========================
+    // INIT
+    // =========================
+    function init(){
+      // theme
+      applyTheme();
+      applyRainbow();
+
+      // admin label
+      adminText.textContent = state.admin ? "Admin ON" : "Admin";
+
+      // contacts + games + music + tus + schedule
+      renderContacts();
+      renderGames();
+      renderMusic();
+      renderTus();
+      renderSchedule();
+    }
+    init();
+  </script>
+</body>
+</html>
