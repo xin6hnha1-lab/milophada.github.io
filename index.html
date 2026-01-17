@@ -1,293 +1,393 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Milo Pha Đá</title>
 
+  <!-- Your effect (avatar deco + ring) -->
   <link rel="stylesheet" href="effect.css" />
 
   <style>
     :root{
-      --bg: #060a14;
-      --card: rgba(20,28,44,.62);
-      --card2: rgba(20,28,44,.45);
-      --text: #e9eefc;
-      --muted: rgba(233,238,252,.72);
-      --stroke: rgba(255,255,255,.10);
+      --bg: #070a12;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.12);
+      --text: #e7eaf3;
+      --muted:#b9c0d4;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
       --pill: rgba(255,255,255,.10);
+      --pillStroke: rgba(255,255,255,.14);
       --btn: rgba(255,255,255,.12);
-      --shadow: 0 24px 60px rgba(0,0,0,.40);
+      --btn2: rgba(255,255,255,.18);
+      --accent:#5bd6ff;
+      --accent2:#a78bfa;
     }
     [data-theme="light"]{
       --bg: #eef2ff;
-      --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.55);
+      --card: rgba(255,255,255,.75);
+      --card2: rgba(255,255,255,.88);
+      --stroke: rgba(15,23,42,.12);
       --text: #0b1220;
-      --muted: rgba(11,18,32,.72);
-      --stroke: rgba(11,18,32,.10);
-      --pill: rgba(11,18,32,.08);
-      --btn: rgba(11,18,32,.08);
-      --shadow: 0 24px 60px rgba(0,0,0,.18);
+      --muted:#46506b;
+      --shadow: 0 24px 70px rgba(2,6,23,.18);
+      --pill: rgba(2,6,23,.06);
+      --pillStroke: rgba(2,6,23,.10);
+      --btn: rgba(2,6,23,.08);
+      --btn2: rgba(2,6,23,.12);
+      --accent:#0ea5e9;
+      --accent2:#6366f1;
     }
 
-    *{ box-sizing:border-box; }
+    *{box-sizing:border-box}
     body{
       margin:0;
       min-height:100vh;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg) url("bg.gif") center/cover no-repeat fixed;
-      color: var(--text);
-      display:flex;
-      justify-content:center;
-      padding:28px 14px 60px;
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: url("bg.gif") center/cover no-repeat fixed;
+    }
+    /* overlay so background not "mất nét" kiểu trắng bệch */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(0,0,0,.25), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(0,0,0,.25), transparent 60%),
+                  rgba(0,0,0,.28);
+      pointer-events:none;
+    }
+    [data-theme="light"] body::before{
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.30), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(255,255,255,.30), transparent 60%),
+                  rgba(255,255,255,.18);
     }
 
-    /* chống mọi kiểu xoay chữ */
-    body, .wrap, .card, .panel, .section-title, .music, .tus{
-      writing-mode: horizontal-tb !important;
-      transform: none !important;
-      rotate: 0deg !important;
+    .wrap{
+      position:relative;
+      width:min(1080px, 94vw);
+      margin: 26px auto 60px;
     }
-
-    .wrap{ width:min(1040px, 100%); }
 
     .card{
-      border:1px solid var(--stroke);
-      border-radius:24px;
-      overflow:hidden;
       background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 26px;
+      overflow:hidden;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      position:relative;
+      backdrop-filter: blur(18px);
     }
 
     .cover{
-      height:240px;
+      height: 240px;
       background: url("cover.gif") center/cover no-repeat;
-      position:relative;
+      border-bottom: 1px solid var(--stroke);
     }
 
-    .top-actions{
-      position:absolute;
-      top:16px; right:16px;
-      display:flex; gap:10px;
-      z-index:80;
-    }
-
-    .btn{
-      border:1px solid var(--stroke);
-      background: var(--btn);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius:14px;
-      cursor:pointer;
-      user-select:none;
-      font-weight:800;
-    }
-    .btn:active{ transform: scale(.98); }
-    .btn[disabled]{ cursor:not-allowed; opacity:.55; }
-
-    .header{
-      padding:18px 22px 10px;
+    /* Facebook-ish header layout */
+    .head{
       display:grid;
-      grid-template-columns: 230px 1fr;
-      gap:18px;
-      align-items:center;
+      grid-template-columns: 240px 1fr;
+      gap: 18px;
+      padding: 18px 20px 12px;
+      align-items:start;
     }
 
-    .title h1{
-      margin:0;
-      font-size: clamp(22px, 3.2vw, 34px);
-      line-height:1.15;
-      letter-spacing:.2px;
-    }
-    .title .sub{
-      margin-top:6px;
-      color: var(--muted);
-      font-weight:700;
-      font-size:14px;
-    }
-    .title .quote{
-      margin-top:8px;
-      color: var(--muted);
-      font-style: italic;
-      font-size:13px;
+    .leftCol{
+      margin-top:-96px; /* avatar overlaps cover like FB */
+      padding-left: 8px;
     }
 
-    .pills{
-      margin-top:12px;
-      display:flex; flex-wrap:wrap;
-      gap:10px;
-    }
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: var(--pill);
-      font-size:13px;
-      color: var(--text);
-      font-weight:700;
+    /* Use your effect.css classes */
+    .avatar-wrap{ margin-left:0; } /* override if needed */
+
+    .rightCol{
+      padding-top: 4px;
     }
 
-    /* ===== MUSIC (đặt ngay dưới title, trước phần Giới thiệu) ===== */
-    .music{
-      margin:6px 22px 14px;
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius:18px;
-      padding:14px;
-    }
-    .music-top{
+    .topRow{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
       gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .music-left h3{
-      margin:0;
-      font-size:16px;
-      font-weight:900;
-    }
-    .music-sub{
-      margin-top:6px;
-      color: var(--muted);
-      font-size:13px;
-      font-weight:600;
     }
 
-    /* Tên bài nhạc nổi bật + mode màu */
-    .musicTitle{
-      margin-top:2px;
-      font-size:20px;
-      font-weight:1000;
+    h1{
+      margin: 6px 0 4px;
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height:1.1;
       letter-spacing:.2px;
-      line-height:1.2;
-      text-shadow: 0 10px 30px rgba(0,0,0,.28);
     }
-    .title-white{ color: #ffffff; }
-    .title-black{ color: #0b1220; }
-    .title-rainbow{
-      background: linear-gradient(90deg,
-        #ff004c, #ff8a00, #ffe600, #3dff00, #00ffd5, #007bff, #a400ff, #ff004c
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: rainbowMove 4s linear infinite;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,.22));
-    }
-    @keyframes rainbowMove{
-      0%{ background-position: 0% 50%; }
-      100%{ background-position: 200% 50%; }
-    }
-
-    .music-controls{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    }
-    .chip{
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:800;
-      user-select:none;
-    }
-    [data-theme="light"] .chip{
-      background: rgba(11,18,32,.06);
-    }
-
-    audio{ width:100%; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .9fr;
-      gap:16px;
-      padding:0 22px 18px;
-    }
-    .panel{
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius:18px;
-      padding:16px;
-    }
-    .section-title{
-      margin:0 0 10px;
-      font-size:16px;
-      font-weight:900;
-    }
-    ul{ margin:0; padding-left:18px; }
-    li{ margin:6px 0; }
-
-    .links{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-      padding:0 22px 18px;
-    }
-    .linkbtn{
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius:16px;
-      padding:14px 12px;
-      text-align:center;
-      font-weight:900;
-      cursor:pointer;
-      color: var(--text);
-      text-decoration:none;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-    }
-
-    .tus{
-      margin:0 22px 22px;
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius:18px;
-      padding:14px;
-    }
-    .tus-head{
-      display:flex; justify-content:space-between; align-items:center; gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .admin-note{
-      color: var(--muted);
-      font-size:13px;
-      margin-top:4px;
+    .sub{
+      margin:0;
+      color:var(--muted);
       font-weight:600;
+      opacity:.95;
     }
-    .tus-list a{
-      display:block;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      text-decoration:none;
-      margin-top:10px;
-      word-break: break-all;
+    .quote{
+      margin: 8px 0 10px;
+      color:var(--muted);
+      font-style:italic;
+      opacity:.9;
     }
-    .tus-del{
-      margin-top:8px;
+
+    .pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .pill{
       display:inline-flex;
       align-items:center;
       gap:8px;
+      padding: 10px 12px;
+      background: var(--pill);
+      border: 1px solid var(--pillStroke);
+      border-radius: 999px;
+      font-weight:700;
+      color: var(--text);
+      font-size: 14px;
+      backdrop-filter: blur(12px);
     }
 
-    @media (max-width:860px){
-      .header{ grid-template-columns: 1fr; }
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid var(--stroke);
+      background: var(--btn);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      backdrop-filter: blur(14px);
+    }
+    .btn:hover{ background: var(--btn2); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 14px 16px 18px;
+    }
+
+    .box{
+      background: var(--card2);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .box h3{
+      margin:0 0 10px;
+      font-size: 18px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .gameItem{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.10);
+    }
+    [data-theme="light"] .gameItem{ background: rgba(255,255,255,.55); }
+
+    .gameLeft{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .gameName{ font-weight:900; }
+    .gameDesc{ color:var(--muted); font-size:13px; font-weight:700; }
+    .tag{
+      align-self:center;
+      padding:8px 12px;
+      border-radius: 999px;
+      background: rgba(91,214,255,.22);
+      border: 1px solid rgba(91,214,255,.32);
+      font-weight:900;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .linksRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 16px 18px;
+    }
+    .linkbtn{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      text-decoration:none;
+      color: var(--text);
+      font-weight:900;
+      cursor:pointer;
+    }
+    .linkbtn:hover{ filter: brightness(1.06); }
+
+    /* Music section goes under avatar/name */
+    .musicWrap{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+    }
+    [data-theme="light"] .musicWrap{ background: rgba(255,255,255,.55); }
+
+    .musicTitle{
+      font-weight:1000;
+      font-size: 18px;
+      margin: 0 0 8px;
+    }
+
+    /* song name effects */
+    .songName{
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 1000;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .songName.white{ color:#fff; text-shadow:0 2px 18px rgba(0,0,0,.45); }
+    .songName.black{ color:#0b1220; text-shadow:0 1px 0 rgba(255,255,255,.18); }
+    .songName.rainbow{
+      background: linear-gradient(90deg,#ff0080,#ff8c00,#faff00,#00ff85,#00c2ff,#7a5cff,#ff0080);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,.35));
+      animation: hue 4s linear infinite;
+    }
+    @keyframes hue{ from{ filter:hue-rotate(0deg) drop-shadow(0 6px 18px rgba(0,0,0,.35)); }
+                    to  { filter:hue-rotate(360deg) drop-shadow(0 6px 18px rgba(0,0,0,.35)); } }
+
+    audio{ width:100%; }
+
+    /* Tus links section */
+    .tusHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom: 10px;
+    }
+    .hint{ color:var(--muted); font-weight:700; }
+
+    .tusList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .tusItem{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.10);
+    }
+    [data-theme="light"] .tusItem{ background: rgba(255,255,255,.55); }
+
+    .tusItem a{
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 900;
+      word-break: break-all;
+    }
+    .tusItem a:hover{ text-decoration: underline; }
+
+    /* Admin modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .modal{
+      width:min(760px, 96vw);
+      background: var(--card2);
+      border:1px solid var(--stroke);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      padding: 14px;
+    }
+    .modalTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .modal h2{ margin:0; font-size:18px; }
+    .xbtn{ padding:10px 12px; border-radius:14px; }
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .field label{ font-weight:900; color:var(--muted); font-size:13px; }
+    .field input, .field select{
+      padding: 12px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.10);
+      color: var(--text);
+      font-weight:800;
+      outline:none;
+    }
+    [data-theme="light"] .field input,
+    [data-theme="light"] .field select{
+      background: rgba(255,255,255,.70);
+      color: var(--text);
+    }
+    .rowBtns{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      margin-top: 12px;
+    }
+
+    /* responsive */
+    @media (max-width: 900px){
+      .head{ grid-template-columns: 1fr; }
+      .leftCol{ margin-top:-110px; }
       .grid{ grid-template-columns: 1fr; }
-      .links{ grid-template-columns: 1fr; }
+      .linksRow{ grid-template-columns: 1fr; }
+      .topRow{ flex-direction:column; align-items:flex-start; }
+      .controls{ width:100%; justify-content:flex-end; }
+      .form{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -297,271 +397,452 @@
     <div class="card">
       <div class="cover"></div>
 
-      <div class="top-actions">
-        <button class="btn" id="themeBtn" type="button">🌙 Dark</button>
-        <button class="btn" id="adminBtn" type="button">🔒 Admin</button>
-      </div>
-
-      <div class="header">
-        <!-- AVATAR + EFFECT -->
-        <div class="avatar-wrap">
-          <div class="ring"></div>
-          <img class="avatar" src="avatar.jpg" alt="avatar">
-          <img class="frame" src="frame.png" alt="frame">
+      <div class="head">
+        <!-- Left: Avatar -->
+        <div class="leftCol">
+          <div class="avatar-wrap">
+            <div class="ring"></div>
+            <img class="avatar" src="avatar.jpg" alt="avatar">
+            <!-- optional: if you want png frame file, keep it.
+                 If not, delete this line safely. -->
+            <img class="frame" id="frameImg" src="frame.png" alt="frame" onerror="this.style.display='none'">
+          </div>
         </div>
 
-        <div class="title">
-          <h1>Milo Pha Đá (Nhat boy)</h1>
-          <div class="sub">IT Student • Software Engineering</div>
-          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
+        <!-- Right: Info -->
+        <div class="rightCol">
+          <div class="topRow">
+            <div>
+              <h1 id="nameText">Milo Pha Đá (Nhat boy)</h1>
+              <p class="sub" id="roleText">IT Student • Software Engineering</p>
+              <p class="quote" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</p>
+            </div>
+
+            <div class="controls">
+              <button class="btn" id="themeBtn">🌙 Dark</button>
+              <button class="btn" id="adminBtn">🔐 Admin</button>
+            </div>
+          </div>
 
           <div class="pills">
-            <div class="pill">📍 Hồ Chí Minh</div>
-            <div class="pill">🎂 19</div>
-            <div class="pill">🎮 gamer</div>
+            <div class="pill">📍 <span id="locText">Hồ Chí Minh</span></div>
+            <div class="pill">🎂 <span id="ageText">19</span></div>
+            <div class="pill">🎮 <span id="vibeText">gamer</span></div>
+          </div>
+
+          <!-- Music section: under avatar area / header -->
+          <div class="musicWrap">
+            <div class="musicTitle">🎵 Nhạc tôi nghe</div>
+            <div class="songName rainbow" id="songName">Tên bài của tôi</div>
+
+            <audio id="audio" controls preload="metadata">
+              <source src="music.mp3" type="audio/mpeg">
+            </audio>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:10px;">
+              <div class="hint" id="musicHint">Bấm Play để nghe 🎧</div>
+              <button class="btn" id="editSongBtn" style="display:none;">✏️ Đổi tên</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- MUSIC: đặt trên phần Giới thiệu -->
-      <div class="music">
-        <div class="music-top">
-          <div class="music-left">
-            <h3>🎵 Nhạc tôi nghe</h3>
-            <div class="musicTitle title-rainbow" id="musicTitle">Ai ngoài anh</div>
-            <!-- (đã bỏ 2 dòng chữ bro không muốn) -->
-            <div class="music-sub" id="musicStatus"></div>
-          </div>
-
-          <div class="music-controls">
-            <button class="btn" id="editMusicTitle" type="button">✏️ Đổi tên</button>
-            <div class="chip" id="colorBtn" title="Đổi màu tên nhạc">🎨 Màu: 7 sắc</div>
-          </div>
-        </div>
-
-        <audio id="player" controls preload="auto"></audio>
-      </div>
-
+      <!-- Main grid -->
       <div class="grid">
-        <div class="panel">
-          <h3 class="section-title">Giới thiệu</h3>
-          <ul>
-            <li>✨ Chạy Ngay Đi</li>
-            <li>🧸 Chạy Vào Trái Tim Em</li>
-            <li>🥵 Đùa Thôi Anh Làm Gì Có Em</li>
-          </ul>
+        <div class="box">
+          <h3>Giới thiệu</h3>
+          <div class="list" id="aboutList">
+            <div>• ✨ Chạy Ngay Đi</div>
+            <div>• 💗 Chạy Vào Trái Tim Em</div>
+            <div>• 😵‍💫 Đùa Thôi Anh Làm Gì Có Em</div>
+          </div>
         </div>
 
-        <div class="panel">
-          <h3 class="section-title">Game mình hay chơi</h3>
-          <div style="display:grid;gap:10px">
-            <div class="panel" style="padding:12px">
-              🕹️ <b>Roblox</b><br><span style="color:var(--muted)">chill / sandbox</span>
+        <div class="box">
+          <h3>Game mình hay chơi</h3>
+          <div class="list" id="gamesList">
+            <div class="gameItem" data-game="roblox">
+              <div class="gameLeft">
+                <div class="gameName">♟ Roblox</div>
+                <div class="gameDesc">chill / sandbox</div>
+                <a class="hint" id="robloxLink" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">🔗 Mở link</a>
+              </div>
+              <div class="tag">casual</div>
             </div>
-            <div class="panel" style="padding:12px">
-              🎯 <b>Valorant</b><br><span style="color:var(--muted)">FPS / tryhard</span>
+
+            <div class="gameItem" data-game="valorant">
+              <div class="gameLeft">
+                <div class="gameName">🎯 Valorant</div>
+                <div class="gameDesc">FPS / tryhard</div>
+                <a class="hint" id="valorantLink" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">🔗 Mở link</a>
+              </div>
+              <div class="tag">rank</div>
             </div>
-            <div class="panel" style="padding:12px">
-              ♟️ <b>TFT</b><br><span style="color:var(--muted)">auto chess</span>
+
+            <div class="gameItem" data-game="tft">
+              <div class="gameLeft">
+                <div class="gameName">♟ TFT</div>
+                <div class="gameDesc">auto chess</div>
+                <a class="hint" id="tftLink" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">🔗 Mở link</a>
+              </div>
+              <div class="tag">brain</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="links">
-        <a class="linkbtn" id="fbBtn"
-   href="https://www.facebook.com/milo.pha.a"
-   target="_blank" rel="noopener noreferrer">
-   🌐 Facebook
-</a>
-
-<a class="linkbtn" id="dcBtn"
-   href="https://discord.com/users/910327589309145109"
-   target="_blank" rel="noopener noreferrer">
-   🎮 Discord
-</a>
-
-      </div>
-
-      <div class="tus">
-        <div class="tus-head">
-          <div>
-            <h3 class="section-title">📝 Đây là nơi check các tus của tôi</h3>
-            <div class="admin-note">Người xem chỉ bấm link • Admin mới thêm/xóa 🔐</div>
+        <!-- Tus section -->
+        <div class="box" style="grid-column: 1 / -1;">
+          <div class="tusHead">
+            <div>
+              <h3 style="margin:0;">📝 Đây là nơi check các tus của tôi</h3>
+              <div class="hint">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
+            </div>
+            <button class="btn" id="addTusBtn" style="display:none;">➕ Thêm link</button>
           </div>
-          <button class="btn" id="addLinkBtn" type="button">➕ Thêm link</button>
+
+          <div class="tusList" id="tusList"></div>
         </div>
-        <div class="tus-list" id="tusList"></div>
+      </div>
+
+      <!-- Links -->
+      <div class="linksRow">
+        <a class="linkbtn" id="fbBtn" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">🌐 Facebook</a>
+        <a class="linkbtn" id="dcBtn" href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener noreferrer">🎮 Discord</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal">
+      <div class="modalTop">
+        <h2>🔐 Admin Panel</h2>
+        <button class="btn xbtn" id="closeModal">✖</button>
+      </div>
+
+      <!-- Step 1: login -->
+      <div id="loginBox">
+        <div class="field" style="max-width:420px;">
+          <label>Nhập mật khẩu admin</label>
+          <input id="passInput" type="password" placeholder="079268" />
+        </div>
+        <div class="rowBtns" style="justify-content:flex-start;">
+          <button class="btn" id="loginBtn">✅ Vào Admin</button>
+        </div>
+        <div class="hint" id="loginHint" style="margin-top:8px;"></div>
+      </div>
+
+      <!-- Step 2: settings -->
+      <div id="adminBox" style="display:none;">
+        <div class="form">
+          <div class="field">
+            <label>Facebook link (dán link profile)</label>
+            <input id="fbInput" placeholder="https://www.facebook.com/..." />
+          </div>
+
+          <div class="field">
+            <label>Discord ID (chỉ nhập số)</label>
+            <input id="dcInput" placeholder="910327589309145109" />
+          </div>
+
+          <div class="field">
+            <label>Roblox link</label>
+            <input id="robloxInput" placeholder="https://..." />
+          </div>
+
+          <div class="field">
+            <label>Valorant link</label>
+            <input id="valorantInput" placeholder="https://..." />
+          </div>
+
+          <div class="field">
+            <label>TFT link</label>
+            <input id="tftInput" placeholder="https://..." />
+          </div>
+
+          <div class="field">
+            <label>Tên bài nhạc</label>
+            <input id="songInput" placeholder="Ai ngoài anh" />
+          </div>
+
+          <div class="field">
+            <label>Style chữ tên nhạc</label>
+            <select id="songStyle">
+              <option value="rainbow">🌈 7 sắc cầu vồng</option>
+              <option value="white">⚪ Trắng</option>
+              <option value="black">⚫ Đen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="rowBtns">
+          <button class="btn" id="logoutBtn">🚪 Thoát Admin</button>
+          <button class="btn" id="saveBtn">💾 Lưu</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // ====== CONFIG ======
+    const ADMIN_PASS = "079268";
+    const LS_KEY = "milo_profile_settings_v1";
+    const LS_TUS = "milo_tus_links_v1";
+
+    // ====== HELPERS ======
     const $ = (id) => document.getElementById(id);
 
-    // ===== Theme
-    const root = document.documentElement;
-    function setTheme(t){
-      root.setAttribute("data-theme", t);
-      localStorage.setItem("theme", t);
-      $("themeBtn").textContent = (t === "light") ? "🌞 Light" : "🌙 Dark";
-      // nếu đang dùng màu BLACK mà theme dark thì vẫn ok, user chọn mà
+    function loadSettings(){
+      try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }
+      catch { return {}; }
     }
-    setTheme(localStorage.getItem("theme") || "dark");
-    $("themeBtn").addEventListener("click", () => {
-      const cur = root.getAttribute("data-theme") || "dark";
-      setTheme(cur === "dark" ? "light" : "dark");
-    });
-
-    // ===== Admin (UI lock)
-    const ADMIN_KEY = "admin_ok";
-    const ADMIN_PASS = "079268";
-    function isAdmin(){ return localStorage.getItem(ADMIN_KEY) === "1"; }
-
-    function updateAdminUI(){
-      const ok = isAdmin();
-      $("adminBtn").textContent = ok ? "🔓 Admin ON" : "🔒 Admin";
-      $("addLinkBtn").disabled = !ok;
-
-      document.querySelectorAll("[data-del]").forEach(btn => {
-        btn.style.display = ok ? "inline-flex" : "none";
-      });
+    function saveSettings(data){
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
     }
 
-    $("adminBtn").addEventListener("click", () => {
-      if (isAdmin()){
-        localStorage.setItem(ADMIN_KEY, "0");
-        updateAdminUI();
-        return;
-      }
-      const pw = prompt("Nhập mật khẩu admin:");
-      if (pw === ADMIN_PASS) {
-        localStorage.setItem(ADMIN_KEY, "1");
-        updateAdminUI();
-      } else {
-        alert("Sai mật khẩu 😭");
-      }
-    });
-
-    // ===== Music load (no status text)
-    const player = $("player");
-    const status = $("musicStatus");
-
-    function loadMusic(){
-      // Ẩn status luôn (bro muốn bỏ chữ)
-      status.textContent = "";
-      const url = new URL("music.mp3", window.location.href);
-      url.searchParams.set("v", Date.now()); // anti-cache
-      player.src = url.toString();
-      player.load();
-    }
-    player.addEventListener("error", () => {
-      // vẫn không hiện status, chỉ log nhẹ
-      console.log("Music load error: kiểm tra music.mp3");
-    });
-    loadMusic();
-
-    // ===== Music title (editable)
-    const titleEl = $("musicTitle");
-    titleEl.textContent = localStorage.getItem("music_title") || "Ai ngoài anh";
-
-    $("editMusicTitle").addEventListener("click", () => {
-      const next = prompt("Nhập tên bài mới:", titleEl.textContent);
-      if (!next) return;
-      titleEl.textContent = next;
-      localStorage.setItem("music_title", next);
-    });
-
-    // ===== Title color mode: white / black / rainbow
-    const COLOR_KEY = "music_title_color";
-    const colorBtn = $("colorBtn");
-    const modes = ["rainbow", "white", "black"];
-
-    function applyColorMode(mode){
-      titleEl.classList.remove("title-rainbow", "title-white", "title-black");
-      if (mode === "rainbow"){
-        titleEl.classList.add("title-rainbow");
-        colorBtn.textContent = "🎨 Màu: 7 sắc";
-      } else if (mode === "white"){
-        titleEl.classList.add("title-white");
-        colorBtn.textContent = "🎨 Màu: Trắng";
-      } else {
-        titleEl.classList.add("title-black");
-        colorBtn.textContent = "🎨 Màu: Đen";
-      }
-      localStorage.setItem(COLOR_KEY, mode);
-    }
-
-    applyColorMode(localStorage.getItem(COLOR_KEY) || "rainbow");
-
-    colorBtn.addEventListener("click", () => {
-      const cur = localStorage.getItem(COLOR_KEY) || "rainbow";
-      const next = modes[(modes.indexOf(cur) + 1) % modes.length];
-      applyColorMode(next);
-    });
-
-    // ===== Tus links (clickable, no copy needed)
-    const tusKey = "tus_links";
-
-    function getLinks(){
-      try { return JSON.parse(localStorage.getItem(tusKey) || "[]"); }
+    function loadTus(){
+      try { return JSON.parse(localStorage.getItem(LS_TUS) || "[]"); }
       catch { return []; }
     }
-    function setLinks(arr){ localStorage.setItem(tusKey, JSON.stringify(arr)); }
+    function saveTus(list){
+      localStorage.setItem(LS_TUS, JSON.stringify(list));
+    }
 
-    function renderLinks(){
-      const list = $("tusList");
-      list.innerHTML = "";
-      const arr = getLinks();
+    function normalizeDiscordUrl(id){
+      const onlyNum = String(id || "").replace(/\\D/g, "");
+      if(!onlyNum) return "";
+      return "https://discord.com/users/" + onlyNum;
+    }
 
-      if (arr.length === 0){
-        list.innerHTML = `<div class="admin-note">Chưa có link nào 😴</div>`;
+    function applySettings(){
+      const s = loadSettings();
+
+      // theme
+      const theme = s.theme || "dark";
+      document.documentElement.setAttribute("data-theme", theme);
+      $("themeBtn").textContent = theme === "dark" ? "🌙 Dark" : "☀️ Light";
+
+      // facebook/discord buttons
+      const fb = s.facebook || "https://www.facebook.com/";
+      $("fbBtn").href = fb;
+
+      const dcUrl = normalizeDiscordUrl(s.discordId) || "https://discord.com/users/910327589309145109";
+      $("dcBtn").href = dcUrl;
+
+      // song name + style
+      const songName = s.songName || "Tên bài của tôi";
+      $("songName").textContent = songName;
+
+      const style = s.songStyle || "rainbow";
+      $("songName").classList.remove("rainbow","white","black");
+      $("songName").classList.add(style);
+
+      // game links
+      const g = s.games || {};
+      setGameLink("roblox", g.roblox);
+      setGameLink("valorant", g.valorant);
+      setGameLink("tft", g.tft);
+
+      // tus list
+      renderTus();
+    }
+
+    function setGameLink(key, url){
+      const el = $(key + "Link");
+      if(url && url.trim()){
+        el.style.display = "inline-flex";
+        el.href = url.trim();
+      }else{
+        el.style.display = "none";
+        el.href = "#";
+      }
+    }
+
+    // ====== THEME TOGGLE ======
+    $("themeBtn").addEventListener("click", () => {
+      const s = loadSettings();
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = cur === "dark" ? "light" : "dark";
+      s.theme = next;
+      saveSettings(s);
+      applySettings();
+    });
+
+    // ====== ADMIN MODAL ======
+    const modalBack = $("modalBack");
+    function openModal(){
+      modalBack.style.display = "flex";
+      $("passInput").value = "";
+      $("loginHint").textContent = "";
+      $("loginBox").style.display = "block";
+      $("adminBox").style.display = "none";
+    }
+    function closeModal(){
+      modalBack.style.display = "none";
+    }
+    $("adminBtn").addEventListener("click", openModal);
+    $("closeModal").addEventListener("click", closeModal);
+    modalBack.addEventListener("click", (e) => {
+      if(e.target === modalBack) closeModal();
+    });
+
+    // admin state
+    let isAdmin = false;
+
+    function enterAdmin(){
+      isAdmin = true;
+      $("loginBox").style.display = "none";
+      $("adminBox").style.display = "block";
+      $("addTusBtn").style.display = "inline-flex";
+      $("editSongBtn").style.display = "inline-flex";
+
+      // fill inputs from settings
+      const s = loadSettings();
+      $("fbInput").value = s.facebook || "";
+      $("dcInput").value = s.discordId || "";
+      $("robloxInput").value = (s.games && s.games.roblox) || "";
+      $("valorantInput").value = (s.games && s.games.valorant) || "";
+      $("tftInput").value = (s.games && s.games.tft) || "";
+      $("songInput").value = s.songName || "Tên bài của tôi";
+      $("songStyle").value = s.songStyle || "rainbow";
+    }
+
+    function leaveAdmin(){
+      isAdmin = false;
+      $("addTusBtn").style.display = "none";
+      $("editSongBtn").style.display = "none";
+      closeModal();
+      renderTus();
+    }
+
+    $("loginBtn").addEventListener("click", () => {
+      const pass = $("passInput").value.trim();
+      if(pass === ADMIN_PASS){
+        $("loginHint").textContent = "✅ Đúng pass rồi bro";
+        enterAdmin();
+      }else{
+        $("loginHint").textContent = "❌ Sai pass nha";
+      }
+    });
+
+    $("logoutBtn").addEventListener("click", leaveAdmin);
+
+    // Save admin settings
+    $("saveBtn").addEventListener("click", () => {
+      const s = loadSettings();
+
+      s.facebook = $("fbInput").value.trim();
+      s.discordId = $("dcInput").value.trim();
+      s.songName = $("songInput").value.trim() || "Tên bài của tôi";
+      s.songStyle = $("songStyle").value;
+
+      s.games = s.games || {};
+      s.games.roblox = $("robloxInput").value.trim();
+      s.games.valorant = $("valorantInput").value.trim();
+      s.games.tft = $("tftInput").value.trim();
+
+      saveSettings(s);
+      applySettings();
+      closeModal();
+    });
+
+    // quick rename song (admin)
+    $("editSongBtn").addEventListener("click", () => {
+      if(!isAdmin) return;
+      const current = $("songName").textContent || "";
+      const next = prompt("Nhập tên bài nhạc:", current);
+      if(next === null) return;
+      const s = loadSettings();
+      s.songName = (next || "").trim() || current;
+      saveSettings(s);
+      applySettings();
+    });
+
+    // ====== TUS LINKS (admin add/remove) ======
+    function renderTus(){
+      const list = loadTus();
+      const box = $("tusList");
+      box.innerHTML = "";
+
+      if(list.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "hint";
+        empty.textContent = "Chưa có link nào. (Admin thêm link là có ngay 😎)";
+        box.appendChild(empty);
         return;
       }
 
-      arr.forEach((it, idx) => {
-        const a = document.createElement("a");
-        a.href = it.url;
-        a.target = "_blank";
-        a.rel = "noreferrer";
-        a.textContent = `${it.title} — ${it.url}`;
-        list.appendChild(a);
+      list.forEach((item, idx) => {
+        const row = document.createElement("div");
+        row.className = "tusItem";
 
-        const del = document.createElement("button");
-        del.className = "btn tus-del";
-        del.dataset.del = "1";
-        del.textContent = "🗑️ Xóa";
-        del.style.display = isAdmin() ? "inline-flex" : "none";
-        del.onclick = () => {
-          const arr2 = getLinks();
-          arr2.splice(idx, 1);
-          setLinks(arr2);
-          renderLinks();
-          updateAdminUI();
-        };
-        list.appendChild(del);
+        const left = document.createElement("div");
+        left.style.display = "flex";
+        left.style.flexDirection = "column";
+        left.style.gap = "6px";
+
+        const title = document.createElement("div");
+        title.style.fontWeight = "1000";
+        title.textContent = item.title || ("Tus " + (idx+1));
+
+        const a = document.createElement("a");
+        a.href = item.url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = item.url;
+
+        left.appendChild(title);
+        left.appendChild(a);
+
+        row.appendChild(left);
+
+        if(isAdmin){
+          const del = document.createElement("button");
+          del.className = "btn";
+          del.textContent = "🗑 Xóa";
+          del.style.borderColor = "rgba(255,80,80,.35)";
+          del.addEventListener("click", () => {
+            const arr = loadTus();
+            arr.splice(idx, 1);
+            saveTus(arr);
+            renderTus();
+          });
+          row.appendChild(del);
+        }
+
+        box.appendChild(row);
       });
     }
 
-    $("addLinkBtn").addEventListener("click", () => {
-      if (!isAdmin()){
-        alert("Chỉ admin mới thêm được nha 🔒");
-        return;
-      }
-      const title = prompt("Tên link (vd: Tus AV):");
-      if (!title) return;
-      const url = prompt("Dán link vào (vd: https://facebook.com/...):");
-      if (!url) return;
+    $("addTusBtn").addEventListener("click", () => {
+      if(!isAdmin) return;
+      const title = prompt("Tên tus (vd: Tus AV):", "Tus mới");
+      if(title === null) return;
+      const url = prompt("Dán link Facebook tus:", "https://www.facebook.com/...");
+      if(!url || !url.trim()) return;
 
-      const arr = getLinks();
-      arr.unshift({ title, url });
-      setLinks(arr);
-      renderLinks();
-      updateAdminUI();
+      const arr = loadTus();
+      arr.unshift({ title: (title||"Tus mới").trim(), url: url.trim() });
+      saveTus(arr);
+      renderTus();
     });
 
-    renderLinks();
-    updateAdminUI();
+    // ====== INIT ======
+    // Ensure buttons visible state correctly
+    $("addTusBtn").style.display = "none";
+    $("editSongBtn").style.display = "none";
+
+    // Apply settings on load
+    applySettings();
+
+    // If audio fails, show hint
+    const audio = $("audio");
+    audio.addEventListener("error", () => {
+      $("musicHint").textContent = "⚠️ Không load được nhạc. Check file music.mp3 có cùng thư mục index.html nha.";
+    });
+    audio.addEventListener("loadedmetadata", () => {
+      $("musicHint").textContent = "OK rồi, bấm Play 🎧";
+    });
   </script>
 </body>
 </html>
