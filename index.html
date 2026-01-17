@@ -4,1013 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Milo Pha Đá</title>
-
-  <style>
-    :root{
-      --bg: #0b1220;
-      --bg2:#0a0f1b;
-      --card: rgba(255,255,255,.10);
-      --card2: rgba(255,255,255,.14);
-      --text:#e8f0ff;
-      --muted: rgba(232,240,255,.70);
-      --line: rgba(255,255,255,.12);
-      --shadow: 0 14px 40px rgba(0,0,0,.35);
-      --radius: 22px;
-      --accent: #4ea1ff;
-      --danger: #ff4b4b;
-      --chip: rgba(0,0,0,.25);
-      --glass: blur(12px);
-    }
-
-    body.light{
-      --bg: #cfe7ff;
-      --bg2:#e8f3ff;
-      --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.82);
-      --text:#0b1a33;
-      --muted: rgba(11,26,51,.70);
-      --line: rgba(11,26,51,.12);
-      --shadow: 0 14px 40px rgba(0,0,0,.18);
-      --chip: rgba(11,26,51,.10);
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      overflow-x:hidden;
-    }
-
-    /* ===== BG ===== */
-    .bg{
-      position: fixed;
-      inset:0;
-      z-index:-2;
-      background:
-        radial-gradient(1200px 600px at 20% 10%, rgba(78,161,255,.25), transparent 60%),
-        radial-gradient(1000px 700px at 90% 20%, rgba(255,120,200,.18), transparent 60%),
-        radial-gradient(900px 600px at 40% 90%, rgba(40,209,124,.14), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    .bg::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background: url("bg.gif") center/cover no-repeat;
-      opacity:.22;
-      filter: saturate(1.1) contrast(1.05);
-    }
-
-    /* ===== Layout ===== */
-    .wrap{
-      width: min(1100px, calc(100vw - 24px));
-      margin: 14px auto 40px;
-      padding-bottom: 40px;
-    }
-
-    .top-actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      position: sticky;
-      top: 10px;
-      z-index: 10;
-      padding-top: 10px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      border-radius: 999px;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      user-select:none;
-      font-weight: 800;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body.light .pill{ background: rgba(255,255,255,.55); }
-    .pill:active{ transform: scale(.98); }
-
-    /* ===== Cards ===== */
-    .card{
-      border:1px solid var(--line);
-      background: var(--card);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    /* ===== Header ===== */
-    .header{ margin-top: 10px; position: relative; }
-    .cover{
-      height: 220px;
-      width: 100%;
-      object-fit: cover;
-      display:block;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .header-inner{
-      display:flex;
-      gap:18px;
-      padding: 14px 16px 16px;
-      align-items:flex-end;
-      flex-wrap:wrap;
-      position: relative;
-    }
-
-    .avatar-wrap{
-      width: 118px;
-      height: 118px;
-      position: relative;
-      flex: 0 0 auto;
-      margin-top: -64px;
-      margin-left: 8px;
-    }
-    .avatar{
-      width: 118px;
-      height: 118px;
-      border-radius: 999px;
-      object-fit: cover;
-      border: 4px solid rgba(255,255,255,.9);
-      background:#000;
-      display:block;
-      position: relative;
-      z-index: 2;
-    }
-    .avatar-frame{
-      pointer-events:none;
-      position:absolute;
-      inset: -18px;
-      width: calc(100% + 36px);
-      height: calc(100% + 36px);
-      object-fit: contain;
-      z-index: 3;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-    }
-
-    .who{ min-width: 260px; flex: 1 1 280px; }
-
-    .name{ margin:0; font-size: 28px; line-height: 1.1; font-weight: 900; }
-    .subtitle{ margin: 6px 0 0; color: var(--muted); font-weight: 700; }
-    .quote{ margin: 8px 0 0; color: var(--muted); font-style: italic; font-weight: 600; }
-
-    .chips{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--chip);
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    /* ===== Grid ===== */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .section{ padding: 14px 14px 12px; }
-    .h{ margin:0 0 10px; font-size: 16px; font-weight: 900; display:flex; gap:8px; align-items:center; }
-    .p{ margin:0; color: var(--muted); font-weight:700; }
-
-    audio{ width:100%; }
-
-    .list{ display:flex; flex-direction:column; gap:10px; margin-top: 10px; }
-    .item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      border-radius: 14px;
-    }
-    body.light .item{ background: rgba(255,255,255,.55); }
-    .tag{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(78,161,255,.18);
-      color: var(--text);
-      white-space:nowrap;
-    }
-
-    .btn{
-      border:none;
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-primary{
-      background: linear-gradient(180deg, rgba(78,161,255,1), rgba(78,161,255,.78));
-      color: white;
-    }
-    .btn-ghost{
-      background: rgba(0,0,0,.12);
-      border:1px solid var(--line);
-      color: var(--text);
-    }
-    body.light .btn-ghost{ background: rgba(255,255,255,.55); }
-    .btn-danger{
-      background: linear-gradient(180deg, rgba(255,75,75,1), rgba(255,75,75,.78));
-      color: white;
-    }
-
-    .contacts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-      margin-top: 14px;
-    }
-    .contact-btn{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      text-decoration:none;
-      color: var(--text);
-      font-weight: 900;
-    }
-    body.light .contact-btn{ background: rgba(255,255,255,.55); }
-
-    /* Tus */
-    .tus-box{ margin-top: 14px; padding: 14px; }
-    .tus-head{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom: 10px;
-      font-weight: 900;
-    }
-    .tus-list{ display:flex; flex-direction:column; gap:10px; }
-    .tus-link{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      text-decoration:none;
-      color: var(--text);
-      font-weight: 900;
-    }
-    body.light .tus-link{ background: rgba(255,255,255,.55); }
-
-    /* Schedule */
-    .schedule{ margin-top: 14px; padding: 14px; }
-    .day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin: 10px 0; }
-    .tab{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      font-weight: 900;
-      cursor:pointer;
-    }
-    body.light .tab{ background: rgba(255,255,255,.55); }
-    .tab.active{ background: rgba(78,161,255,.22); border-color: rgba(78,161,255,.45); }
-
-    .slot{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      margin-top: 10px;
-      flex-wrap:wrap;
-    }
-    body.light .slot{ background: rgba(255,255,255,.55); }
-    .slot-left{ display:flex; flex-direction:column; gap:4px; min-width: 220px; flex: 1 1 240px; }
-    .slot-title{ font-weight: 900; }
-    .slot-time{ color: var(--muted); font-weight:800; font-size: 13px; }
-
-    /* Modal */
-    .modal{
-      position: fixed;
-      inset: 0;
-      display:none;
-      z-index: 9999;
-      background: rgba(0,0,0,.55);
-      padding: 12px;
-      align-items:center;
-      justify-content:center;
-    }
-    .modal.show{ display:flex; }
-
-    .modal-card{
-      width: min(980px, calc(100vw - 24px));
-      max-height: 92dvh;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      background: var(--card2);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      padding: 14px;
-      position: relative;
-    }
-    .modal-close{
-      position:absolute;
-      top: 10px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      font-weight: 900;
-      cursor:pointer;
-    }
-    body.light .modal-close{ background: rgba(255,255,255,.55); }
-
-    .modal-title{ margin: 0 0 10px; font-weight: 1000; font-size: 18px; padding-right: 48px; }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .field{ display:flex; flex-direction:column; gap:8px; }
-    label{ font-weight: 900; }
-
-    input, select, textarea{
-      width:100%;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      padding: 11px 12px;
-      outline:none;
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      font-weight: 800;
-    }
-    body.light input, body.light select, body.light textarea{ background: rgba(255,255,255,.55); }
-    textarea{ min-height: 90px; resize: vertical; }
-
-    .help{ color: var(--muted); font-weight: 700; margin: 6px 0 0; }
-    .modal-actions{
-      position: sticky;
-      bottom: 0;
-      display:flex;
-      gap: 10px;
-      padding: 12px 0 4px;
-      margin-top: 10px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    /* admin-only */
-    .admin-only{ display:none; }
-    body.admin-on .admin-only{ display:block; }
-
-    /* ===== Rainbow: chỉ animate desktop, mobile tĩnh => đỡ lag ===== */
-    .rainbow-target{
-      background: linear-gradient(90deg,#ff3b3b,#ff8c2f,#ffe94a,#35e17a,#36b9ff,#7a5cff,#ff4fd8);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      background-clip:text;
-      color: transparent;
-    }
-    @media (hover:hover) and (pointer:fine){
-      body.rainbow-on .rainbow-target{ animation: rainbowMove 3.8s linear infinite; }
-    }
-    @keyframes rainbowMove{
-      from{ background-position: 0% 50%; }
-      to{ background-position: 200% 50%; }
-    }
-
-    /* Không phá input/audio */
-    input, textarea, select, option, audio, button{
-      background-clip: initial !important;
-      -webkit-background-clip: initial !important;
-      color: inherit !important;
-    }
-
-    /* Responsive */
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-      .contacts{ grid-template-columns: 1fr 1fr; }
-      .name{ font-size: 24px; }
-      .avatar-wrap{ width: 96px; height: 96px; margin-top:-58px; }
-      .avatar{ width:96px; height:96px; }
-      .avatar-frame{
-        inset:-15px;
-        width: calc(100% + 30px);
-        height: calc(100% + 30px);
-      }
-      .cover{ height: 200px; }
-      .row{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 420px){
-      .contacts{ grid-template-columns: 1fr; }
-      .pill{ padding: 10px 12px; }
-    }
-  </style>
+  <link rel="stylesheet" href="effect.css">
 </head>
 
-<body>
-  <div class="bg"></div>
-
-  <div class="wrap">
-    <div class="top-actions">
-      <div class="pill" id="btnTheme">🌙 <span id="themeText">Dark</span></div>
-      <div class="pill" id="btnAdmin">🔒 <span id="adminText">Admin</span></div>
-    </div>
-
-    <div class="card header">
-      <img class="cover" src="cover.gif" alt="Cover" />
-      <div class="header-inner">
-        <div class="avatar-wrap">
-          <img class="avatar" src="avatar.jpg" alt="Avatar" />
-          <img class="avatar-frame" src="frame.png" alt="">
-        </div>
-
-        <div class="who">
-          <h1 class="name rainbow-target" id="nameText">Milo Pha Đá (Nhat boy)</h1>
-          <div class="subtitle rainbow-target" id="subtitleText">IT Student • Software Engineering</div>
-          <div class="quote rainbow-target" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</div>
-
-          <div class="chips">
-            <div class="chip"><span class="rainbow-target">📍 Hồ Chí Minh</span></div>
-            <div class="chip"><span class="rainbow-target">🎂 19</span></div>
-            <div class="chip"><span class="rainbow-target">🎮 gamer</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card section">
-        <div class="h"><span class="rainbow-target">🎧 Nhạc tôi nghe</span></div>
-        <div class="p rainbow-target">Đang nghe: <span id="songName" class="rainbow-target">Ai ngoài anh</span></div>
-        <div class="p rainbow-target">Bấm Play để nghe 🎧</div>
-        <div style="height:10px"></div>
-        <audio id="audio" controls src="music.mp3"></audio>
-      </div>
-
-      <div class="card section">
-        <div class="h"><span class="rainbow-target">📌 Giới thiệu</span></div>
-        <div class="list" id="introList"></div>
-      </div>
-
-      <div class="card section">
-        <div class="h"><span class="rainbow-target">🎮 Game mình hay chơi</span></div>
-        <div class="list" id="gameList"></div>
-        <p class="help rainbow-target">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
-      </div>
-
-      <div class="card section">
-        <div class="h"><span class="rainbow-target">🔗 Liên hệ</span></div>
-        <div class="contacts">
-          <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">🌐 Facebook</span></a>
-          <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">💬 Discord</span></a>
-        </div>
-        <p class="help rainbow-target">Discord: nhập ID là tự tạo link profile.</p>
-      </div>
-    </div>
-
-    <div class="card tus-box">
-      <div class="tus-head">
-        <div class="rainbow-target">📝 Đây là nơi check các tus của tôi</div>
-        <button class="btn btn-primary" id="btnAddTus">➕ Thêm tus</button>
-      </div>
-      <div class="p rainbow-target">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</div>
-      <div style="height:10px"></div>
-      <div class="tus-list" id="tusList"></div>
-    </div>
-
-    <div class="card schedule">
-      <div class="h"><span class="rainbow-target">📅 Lịch bận / rảnh</span></div>
-      <div class="p rainbow-target">Set theo từng ngày trong tuần ✅</div>
-      <div class="day-tabs" id="dayTabs"></div>
-      <div id="daySlots"></div>
-    </div>
-  </div>
-
-  <!-- Admin Modal -->
-  <div class="modal" id="adminModal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true">
-      <button class="modal-close" id="adminClose">✕</button>
-      <h2 class="modal-title rainbow-target">🔐 Admin Panel</h2>
-
-      <div class="field">
-        <label class="rainbow-target">Mật khẩu admin</label>
-        <input id="adminPassInput" type="password" placeholder="Nhập pass..." />
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn btn-primary" id="btnLogin">✅ Bật Admin</button>
-        <button class="btn btn-danger" id="btnLogout">🚪 Thoát Admin</button>
-      </div>
-
-      <div class="admin-only">
-        <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
-
-        <div class="row">
-          <div class="field">
-            <label class="rainbow-target">Link Facebook</label>
-            <input id="fbInput" placeholder="https://facebook.com/..." />
-          </div>
-          <div class="field">
-            <label class="rainbow-target">Discord ID</label>
-            <input id="dcIdInput" placeholder="9103..." />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label class="rainbow-target">Link Roblox</label>
-            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
-          </div>
-          <div class="field">
-            <label class="rainbow-target">Link Valorant</label>
-            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label class="rainbow-target">Link TFT</label>
-            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
-          </div>
-          <div class="field">
-            <label class="rainbow-target">Tên bài nhạc</label>
-            <input id="songInput" placeholder="Ai ngoài anh" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label class="rainbow-target">Rainbow chữ</label>
-            <select id="rainbowSelect">
-              <option value="0">Tắt</option>
-              <option value="1">Bật</option>
-            </select>
-            <div class="help rainbow-target">Mobile tĩnh để đỡ lag 🌈</div>
-          </div>
-          <div class="field">
-            <label class="rainbow-target">Đổi mật khẩu (tuỳ chọn)</label>
-            <input id="newPassInput" placeholder="Để trống nếu không đổi" />
-          </div>
-        </div>
-
-        <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
-
-        <div class="row">
-          <div class="field">
-            <label class="rainbow-target">➕ Thêm tus</label>
-            <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
-            <input id="tusLinkInput" placeholder="Dán link tus Facebook..." />
-            <button class="btn btn-ghost" id="btnAddTusAdmin">➕ Thêm</button>
-          </div>
-
-          <div class="field">
-            <label class="rainbow-target">📅 Thêm lịch</label>
-            <select id="daySelect"></select>
-            <div class="row" style="margin-top:0">
-              <div class="field">
-                <label class="rainbow-target">Từ giờ</label>
-                <input id="fromInput" placeholder="09:00" />
-              </div>
-              <div class="field">
-                <label class="rainbow-target">Đến giờ</label>
-                <input id="toInput" placeholder="11:30" />
-              </div>
-            </div>
-            <textarea id="taskInput" placeholder="Việc gì? (vd: Học / gym / làm bài...)"></textarea>
-            <button class="btn btn-ghost" id="btnAddSlot">➕ Thêm lịch</button>
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button class="btn btn-primary" id="btnSave">💾 Lưu cài đặt</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const KEY = "milo_site_safe_v1";
-      const $ = (id)=>document.getElementById(id);
-
-      const defaultState = {
-        theme: "dark",
-        adminPass: "079268",
-        isAdmin: false,
-        rainbow: 0,
-        fbLink: "https://www.facebook.com/milo.pha.a",
-        discordId: "910327589309145109",
-        gameLinks: {
-          roblox: "https://www.roblox.com/users/7884569651/profile",
-          valorant: "",
-          tft: ""
-        },
-        songName: "Ai ngoài anh",
-        intro: ["✨ Chạy Ngay Đi","🐻 Chạy Vào Trái Tim Em","😳 Đùa Thôi Anh      border:1px solid var(--line);
-      background: var(--card);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    /* Header */
-    .header{ margin-top: 10px; position: relative; }
-    .cover{
-      height: 220px;
-      width: 100%;
-      object-fit: cover;
-      display:block;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .header-inner{
-      display:flex;
-      gap:18px;
-      padding: 14px 16px 16px;
-      align-items:flex-end;
-      flex-wrap:wrap;
-      position: relative;
-    }
-
-    /* Avatar + Frame */
-    .avatar-wrap{
-      width: 118px;
-      height: 118px;
-      position: relative;
-      flex: 0 0 auto;
-      margin-top: -64px;
-      margin-left: 8px;
-    }
-    .avatar{
-      width: 118px;
-      height: 118px;
-      border-radius: 999px;
-      object-fit: cover;
-      border: 4px solid rgba(255,255,255,.9);
-      background:#000;
-      display:block;
-      position: relative;
-      z-index: 2;
-    }
-    .avatar-frame{
-      pointer-events:none;
-      position:absolute;
-      inset: -18px;            /* khung to hơn avatar */
-      width: calc(100% + 36px);
-      height: calc(100% + 36px);
-      object-fit: contain;
-      z-index: 3;              /* trên avatar */
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-    }
-
-    .who{
-      min-width: 260px;
-      flex: 1 1 280px;
-    }
-
-    .name{
-      margin:0;
-      font-size: 28px;
-      line-height: 1.1;
-      font-weight: 900;
-      letter-spacing: .2px;
-    }
-    .subtitle{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-weight: 700;
-    }
-    .quote{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--chip);
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    /* Grid main */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .section{ padding: 14px 14px 12px; }
-    .h{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin:0 0 10px;
-      font-size: 16px;
-      font-weight: 900;
-    }
-    .p{ margin:0; color: var(--muted); font-weight:700; }
-
-    /* Music */
-    .music-title{ font-weight: 900; margin:0 0 6px; }
-    audio{ width:100%; }
-
-    /* List */
-    .list{ display:flex; flex-direction:column; gap:10px; margin-top: 10px; }
-    .item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      border-radius: 14px;
-    }
-    body.light .item{ background: rgba(255,255,255,.55); }
-    .tag{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(78,161,255,.18);
-      color: var(--text);
-      white-space:nowrap;
-    }
-
-    /* Buttons */
-    .btn{
-      border:none;
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-    }
-    .btn-primary{
-      background: linear-gradient(180deg, rgba(78,161,255,1), rgba(78,161,255,.78));
-      color: white;
-    }
-    .btn-ghost{
-      background: rgba(0,0,0,.12);
-      border:1px solid var(--line);
-      color: var(--text);
-    }
-    body.light .btn-ghost{ background: rgba(255,255,255,.55); }
-    .btn-danger{
-      background: linear-gradient(180deg, rgba(255,75,75,1), rgba(255,75,75,.78));
-      color: white;
-    }
-    .btn:active{ transform: scale(.98); }
-
-    /* Contacts row */
-    .contacts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-      margin-top: 14px;
-    }
-    .contact-btn{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      text-decoration:none;
-      color: var(--text);
-      font-weight: 900;
-    }
-    body.light .contact-btn{ background: rgba(255,255,255,.55); }
-
-    /* TUS */
-    .tus-box{ margin-top: 14px; padding: 14px; }
-    .tus-head{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom: 10px;
-      font-weight: 900;
-    }
-    .tus-list{ display:flex; flex-direction:column; gap:10px; }
-    .tus-link{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      text-decoration:none;
-      color: var(--text);
-      font-weight: 900;
-    }
-    body.light .tus-link{ background: rgba(255,255,255,.55); }
-
-    /* Schedule */
-    .schedule{ margin-top: 14px; padding: 14px; }
-    .day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
-    .tab{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      font-weight: 900;
-      cursor:pointer;
-    }
-    body.light .tab{ background: rgba(255,255,255,.55); }
-    .tab.active{
-      background: rgba(78,161,255,.22);
-      border-color: rgba(78,161,255,.45);
-    }
-    .slot{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      margin-top: 10px;
-      flex-wrap:wrap;
-    }
-    body.light .slot{ background: rgba(255,255,255,.55); }
-    .slot-left{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-width: 240px;
-      flex: 1 1 260px;
-    }
-    .slot-title{ font-weight: 900; }
-    .slot-time{ color: var(--muted); font-weight:800; font-size: 13px; }
-
-    /* Modal */
-    .modal{
-      position: fixed;
-      inset: 0;
-      display:none;
-      z-index: 9999;
-      background: rgba(0,0,0,.55);
-      padding: 12px;
-      align-items:center;
-      justify-content:center;
-    }
-    .modal.show{ display:flex; }
-    .modal-card{
-      width: min(980px, calc(100vw - 24px));
-      max-height: 92dvh;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      background: var(--card2);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      padding: 14px;
-      position: relative;
-    }
-    .modal-close{
-      position:absolute;
-      top: 10px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      font-weight: 900;
-      cursor:pointer;
-    }
-    body.light .modal-close{ background: rgba(255,255,255,.55); }
-
-    .modal-title{
-      margin: 0 0 10px;
-      font-weight: 1000;
-      font-size: 18px;
-      padding-right: 48px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .field{ display:flex; flex-direction:column; gap:8px; }
-    label{ font-weight: 900; }
-    input, select, textarea{
-      width:100%;
-      border-radius: 14px;
-      border:1px solid var(--line);
-      padding: 11px 12px;
-      outline:none;
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      font-weight: 800;
-    }
-    body.light input, body.light select, body.light textarea{ background: rgba(255,255,255,.55); }
-    textarea{ min-height: 90px; resize: vertical; }
-    .help{ color: var(--muted); font-weight: 700; margin: 6px 0 0; }
-
-    .modal-actions{
-      position: sticky;
-      bottom: 0;
-      display:flex;
-      gap: 10px;
-      padding: 12px 0 4px;
-      margin-top: 10px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    /* admin-only hidden until login */
-    .admin-only{ display:none; }
-    .admin-on .admin-only{ display:block; }
-
-    /* Responsive */
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-      .contacts{ grid-template-columns: 1fr 1fr; }
-      .name{ font-size: 24px; }
-      .avatar-wrap{ width: 96px; height: 96px; margin-top:-58px; }
-      .avatar{ width:96px; height:96px; }
-      .avatar-frame{
-        inset:-15px;
-        width: calc(100% + 30px);
-        height: calc(100% + 30px);
-      }
-      .cover{ height: 200px; }
-      .row{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 420px){
-      .contacts{ grid-template-columns: 1fr; }
-      .pill{ padding: 10px 12px; }
-    }
-  </style>
-</head>
-
-<body>
+<body class="dark">
   <div class="bg"></div>
 
   <div class="wrap">
@@ -1023,12 +20,16 @@
       </div>
     </div>
 
+    <!-- HEADER -->
     <div class="card header">
+      <!-- CHỈ 1 COVER -->
       <img class="cover" src="cover.gif" alt="Cover" />
+
       <div class="header-inner">
+        <!-- AVATAR + FRAME.PNG -->
         <div class="avatar-wrap">
           <img class="avatar" src="avatar.jpg" alt="Avatar" />
-          <img class="avatar-frame" src="frame.png" alt="">
+          <img class="avatar-frame" src="frame.png" alt="" />
         </div>
 
         <div class="who">
@@ -1045,6 +46,7 @@
       </div>
     </div>
 
+    <!-- MAIN GRID -->
     <div class="grid">
       <div class="card section">
         <div class="h"><span class="rainbow-target">🎧</span> <span class="rainbow-target">Nhạc tôi nghe</span></div>
@@ -1068,13 +70,14 @@
       <div class="card section">
         <div class="h"><span class="rainbow-target">🔗</span> <span class="rainbow-target">Liên hệ</span></div>
         <div class="contacts">
-          <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">🌐 Facebook</span></a>
-          <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">💬 Discord</span></a>
+          <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
+          <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
         </div>
         <p class="help rainbow-target">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </div>
 
+    <!-- TUS -->
     <div class="card tus-box">
       <div class="tus-head">
         <div class="rainbow-target">📝 Đây là nơi check các tus của tôi</div>
@@ -1085,6 +88,7 @@
       <div class="tus-list" id="tusList"></div>
     </div>
 
+    <!-- SCHEDULE -->
     <div class="card schedule">
       <div class="h"><span class="rainbow-target">📅</span> <span class="rainbow-target">Lịch bận / rảnh</span></div>
       <div class="p rainbow-target">Set theo từng ngày trong tuần ✅</div>
@@ -1094,25 +98,41 @@
     </div>
   </div>
 
-  <!-- Admin Modal -->
+  <!-- ADMIN MODAL -->
   <div class="modal" id="adminModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <button class="modal-close" id="adminClose" aria-label="Close">✕</button>
       <h2 class="modal-title rainbow-target">🔐 Admin Panel</h2>
 
+      <!-- Login -->
       <div class="field">
         <label class="rainbow-target">Mật khẩu admin</label>
         <input id="adminPassInput" type="password" placeholder="Nhập pass..." />
       </div>
 
       <div class="modal-actions">
-        <button class="btn btn-primary" id="btnLogin">✅ Bật Admin</button>
+        <button class="btn btn-primary" id="btnLogin">✅ Đăng nhập</button>
         <button class="btn btn-danger" id="btnLogout">🚪 Thoát Admin</button>
       </div>
 
-      <!-- ===== chỉ hiện khi admin-on ===== -->
-      <div class="admin-only">
-        <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
+      <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
+
+      <!-- ===== PHẦN NÀY CHỈ HIỆN KHI ADMIN ON ===== -->
+      <div id="adminLocked" class="admin-locked">
+
+        <!-- Chỉnh màu sắc -->
+        <div class="row">
+          <div class="field">
+            <label class="rainbow-target">🎨 Màu chính (Accent)</label>
+            <input id="accentInput" type="color" />
+            <div class="help rainbow-target">Đổi màu nút/tag cho “xịn” 😎</div>
+          </div>
+          <div class="field">
+            <label class="rainbow-target">🧱 Đậm/Nhạt card</label>
+            <input id="cardAlpha" type="range" min="6" max="30" value="10" />
+            <div class="help rainbow-target">Kéo để card trong/đậm hơn.</div>
+          </div>
+        </div>
 
         <div class="row">
           <div class="field">
@@ -1149,12 +169,12 @@
 
         <div class="row">
           <div class="field">
-            <label class="rainbow-target">Rainbow chữ</label>
+            <label class="rainbow-target">🌈 Rainbow chữ (nhẹ)</label>
             <select id="rainbowSelect">
               <option value="0">Tắt</option>
               <option value="1">Bật</option>
             </select>
-            <div class="help rainbow-target">Bật: chữ đổi màu 🌈 (mobile không animate để đỡ lag)</div>
+            <div class="help rainbow-target">Chỉ đổi màu chữ “rainbow-target”, không phá input/audio.</div>
           </div>
           <div class="field">
             <label class="rainbow-target">Đổi mật khẩu admin (tuỳ chọn)</label>
@@ -1173,8 +193,9 @@
           </div>
 
           <div class="field">
-            <label class="rainbow-target">📅 Thêm lịch bận / rảnh</label>
+            <label class="rainbow-target">📅 Thêm lịch (bận)</label>
             <select id="daySelect"></select>
+
             <div class="row" style="margin-top:0">
               <div class="field">
                 <label class="rainbow-target">Từ giờ</label>
@@ -1185,7 +206,8 @@
                 <input id="toInput" placeholder="11:30" />
               </div>
             </div>
-            <textarea id="taskInput" placeholder="Việc gì? (vd: Học PRF192 / đi gym / làm bài...)"></textarea>
+
+            <textarea id="taskInput" placeholder="Việc gì? (vd: Học / đi gym / làm bài...)"></textarea>
             <button class="btn btn-ghost" id="btnAddSlot">➕ Thêm lịch</button>
           </div>
         </div>
@@ -1194,15 +216,346 @@
           <button class="btn btn-primary" id="btnSave">💾 Lưu cài đặt</button>
         </div>
       </div>
+      <!-- ===== END adminLocked ===== -->
     </div>
   </div>
 
   <script>
+    // ===== Storage =====
     const KEY = "milo_site_v2";
 
     const defaultState = {
-      theme: "dark",
+      theme: "dark",           // dark/light
       adminPass: "079268",
       isAdmin: false,
+
+      // rainbow + color
       rainbow: 0,
-      fbLink: "https://www.
+      accent: "#4ea1ff",
+      cardAlpha: 10,           // 6..30
+
+      fbLink: "https://www.facebook.com/milo.pha.a",
+      discordId: "910327589309145109",
+
+      gameLinks: { roblox:"", valorant:"", tft:"" },
+      songName: "Ai ngoài anh",
+
+      intro: [
+        "✨ Chạy Ngay Đi",
+        "🐻 Chạy Vào Trái Tim Em",
+        "😳 Đùa Thôi Anh Làm Gì Có Em"
+      ],
+
+      tus: [
+        { title: "Tus AV", link: "https://www.facebook.com/" }
+      ],
+
+      schedule: {
+        "Thứ 2": [],
+        "Thứ 3": [],
+        "Thứ 4": [],
+        "Thứ 5": [],
+        "Thứ 6": [],
+        "Thứ 7": [],
+        "Chủ nhật": []
+      }
+    };
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return structuredClone(defaultState);
+        const s = JSON.parse(raw);
+        return {
+          ...structuredClone(defaultState),
+          ...s,
+          gameLinks: { ...structuredClone(defaultState.gameLinks), ...(s.gameLinks||{}) },
+          schedule: { ...structuredClone(defaultState.schedule), ...(s.schedule||{}) }
+        };
+      }catch(e){
+        return structuredClone(defaultState);
+      }
+    }
+    function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+    let state = loadState();
+
+    // ===== Helpers =====
+    const $ = (id)=>document.getElementById(id);
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
+    function escapeAttr(str){ return escapeHtml(str); }
+
+    // ===== Elements =====
+    const btnTheme = $("btnTheme");
+    const themeText = $("themeText");
+    const btnAdmin = $("btnAdmin");
+    const adminModal = $("adminModal");
+    const adminClose = $("adminClose");
+
+    const songNameEl = $("songName");
+    const introList = $("introList");
+    const gameList = $("gameList");
+    const tusList = $("tusList");
+    const fbBtn = $("fbBtn");
+    const dcBtn = $("dcBtn");
+
+    // Admin login
+    const adminLocked = $("adminLocked");
+    const adminPassInput = $("adminPassInput");
+    const btnLogin = $("btnLogin");
+    const btnLogout = $("btnLogout");
+    const btnSave = $("btnSave");
+
+    // Admin inputs
+    const fbInput = $("fbInput");
+    const dcIdInput = $("dcIdInput");
+    const robloxInput = $("robloxInput");
+    const valoInput = $("valoInput");
+    const tftInput = $("tftInput");
+    const songInput = $("songInput");
+    const rainbowSelect = $("rainbowSelect");
+    const newPassInput = $("newPassInput");
+
+    const accentInput = $("accentInput");
+    const cardAlpha = $("cardAlpha");
+
+    const tusTitleInput = $("tusTitleInput");
+    const tusLinkInput = $("tusLinkInput");
+    const btnAddTusAdmin = $("btnAddTusAdmin");
+
+    const daySelect = $("daySelect");
+    const fromInput = $("fromInput");
+    const toInput = $("toInput");
+    const taskInput = $("taskInput");
+    const btnAddSlot = $("btnAddSlot");
+
+    const btnAddTus = $("btnAddTus");
+
+    // Schedule UI
+    const dayTabs = $("dayTabs");
+    const daySlots = $("daySlots");
+    let activeDay = "Thứ 2";
+
+    // ===== Apply theme/color =====
+    function applyTheme(){
+      document.body.classList.toggle("light", state.theme === "light");
+      themeText.textContent = state.theme === "light" ? "Light" : "Dark";
+    }
+
+    function setCSSVar(name, value){
+      document.documentElement.style.setProperty(name, value);
+    }
+
+    function applyColors(){
+      setCSSVar("--accent", state.accent);
+      setCSSVar("--accent2", hexToRgba(state.accent, 0.22));
+
+      // card alpha (đậm/nhạt)
+      const a = clamp(Number(state.cardAlpha || 10), 6, 30) / 100;
+      setCSSVar("--card", `rgba(255,255,255,${(state.theme==="light") ? 0.72 : a})`);
+      setCSSVar("--card2", `rgba(255,255,255,${(state.theme==="light") ? 0.82 : Math.min(a+0.04, 0.18)})`);
+    }
+
+    function applyRainbow(){
+      document.body.classList.toggle("rainbow-on", Number(state.rainbow) === 1);
+    }
+
+    function applyAdminGate(){
+      document.body.classList.toggle("admin-on", !!state.isAdmin);
+      // ẩn/hiện block dưới
+      adminLocked.style.display = state.isAdmin ? "block" : "none";
+    }
+
+    // ===== Render =====
+    function renderContacts(){
+      fbBtn.href = state.fbLink || "#";
+      const id = (state.discordId || "").trim();
+      dcBtn.href = id ? `https://discord.com/users/${encodeURIComponent(id)}` : "#";
+    }
+
+    function renderIntro(){
+      introList.innerHTML = "";
+      state.intro.forEach(t=>{
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<div class="rainbow-target" style="font-weight:900">${escapeHtml(t)}</div>`;
+        introList.appendChild(div);
+      });
+    }
+
+    function renderGames(){
+      const games = [
+        { key:"roblox", icon:"🕹️", name:"Roblox", desc:"chill / sandbox", tag:"casual" },
+        { key:"valorant", icon:"🎯", name:"Valorant", desc:"FPS / tryhard", tag:"rank" },
+        { key:"tft", icon:"🧠", name:"TFT", desc:"auto chess", tag:"brain" }
+      ];
+      gameList.innerHTML = "";
+      games.forEach(g=>{
+        const link = state.gameLinks[g.key] || "";
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="font-size:18px">${g.icon}</div>
+            <div>
+              <div class="rainbow-target" style="font-weight:1000">${g.name}</div>
+              <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
+              ${
+                link
+                ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
+                : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
+              }
+            </div>
+          </div>
+          <div class="tag">${g.tag}</div>
+        `;
+        gameList.appendChild(row);
+      });
+    }
+
+    function renderTus(){
+      tusList.innerHTML = "";
+      state.tus.forEach((t, idx)=>{
+        const a = document.createElement("a");
+        a.className = "tus-link";
+        a.href = t.link || "#";
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.innerHTML = `
+          <div class="rainbow-target">🔗 ${escapeHtml(t.title || "Tus")}</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            ${
+              state.isAdmin
+              ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
+              : `<span style="color:var(--muted);font-weight:900">Mở</span>`
+            }
+          </div>
+        `;
+        tusList.appendChild(a);
+      });
+
+      if(state.isAdmin){
+        tusList.querySelectorAll("[data-del]").forEach(btn=>{
+          btn.addEventListener("click", (e)=>{
+            e.preventDefault();
+            const i = Number(btn.getAttribute("data-del"));
+            state.tus.splice(i, 1);
+            saveState();
+            renderTus();
+          });
+        });
+      }
+    }
+
+    function renderScheduleTabs(){
+      const days = Object.keys(state.schedule);
+      dayTabs.innerHTML = "";
+      days.forEach(d=>{
+        const b = document.createElement("button");
+        b.className = "tab" + (d===activeDay ? " active" : "");
+        b.textContent = d;
+        b.addEventListener("click", ()=>{
+          activeDay = d;
+          renderScheduleTabs();
+          renderScheduleDay();
+        });
+        dayTabs.appendChild(b);
+      });
+
+      // admin select
+      daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
+      daySelect.value = activeDay;
+    }
+
+    function renderScheduleDay(){
+      const items = state.schedule[activeDay] || [];
+      daySlots.innerHTML = "";
+      if(items.length === 0){
+        const p = document.createElement("div");
+        p.className = "item";
+        p.innerHTML = `<div class="rainbow-target" style="font-weight:900">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
+        daySlots.appendChild(p);
+        return;
+      }
+
+      items.forEach((it, idx)=>{
+        const div = document.createElement("div");
+        div.className = "slot";
+        div.innerHTML = `
+          <div class="slot-left">
+            <div class="slot-title rainbow-target">${escapeHtml(it.task || "Việc")}</div>
+            <div class="slot-time">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <span class="tag">bận</span>
+            ${state.isAdmin ? `<button class="btn btn-danger" data-slot-del="${idx}" type="button">Xoá</button>` : ""}
+          </div>
+        `;
+        daySlots.appendChild(div);
+      });
+
+      if(state.isAdmin){
+        daySlots.querySelectorAll("[data-slot-del]").forEach(btn=>{
+          btn.addEventListener("click", ()=>{
+            const i = Number(btn.getAttribute("data-slot-del"));
+            state.schedule[activeDay].splice(i,1);
+            saveState();
+            renderScheduleDay();
+          });
+        });
+      }
+    }
+
+    function renderText(){
+      songNameEl.textContent = state.songName || "Nhạc";
+      renderContacts();
+      renderIntro();
+      renderGames();
+      renderTus();
+      renderScheduleTabs();
+      renderScheduleDay();
+    }
+
+    function fillAdminForm(){
+      fbInput.value = state.fbLink || "";
+      dcIdInput.value = state.discordId || "";
+      robloxInput.value = state.gameLinks.roblox || "";
+      valoInput.value = state.gameLinks.valorant || "";
+      tftInput.value = state.gameLinks.tft || "";
+      songInput.value = state.songName || "";
+      rainbowSelect.value = String(state.rainbow || 0);
+      newPassInput.value = "";
+
+      accentInput.value = state.accent || "#4ea1ff";
+      cardAlpha.value = String(state.cardAlpha || 10);
+    }
+
+    // ===== Events =====
+    btnTheme.addEventListener("click", ()=>{
+      state.theme = (state.theme === "light") ? "dark" : "light";
+      saveState();
+      applyTheme();
+      applyColors();
+    });
+
+    btnAdmin.addEventListener("click", ()=>{
+      adminModal.classList.add("show");
+      adminPassInput.value = "";
+      fillAdminForm();
+      applyAdminGate();
+      setTimeout(()=>adminPassInput.focus(), 60);
+    });
+
+    adminClose.addEventListener("click", ()=> adminModal.classList.remove("show"));
+    adminModal.addEventListener("click", (e)=>{
+      if(e.target === adminModal) adminModal.classList.remove("show");
+    });
+
+    btnLogin.addEventListener("click", ()=>{
+      const pass = adminPassInput.value.trim();
+      if(pass 
