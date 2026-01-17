@@ -5,34 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <!-- file hiệu ứng avatar -->
-  <link rel="stylesheet" href="effect.css" />
+  <!-- Effect riêng để bạn đổi cho tiện -->
+  <link rel="stylesheet" href="effect.css?v=1" />
 
   <style>
     :root{
       --text:#e5e7eb;
-      --muted:rgba(229,231,235,.75);
-      --card:rgba(20,30,45,.62);
+      --muted:rgba(229,231,235,.72);
+      --card:rgba(15,23,42,.62);
       --line:rgba(255,255,255,.10);
-      --accent:#38bdf8;
       --shadow:0 22px 70px rgba(0,0,0,.48);
+      --accent:#38bdf8;
     }
+
     *{ box-sizing:border-box; }
+    html,body{ height:100%; }
 
     body{
       margin:0;
       min-height:100vh;
       background:url("bg.gif") center/cover no-repeat fixed;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:22px;
       color:var(--text);
+      display:flex;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .wrap{
+      width:min(1100px, 100%);
     }
 
     .card{
-      width:min(980px, 100%);
       background:var(--card);
       border:1px solid var(--line);
       border-radius:22px;
@@ -41,36 +45,46 @@
       overflow:hidden;
     }
 
+    /* ✅ COVER full giống mobile (ưu tiên phần trên) */
     .cover{
-      height:240px;
-      background:url("cover.gif") center/cover no-repeat;
+      width:100%;
+      height:min(42vh, 380px);
+      min-height:220px;
+      background:url("cover.gif") center top / cover no-repeat;
       position:relative;
     }
 
-    .inner{
-      padding:18px 22px 22px;
+    /* lớp tối nhẹ cho chữ dễ đọc */
+    .cover::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.18));
+      pointer-events:none;
     }
 
-    /* ✅ Header kiểu Facebook: avatar trái - info phải */
+    .inner{ padding:18px 22px 22px; }
+
+    /* ✅ Header kiểu Facebook (PC) */
     .header{
       display:flex;
       align-items:flex-end;
       gap:26px;
-      margin-top:-86px;  /* đè vừa đủ, KHÔNG đè tên */
+      margin-top:-110px;     /* avatar đè cover nhưng không đè tên */
+      padding:0 8px;
     }
 
     .info{
       min-width:0;
-      padding-bottom:10px;
+      padding-bottom:6px;
+      text-align:left;
     }
 
     .name{
       margin:0;
-      margin-top:6px;     /* ✅ chừa chỗ chống avatar đè */
-      font-size:30px;
+      font-size:34px;
       line-height:1.15;
       letter-spacing:.2px;
-      text-shadow:0 2px 12px rgba(0,0,0,.25);
+      text-shadow:0 2px 14px rgba(0,0,0,.25);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -85,7 +99,7 @@
     .quote{
       margin-top:8px;
       font-size:14px;
-      color:rgba(229,231,235,.85);
+      color:rgba(229,231,235,.88);
       font-style:italic;
     }
 
@@ -94,15 +108,15 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      justify-content:flex-start;
     }
-
     .chip{
       padding:7px 12px;
       border-radius:999px;
       background:rgba(255,255,255,.08);
       border:1px solid rgba(255,255,255,.10);
       font-size:13px;
-      color:rgba(229,231,235,.92);
+      color:rgba(229,231,235,.95);
       backdrop-filter: blur(8px);
     }
 
@@ -143,7 +157,6 @@
       border:1px solid rgba(255,255,255,.08);
       margin-bottom:10px;
     }
-
     .game small{
       display:block;
       color:rgba(229,231,235,.7);
@@ -156,7 +169,7 @@
       border-radius:999px;
       background:var(--accent);
       color:#06101f;
-      font-weight:600;
+      font-weight:800;
     }
 
     .contact{
@@ -176,7 +189,7 @@
       text-decoration:none;
       background:rgba(255,255,255,.08);
       border:1px solid rgba(255,255,255,.10);
-      color:rgba(229,231,235,.95);
+      color:rgba(229,231,235,.96);
       transition:.18s ease;
     }
     .btn:hover{
@@ -185,19 +198,23 @@
       border-color:rgba(56,189,248,.35);
     }
 
-    /* ✅ Mobile: avatar giữa, text xuống dưới */
+    /* ✅ Mobile: giống Facebook mobile (center) */
     @media (max-width: 820px){
       body{ padding:16px; }
-      .cover{ height:180px; }
+      .cover{
+        height:220px;
+        background-position:center top;
+      }
       .header{
         flex-direction:column;
         align-items:center;
         text-align:center;
-        margin-top:-92px;
+        margin-top:-120px;
         gap:14px;
       }
+      .info{ text-align:center; }
       .name{
-        font-size:24px;
+        font-size:26px;
         white-space:normal;
       }
       .chips{ justify-content:center; }
@@ -208,69 +225,71 @@
 </head>
 
 <body>
-  <main class="card">
-    <div class="cover"></div>
+  <div class="wrap">
+    <main class="card">
+      <div class="cover"></div>
 
-    <div class="inner">
-      <div class="header">
-        <!-- AVATAR + FRAME -->
-        <div class="avatar-wrap">
-          <img src="avatar.jpg" class="avatar" alt="avatar">
-          <img src="frame.png" class="frame" alt="frame">
-          <span class="ring"></span>
-        </div>
+      <div class="inner">
+        <div class="header">
+          <!-- Avatar + effect (đổi file frame.png là đổi effect) -->
+          <div class="avatar-wrap">
+            <img src="avatar.jpg" class="avatar" alt="avatar">
+            <img src="frame.png" class="frame" alt="effect">
+            <span class="ring"></span>
+          </div>
 
-        <div class="info">
-          <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
-          <div class="sub">IT Student • Software Engineering</div>
-          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
+          <div class="info">
+            <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
+            <div class="sub">IT Student • Software Engineering</div>
+            <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
-          <div class="chips">
-            <div class="chip">📍 Hồ Chí Minh</div>
-            <div class="chip">🎂 19</div>
-            <div class="chip">💻 Dev vibes</div>
+            <div class="chips">
+              <div class="chip">📍 Hồ Chí Minh</div>
+              <div class="chip">🎂 19</div>
+              <div class="chip">💻 Dev vibes</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="grid">
-        <section class="section">
-          <h2>Giới thiệu</h2>
-          <ul>
-            <li>🏃‍♂️ Chạy Ngay Đi</li>
-            <li>🐧 Chạy Vào Trái Tim Em</li>
-            <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
-          </ul>
+        <div class="grid">
+          <section class="section">
+            <h2>Giới thiệu</h2>
+            <ul>
+              <li>🏃‍♂️ Chạy Ngay Đi</li>
+              <li>🐧 Chạy Vào Trái Tim Em</li>
+              <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+            </ul>
+          </section>
+
+          <section class="section">
+            <h2>Game mình hay chơi</h2>
+
+            <div class="game">
+              <div>🕹 Roblox <small>chill / sandbox</small></div>
+              <span class="tag">casual</span>
+            </div>
+
+            <div class="game">
+              <div>🎯 Valorant <small>FPS / tryhard</small></div>
+              <span class="tag">rank</span>
+            </div>
+
+            <div class="game" style="margin-bottom:0">
+              <div>♟ TFT <small>auto chess</small></div>
+              <span class="tag">brain</span>
+            </div>
+          </section>
+        </div>
+
+        <section class="section" style="margin-top:14px;">
+          <h2>Liên hệ</h2>
+          <div class="contact">
+            <a class="btn" href="https://www.facebook.com/milo.pha.a" target="_blank">🌐 Facebook</a>
+            <a class="btn" href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord</a>
+          </div>
         </section>
-
-        <section class="section">
-          <h2>Game mình hay chơi</h2>
-
-          <div class="game">
-            <div>🕹 Roblox <small>chill / sandbox</small></div>
-            <span class="tag">casual</span>
-          </div>
-
-          <div class="game">
-            <div>🎯 Valorant <small>FPS / tryhard</small></div>
-            <span class="tag">rank</span>
-          </div>
-
-          <div class="game" style="margin-bottom:0">
-            <div>♟ TFT <small>auto chess</small></div>
-            <span class="tag">brain</span>
-          </div>
-        </section>
       </div>
-
-      <section class="section" style="margin-top:14px;">
-        <h2>Liên hệ</h2>
-        <div class="contact">
-          <a class="btn" href="https://www.facebook.com/milo.pha.a" target="_blank">🌐 Facebook</a>
-          <a class="btn" href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord</a>
-        </div>
-      </section>
-    </div>
-  </main>
+    </main>
+  </div>
 </body>
 </html>
