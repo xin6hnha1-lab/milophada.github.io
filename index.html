@@ -43,18 +43,35 @@
 
     /* COVER */
     .cover{
-      width:100%;
-      height:min(42vh, 360px);
-      min-height:210px;
-      background:url("cover.gif") center top/cover no-repeat;
-      position:relative;
-    }
-    .cover::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.20));
-      pointer-events:none;
-    }
+  width:100%;
+  height:min(42vh, 360px);
+  min-height:210px;
+  position:relative;
+  overflow:hidden;
+
+  /* lớp nền phía sau (blur) để full ảnh vẫn đẹp */
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.30)),
+    url("cover.gif") center/cover no-repeat;
+}
+
+/* lớp ảnh chính: hiển thị FULL (không bị cắt) */
+.cover::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("cover.gif") center/contain no-repeat;
+  transform: scale(1.02);
+  pointer-events:none;
+}
+
+/* giữ overlay nhẹ */
+.cover::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,.08), rgba(0,0,0,.25));
+  pointer-events:none;
+}
 
     /* PROFILE ZONE */
     .profile{
