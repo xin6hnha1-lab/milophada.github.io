@@ -1,987 +1,534 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Milo Pha Đá</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <style>
-    :root{
-      --bg: #0b1020;
-      --card: rgba(18,28,48,.68);
-      --card2: rgba(18,28,48,.50);
-      --stroke: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --chip: rgba(255,255,255,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-
-      --accent: rgba(99,102,241,.75);
-      --accent2: rgba(56,189,248,.70);
-
-      --musicTitleMode: 0; /* 0 white, 1 black, 2 rainbow */
-    }
-    [data-theme="light"]{
-      --bg: #e9eef8;
-      --card: rgba(255,255,255,.78);
-      --card2: rgba(255,255,255,.62);
-      --stroke: rgba(20,20,20,.10);
-      --text: rgba(10,10,10,.92);
-      --muted: rgba(20,20,20,.62);
-      --chip: rgba(20,20,20,.08);
-      --shadow: 0 18px 60px rgba(0,0,0,.18);
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color: var(--text);
-      background: url("bg.gif") center/cover no-repeat fixed;
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-
-    /* subtle overlay to reduce noise in both modes */
-    .bgOverlay{
-      position:fixed; inset:0;
-      background: radial-gradient(1200px 600px at 20% 10%, rgba(0,0,0,.35), transparent 60%),
-                  radial-gradient(900px 700px at 80% 30%, rgba(0,0,0,.30), transparent 55%),
-                  linear-gradient(to bottom, rgba(0,0,0,.22), rgba(0,0,0,.38));
-      pointer-events:none;
-      z-index:0;
-    }
-    [data-theme="light"] .bgOverlay{
-      background: radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.55), transparent 60%),
-                  radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.45), transparent 55%),
-                  linear-gradient(to bottom, rgba(255,255,255,.30), rgba(255,255,255,.15));
-    }
-
-    .wrap{
-      position:relative;
-      z-index:1;
-      width:min(1100px, 92vw);
-      margin: 28px auto 60px;
-    }
-
-    .topbar{
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
-      align-items:center;
-      margin-bottom:10px;
-    }
-
-    .pillBtn{
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.25);
-      color: var(--text);
-      padding:10px 14px;
-      border-radius: 999px;
-      cursor:pointer;
-      box-shadow: 0 10px 25px rgba(0,0,0,.18);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      font-weight:600;
-      display:flex; gap:8px; align-items:center;
-    }
-    [data-theme="light"] .pillBtn{ background: rgba(255,255,255,.55); }
-
-    /* main card */
-    .card{
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--stroke);
-      overflow:hidden;
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    /* cover */
-    .cover{
-      height: 240px;
-      background: url("cover.gif") center/cover no-repeat;
-      position:relative;
-    }
-    .cover::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.45));
-    }
-
-    /* header section like facebook */
-    .header{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap: 16px;
-      padding: 18px 22px 10px;
-      align-items:end;
-      position:relative;
-    }
-
-    .avatarCol{
-      position:relative;
-      margin-top: -92px; /* overlaps cover like FB */
-      padding-left: 6px;
-    }
-
-    /* avatar wrap uses your effect.css sizing idea */
-    .avatar-wrap{
-      position:relative;
-      width:210px;
-      height:210px;
-    }
-    .avatar{
-      position:absolute;
-      inset:28px;
-      width:154px;
-      height:154px;
-      border-radius:50%;
-      object-fit:cover;
-      z-index:2;
-      background:#0b1220;
-      box-shadow: 0 18px 50px rgba(0,0,0,.38);
-    }
-    .frame{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index:3;
-      pointer-events:none;
-      filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
-    }
-    .ring{
-      position:absolute;
-      inset:-12px;
-      border-radius:50%;
-      z-index:1;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(56,189,248,.34), transparent 48%),
-        radial-gradient(circle at 70% 70%, rgba(99,102,241,.26), transparent 55%);
-      filter: blur(7px);
-      opacity:.85;
-      animation: ringPulse 2.8s ease-in-out infinite;
-    }
-    .ring::before,
-    .ring::after{
-      content:"";
-      position:absolute;
-      inset:16px;
-      border-radius:50%;
-      border:2px solid rgba(56,189,248,.18);
-      animation: wave 2.2s ease-in-out infinite;
-    }
-    .ring::after{
-      inset:26px;
-      border-color: rgba(99,102,241,.14);
-      animation-duration: 3.1s;
-      animation-direction: reverse;
-    }
-    @keyframes ringPulse{
-      0%,100%{ transform:scale(1); opacity:.70; }
-      50%{ transform:scale(1.04); opacity:.95; }
-    }
-    @keyframes wave{
-      0%,100%{ transform:scale(1); opacity:.52; }
-      50%{ transform:scale(1.08); opacity:.88; }
-    }
-
-    .infoCol{
-      padding-bottom: 6px;
-      min-width:0;
-    }
-
-    .name{
-      font-size: clamp(26px, 2.6vw, 40px);
-      margin:0;
-      line-height:1.05;
-      font-weight: 800;
-      text-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    .role{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-weight:600;
-    }
-    .quote{
-      margin: 8px 0 12px;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .chips{
-      display:flex; flex-wrap:wrap;
-      gap:10px;
-      margin: 6px 0 0;
-    }
-    .chip{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: var(--chip);
-      color: var(--text);
-      font-weight:700;
-      font-size: 14px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    /* music block under avatar (your request) */
-    .musicBox{
-      margin-top: 14px;
-      border: 1px solid var(--stroke);
-      background: var(--card2);
-      border-radius: 18px;
-      padding: 12px 12px 10px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.20);
-    }
-    .musicHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-    .musicTitle{
-      font-weight: 900;
-      font-size: 18px;
-      letter-spacing:.2px;
-      margin:0;
-    }
-    .musicTitle.mode-white{ color: rgba(255,255,255,.94); }
-    [data-theme="light"] .musicTitle.mode-white{ color: rgba(10,10,10,.92); } /* still readable */
-    .musicTitle.mode-black{ color: rgba(10,10,10,.92); }
-    [data-theme="light"] .musicTitle.mode-black{ color: rgba(10,10,10,.92); }
-
-    .musicTitle.mode-rainbow{
-      background: linear-gradient(90deg, #ff4d4d, #ffcc00, #3cff88, #3cc7ff, #7b61ff, #ff4ddb);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color: transparent;
-      filter: drop-shadow(0 8px 22px rgba(0,0,0,.35));
-    }
-
-    .musicSub{
-      color: var(--muted);
-      font-weight:600;
-      font-size: 13px;
-      margin:0 0 10px;
-    }
-    .audio{
-      width:100%;
-      border-radius: 14px;
-      overflow:hidden;
-    }
-
-    /* grid content */
-    .content{
-      padding: 10px 22px 22px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .box{
-      border: 1px solid var(--stroke);
-      background: var(--card2);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.18);
-      min-width:0;
-    }
-    .box h3{
-      margin:0 0 10px;
-      font-size: 18px;
-      font-weight: 900;
-    }
-    .list{
-      margin:0;
-      padding-left: 18px;
-      color: var(--text);
-      font-weight: 650;
-      line-height: 1.7;
-    }
-    .list span{ color: var(--muted); font-weight:600; }
-
-    .games{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .gameRow{
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.14);
-      border-radius: 16px;
-      padding: 12px 12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-    [data-theme="light"] .gameRow{ background: rgba(255,255,255,.35); }
-    .gameLeft{
-      min-width:0;
-    }
-    .gameName{
-      font-weight:900;
-      margin:0;
-    }
-    .gameMeta{
-      margin:2px 0 0;
-      color: var(--muted);
-      font-weight:650;
-      font-size: 13px;
-    }
-    .tag{
-      border: 1px solid rgba(56,189,248,.35);
-      background: rgba(56,189,248,.18);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight:900;
-      font-size: 13px;
-      white-space:nowrap;
-    }
-
-    .gameLink{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      margin-top:6px;
-      font-size: 13px;
-      font-weight: 800;
-      color: rgba(56,189,248,.95);
-      text-decoration:none;
-    }
-    .gameLink:hover{ text-decoration: underline; }
-
-    /* contact buttons */
-    .contacts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
-    .linkBtn{
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.16);
-      border-radius: 18px;
-      padding: 14px 16px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      font-weight: 900;
-      cursor:pointer;
-      color: var(--text);
-      text-decoration:none;
-      box-shadow: 0 14px 40px rgba(0,0,0,.18);
-    }
-    [data-theme="light"] .linkBtn{ background: rgba(255,255,255,.35); }
-    .linkBtn:hover{ transform: translateY(-1px); }
-    .smallNote{
-      color: var(--muted);
-      font-weight:650;
-      margin: 8px 0 0;
-      font-size: 13px;
-    }
-
-    /* tus section */
-    .tusHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin: 8px 0 10px;
-    }
-    .tusTitle{
-      margin:0;
-      font-weight: 950;
-      font-size: 20px;
-    }
-    .tusSub{
-      margin:3px 0 0;
-      color: var(--muted);
-      font-weight:650;
-      font-size: 13px;
-    }
-
-    .btn{
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 900;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-    }
-    [data-theme="light"] .btn{ background: rgba(255,255,255,.42); }
-    .btn:hover{ transform: translateY(-1px); }
-
-    .tusList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top: 10px;
-    }
-    .tusItem{
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-      border-radius: 16px;
-      padding: 12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    [data-theme="light"] .tusItem{ background: rgba(255,255,255,.35); }
-
-    .tusLeft{ min-width:0; }
-    .tusName{ margin:0; font-weight:950; }
-    .tusUrl{
-      margin:4px 0 0;
-      color: rgba(56,189,248,.95);
-      font-weight:800;
-      font-size: 13px;
-      text-decoration:none;
-      word-break: break-all;
-    }
-    .tusUrl:hover{ text-decoration:underline; }
-
-    .danger{
-      border-color: rgba(239,68,68,.35);
-      background: rgba(239,68,68,.14);
-    }
-
-    /* admin modal */
-    .modalBack{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.52);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 16px;
-      z-index:50;
-    }
-    .modal{
-      width: min(860px, 95vw);
-      background: rgba(255,255,255,.92);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
-      color: #111;
-    }
-    .modalTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
-    }
-    .modalTop h2{ margin:0; font-size: 22px; font-weight: 950; }
-    .xBtn{
-      border: 1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.8);
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 900;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin: 10px 0;
-    }
-    .field label{
-      font-weight: 900;
-      color:#222;
-    }
-    .field input, .field select{
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(0,0,0,.15);
-      outline:none;
-      font-weight: 800;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .hint{
-      font-weight:800;
-      color:#444;
-      font-size: 13px;
-    }
-
-    .adminOnly{ display:none; }
-
-    /* responsive */
-    @media (max-width: 920px){
-      .header{ grid-template-columns: 1fr; }
-      .avatarCol{ margin-top: -98px; display:flex; justify-content:flex-start; }
-      .grid{ grid-template-columns: 1fr; }
-      .contacts{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 520px){
-      .cover{ height: 210px; }
-      .avatar-wrap{ transform: scale(.92); transform-origin:left top; }
-    }
-  </style>
-
-  <!-- keep your existing effect.css if you want (optional) -->
-  <link rel="stylesheet" href="effect.css">
+  <link rel="stylesheet" href="effect.css" />
 </head>
 
 <body>
-  <div class="bgOverlay"></div>
+  <!-- Top actions -->
+  <div class="top-actions">
+    <button id="btnTheme" class="pill-btn" type="button">🌙 Dark</button>
+    <button id="btnAdmin" class="pill-btn" type="button">🔒 Admin</button>
+  </div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <button class="pillBtn" id="themeBtn">🌙 <span id="themeText">Dark</span></button>
-      <button class="pillBtn" id="adminBtn">🔒 Admin</button>
-    </div>
+  <!-- Background -->
+  <div class="bg" aria-hidden="true"></div>
 
-    <div class="card">
-      <div class="cover"></div>
+  <main class="wrap">
+    <section class="card">
 
-      <div class="header">
-        <div class="avatarCol">
-          <div class="avatar-wrap">
-            <div class="ring"></div>
-            <img class="avatar" src="avatar.jpg" alt="avatar">
-            <img class="frame" src="frame.png" alt="frame">
-          </div>
+      <!-- COVER -->
+      <div class="cover">
+        <!-- cover.gif đặt cùng thư mục -->
+        <img id="coverImg" src="cover.gif" alt="cover" />
+        <div class="coverShade" aria-hidden="true"></div>
+      </div>
 
-          <!-- MUSIC under avatar -->
-          <div class="musicBox">
-            <div class="musicHead">
-              <p class="musicTitle" id="musicTitle">Ai ngoài anh</p>
-            </div>
-            <p class="musicSub" id="musicSub">Bấm Play để nghe 🎧</p>
-
-            <audio class="audio" id="player" controls preload="metadata">
-              <source src="music.mp3" type="audio/mpeg">
-            </audio>
-          </div>
+      <!-- PROFILE BAR -->
+      <div class="profileBar">
+        <!-- AVATAR + EFFECT -->
+        <div class="avatar-wrap">
+          <div class="ring" aria-hidden="true"></div>
+          <img class="avatar" id="avatarImg" src="avatar.jpg" alt="avatar" />
+          <!-- frame.png đặt cùng thư mục; nếu không muốn dùng thì xóa dòng dưới -->
+          <img class="frame" id="frameImg" src="frame.png" alt="frame" />
         </div>
 
-        <div class="infoCol">
-          <h1 class="name">Milo Pha Đá (Nhat boy)</h1>
-          <p class="role">IT Student • Software Engineering</p>
-          <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
+        <!-- INFO -->
+        <div class="info">
+          <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
+          <div class="sub">IT Student • Software Engineering</div>
+          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
           <div class="chips">
-            <div class="chip">📍 Hồ Chí Minh</div>
-            <div class="chip">🎂 19</div>
-            <div class="chip">🎮 <span id="devVibesText">gamer</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content">
-        <div class="grid">
-          <div class="box">
-            <h3>Giới thiệu</h3>
-            <ul class="list">
-              <li>✨ Chạy Ngay Đi</li>
-              <li>🧸 Chạy Vào Trái Tim Em</li>
-              <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
-            </ul>
+            <span class="chip">📍 <span id="chipCity">Hồ Chí Minh</span></span>
+            <span class="chip">🎂 <span id="chipAge">19</span></span>
+            <span class="chip">🎮 <span id="chipTag">gamer</span></span>
           </div>
 
-          <div class="box">
-            <h3>Game mình hay chơi</h3>
-            <div class="games" id="gamesBox"></div>
-          </div>
-        </div>
-
-        <div class="contacts">
-          <a class="linkBtn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
-          <a class="linkBtn" id="dcBtn" href="#" target="_blank" rel="noopener">🎮 Discord</a>
-        </div>
-
-        <div class="box" style="margin-top:14px;">
-          <div class="tusHead">
-            <div>
-              <h3 class="tusTitle">📝 Đây là nơi check các tus của tôi</h3>
-              <p class="tusSub">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</p>
+          <!-- MUSIC (đưa lên dưới ảnh đại diện / info, đẹp rõ ràng) -->
+          <div class="musicBox">
+            <div class="musicTitleRow">
+              <div class="musicTitleLabel">🎵 Nhạc tôi nghe</div>
+              <button id="btnEditMusic" class="mini-btn" type="button">✏️ Đổi tên</button>
             </div>
-            <button class="btn adminOnly" id="addTusBtn">➕ Thêm link</button>
-          </div>
 
-          <div class="tusList" id="tusList"></div>
+            <div class="musicName" id="musicName">Ai ngoài anh</div>
+            <div class="musicHint">Bấm Play để nghe 🎧</div>
+
+            <!-- music.mp3 đặt cùng thư mục -->
+            <audio id="audio" controls preload="metadata">
+              <source src="music.mp3" type="audio/mpeg" />
+            </audio>
+
+            <div class="musicColorRow">
+              <span class="label">Màu chữ tên nhạc:</span>
+              <div class="seg">
+                <button class="segBtn" data-musiccolor="white" type="button">⚪ Trắng</button>
+                <button class="segBtn" data-musiccolor="black" type="button">⚫ Đen</button>
+                <button class="segBtn" data-musiccolor="rainbow" type="button">🌈 7 sắc</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+
+      <!-- CONTENT GRID -->
+      <div class="grid">
+        <section class="panel">
+          <h2>Giới thiệu</h2>
+          <ul class="list">
+            <li>✨ Chạy Ngay Đi</li>
+            <li>🧸 Chạy Vào Trái Tim Em</li>
+            <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Game mình hay chơi</h2>
+
+          <div class="gameList">
+            <a class="gameItem" id="linkRoblox" href="#" target="_blank" rel="noopener">
+              <div class="gLeft">
+                <div class="gName">🕹️ Roblox</div>
+                <div class="gSub">chill / sandbox</div>
+              </div>
+              <span class="badge">casual</span>
+            </a>
+
+            <a class="gameItem" id="linkValorant" href="#" target="_blank" rel="noopener">
+              <div class="gLeft">
+                <div class="gName">🎯 Valorant</div>
+                <div class="gSub">FPS / tryhard</div>
+              </div>
+              <span class="badge">rank</span>
+            </a>
+
+            <a class="gameItem" id="linkTFT" href="#" target="_blank" rel="noopener">
+              <div class="gLeft">
+                <div class="gName">🧠 TFT</div>
+                <div class="gSub">auto chess</div>
+              </div>
+              <span class="badge">brain</span>
+            </a>
+          </div>
+
+          <div class="note">*Link game có thể chỉnh trong Admin 🤫</div>
+        </section>
+
+        <section class="panel wide">
+          <h2>Liên hệ</h2>
+          <div class="contactRow">
+            <a class="contactBtn" id="btnFacebook" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
+            <a class="contactBtn" id="btnDiscord" href="#" target="_blank" rel="noopener">🎮 Discord</a>
+          </div>
+        </section>
+
+        <!-- POSTS / TUS -->
+        <section class="panel wide">
+          <div class="panelHead">
+            <div>
+              <h2>📝 Đây là nơi check các tus của tôi</h2>
+              <div class="subline">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
+            </div>
+            <button id="btnAddTus" class="pill-btn ghost" type="button">➕ Thêm tus</button>
+          </div>
+
+          <div id="tusList" class="tusList"></div>
+          <div class="note">*Tus là link bấm mở trực tiếp, khỏi copy nhé 😎</div>
+        </section>
+      </div>
+    </section>
+  </main>
 
   <!-- ADMIN MODAL -->
-  <div class="modalBack" id="modalBack">
-    <div class="modal">
-      <div class="modalTop">
-        <h2>🔒 Admin Panel</h2>
-        <button class="xBtn" id="closeModal">✖</button>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div class="modalTitle" id="modalTitle">🔐 Admin Panel</div>
+        <button id="btnCloseModal" class="xBtn" type="button">✕</button>
       </div>
 
-      <div id="loginBox">
-        <div class="field" style="max-width:420px;">
-          <label>Nhập mật khẩu admin</label>
-          <div style="display:flex; gap:10px; align-items:center;">
-            <input id="passInput" type="password" placeholder="Nhập mật khẩu…" autocomplete="current-password" style="flex:1;">
-            <button class="btn" id="togglePass" type="button">👁️</button>
-          </div>
-          <div class="hint" id="loginHint"></div>
+      <!-- LOGIN -->
+      <div id="loginView">
+        <div class="field">
+          <label>Mật khẩu admin</label>
+          <input id="adminPass" type="password" placeholder="Nhập pass..." autocomplete="current-password" />
         </div>
-        <button class="btn" id="loginBtn">✅ Vào Admin</button>
+        <div class="row">
+          <button id="btnLogin" class="primary" type="button">✅ Vào Admin</button>
+          <span id="loginMsg" class="msg"></span>
+        </div>
+        <div class="tiny">Pass admin: <b>079268</b> (chỉ để chặn người xem “bấm nút”, không phải bảo mật tuyệt đối trên GitHub Pages)</div>
       </div>
 
-      <div id="adminBox" style="display:none;">
-        <div class="row">
+      <!-- ADMIN CONTENT -->
+      <div id="adminView" class="hidden">
+        <div class="adminGrid">
+
           <div class="field">
-            <label>Link Facebook (dán link profile của bạn)</label>
-            <input id="fbInput" placeholder="https://facebook.com/..." />
-            <div class="hint">Người xem bấm Facebook là mở link này.</div>
+            <label>Link Facebook (dán link profile)</label>
+            <input id="fbLink" type="url" placeholder="https://facebook.com/..." />
+            <div class="tiny">Người xem bấm Facebook là mở link này.</div>
           </div>
+
           <div class="field">
             <label>Discord ID (chỉ cần ID)</label>
-            <input id="dcInput" placeholder="9103..." />
-            <div class="hint">Tự build link: discord.com/users/ID</div>
+            <input id="dcId" type="text" placeholder="9103..." inputmode="numeric" />
+            <div class="tiny">Tự build link: discord.com/users/&lt;ID&gt;</div>
           </div>
-        </div>
 
-        <div class="row">
+          <div class="field">
+            <label>Link Roblox (tài khoản)</label>
+            <input id="robloxLink" type="url" placeholder="Dán link (có thể để trống)" />
+          </div>
+
+          <div class="field">
+            <label>Link Valorant (tài khoản / tracker...)</label>
+            <input id="valorantLink" type="url" placeholder="Dán link (có thể để trống)" />
+          </div>
+
+          <div class="field">
+            <label>Link TFT (tài khoản / tracker...)</label>
+            <input id="tftLink" type="url" placeholder="Dán link (có thể để trống)" />
+          </div>
+
           <div class="field">
             <label>Tên bài nhạc hiển thị</label>
-            <input id="musicNameInput" placeholder="Ai ngoài anh" />
+            <input id="musicNameInput" type="text" placeholder="Ví dụ: Ai ngoài anh" />
           </div>
+
           <div class="field">
-            <label>Màu chữ tên nhạc</label>
-            <select id="musicColorMode">
-              <option value="0">Trắng</option>
-              <option value="1">Đen</option>
-              <option value="2">7 sắc cầu vồng 🌈</option>
-            </select>
+            <label>Thêm tus mới</label>
+            <input id="tusTitle" type="text" placeholder="Tên tus (vd: Tus AV)" />
+            <input id="tusUrl" type="url" placeholder="Dán link tus Facebook..." />
+            <button id="btnSaveTus" class="primary" type="button">➕ Lưu tus</button>
+            <div class="tiny">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
           </div>
         </div>
 
-        <div class="field">
-          <label>Link cho từng game (để người xem bấm vào)</label>
-          <div class="hint">Bạn sửa link game ở đây, khỏi code lại.</div>
-        </div>
-        <div class="row" id="gameLinkEditors"></div>
-
-        <div class="field">
-          <label>Thêm tus mới</label>
-          <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
-          <input id="tusUrlInput" placeholder="Dán link tus Facebook..." />
-          <button class="btn" id="saveTusBtn">➕ Lưu tus</button>
-          <div class="hint">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="saveAdminBtn">💾 Lưu cài đặt</button>
-          <button class="btn danger" id="logoutBtn">🚪 Thoát Admin</button>
+        <div class="footerRow">
+          <button id="btnSaveAll" class="primary" type="button">💾 Lưu cài đặt</button>
+          <button id="btnLogout" class="danger" type="button">🚪 Thoát Admin</button>
+          <span id="saveMsg" class="msg"></span>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    const $ = (id)=>document.getElementById(id);
+<script>
+/* =========================
+   STORAGE + DEFAULTS
+========================= */
+const KEY = "milo_profile_v3";
 
-    // ====== STORAGE ======
-    const KEY = "milo_profile_v1";
-    const DEFAULT = {
-      theme: "dark",
-      fbLink: "https://facebook.com/",
-      discordId: "910327589309145109",
-      musicTitle: "Ai ngoài anh",
-      musicColorMode: 2,
-      tus: [
-        { title: "Tus AV", url: "https://www.facebook.com/" }
-      ],
-      games: [
-        { name:"Roblox", meta:"chill / sandbox", tag:"casual", link:"" },
-        { name:"Valorant", meta:"FPS / tryhard", tag:"rank", link:"" },
-        { name:"TFT", meta:"auto chess", tag:"brain", link:"" }
-      ]
+const DEFAULTS = {
+  theme: "dark",
+  facebook: "https://facebook.com/",
+  discordId: "910327589309145109",
+  gameLinks: { roblox: "", valorant: "", tft: "" },
+  musicName: "Ai ngoài anh",
+  musicColor: "rainbow",
+  tus: [
+    { title: "Tus AV", url: "https://www.facebook.com/" }
+  ]
+};
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return structuredClone(DEFAULTS);
+    const parsed = JSON.parse(raw);
+    return {
+      ...structuredClone(DEFAULTS),
+      ...parsed,
+      gameLinks: { ...structuredClone(DEFAULTS.gameLinks), ...(parsed.gameLinks||{}) },
+      tus: Array.isArray(parsed.tus) ? parsed.tus : structuredClone(DEFAULTS.tus)
     };
+  }catch(e){
+    return structuredClone(DEFAULTS);
+  }
+}
+function saveData(data){
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
 
-    function loadData(){
-      try{
-        const raw = localStorage.getItem(KEY);
-        if(!raw) return structuredClone(DEFAULT);
-        const obj = JSON.parse(raw);
-        return { ...structuredClone(DEFAULT), ...obj };
-      }catch(e){
-        return structuredClone(DEFAULT);
-      }
+let data = loadData();
+
+/* =========================
+   APPLY UI
+========================= */
+const $ = (s)=>document.querySelector(s);
+
+function safeHref(url){
+  if(!url) return "#";
+  try{
+    const u = new URL(url);
+    return u.href;
+  }catch{
+    return "#";
+  }
+}
+
+function applyAll(){
+  // theme
+  document.documentElement.dataset.theme = data.theme;
+
+  // top buttons label
+  $("#btnTheme").textContent = (data.theme === "dark") ? "🌙 Dark" : "☀️ Light";
+
+  // contacts
+  $("#btnFacebook").href = safeHref(data.facebook);
+
+  const dc = (data.discordId || "").trim();
+  $("#btnDiscord").href = dc ? `https://discord.com/users/${encodeURIComponent(dc)}` : "#";
+
+  // games
+  const gl = data.gameLinks || {};
+  $("#linkRoblox").href = gl.roblox ? safeHref(gl.roblox) : "#";
+  $("#linkValorant").href = gl.valorant ? safeHref(gl.valorant) : "#";
+  $("#linkTFT").href = gl.tft ? safeHref(gl.tft) : "#";
+
+  // disable empty links (so it doesn't look broken)
+  ["#linkRoblox","#linkValorant","#linkTFT","#btnFacebook","#btnDiscord"].forEach(sel=>{
+    const a = $(sel);
+    if(a.getAttribute("href")==="#" || !a.getAttribute("href")){
+      a.classList.add("disabledLink");
+      a.addEventListener("click", (e)=>e.preventDefault(), { once:false });
+    }else{
+      a.classList.remove("disabledLink");
     }
-    function saveData(){
-      localStorage.setItem(KEY, JSON.stringify(state));
-    }
+  });
 
-    let state = loadData();
-    let isAdmin = false;
+  // music
+  $("#musicName").textContent = data.musicName || DEFAULTS.musicName;
+  $("#musicName").classList.remove("mWhite","mBlack","mRainbow");
+  if(data.musicColor==="white") $("#musicName").classList.add("mWhite");
+  if(data.musicColor==="black") $("#musicName").classList.add("mBlack");
+  if(data.musicColor==="rainbow") $("#musicName").classList.add("mRainbow");
 
-    // ====== THEME ======
-    function applyTheme(){
-      document.documentElement.setAttribute("data-theme", state.theme === "light" ? "light" : "dark");
-      const isLight = state.theme === "light";
-      $("themeText").textContent = isLight ? "Light" : "Dark";
-      $("themeBtn").firstChild.textContent = isLight ? "☀️ " : "🌙 ";
-    }
+  // tus list
+  renderTus();
+}
 
-    $("themeBtn").addEventListener("click", ()=>{
-      state.theme = (state.theme === "dark") ? "light" : "dark";
-      saveData();
-      applyTheme();
-      applyMusicTitleStyle();
-    });
+function renderTus(){
+  const box = $("#tusList");
+  box.innerHTML = "";
+  const tus = Array.isArray(data.tus) ? data.tus : [];
+  if(tus.length === 0){
+    box.innerHTML = `<div class="empty">Chưa có tus nào 😭 (Admin thêm là xuất hiện ngay)</div>`;
+    return;
+  }
 
-    // ====== LINKS ======
-    function applyLinks(){
-      // facebook
-      $("fbBtn").href = state.fbLink || "https://facebook.com/";
-      // discord
-      const id = (state.discordId || "").trim();
-      $("dcBtn").href = id ? ("https://discord.com/users/" + encodeURIComponent(id)) : "https://discord.com/";
-    }
+  tus.forEach((t, idx)=>{
+    const wrap = document.createElement("div");
+    wrap.className = "tusItem";
 
-    // ====== MUSIC ======
-    function applyMusic(){
-      $("musicTitle").textContent = state.musicTitle || "Tên bài của tôi";
-      applyMusicTitleStyle();
-      // source fixed to music.mp3 (replace file but keep same name)
-      const audio = $("player");
-      // force reload metadata if needed
-      audio.load();
-    }
-    function applyMusicTitleStyle(){
-      const el = $("musicTitle");
-      el.classList.remove("mode-white","mode-black","mode-rainbow");
+    const left = document.createElement("div");
+    left.className = "tusLeft";
 
-      const mode = Number(state.musicColorMode ?? 0);
-      if(mode === 1){
-        el.classList.add("mode-black");
-      }else if(mode === 2){
-        el.classList.add("mode-rainbow");
-      }else{
-        el.classList.add("mode-white");
-      }
-    }
+    const title = document.createElement("div");
+    title.className = "tusTitle";
+    title.textContent = t.title || `Tus ${idx+1}`;
 
-    // ====== GAMES ======
-    function renderGames(){
-      const box = $("gamesBox");
-      box.innerHTML = "";
-      state.games.forEach((g, idx)=>{
-        const row = document.createElement("div");
-        row.className = "gameRow";
+    const link = document.createElement("a");
+    link.className = "tusLink";
+    link.href = safeHref(t.url || "");
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = t.url || "(chưa có link)";
+    if(link.href === location.href + "#"){ link.classList.add("disabledLink"); link.addEventListener("click", (e)=>e.preventDefault()); }
 
-        const left = document.createElement("div");
-        left.className = "gameLeft";
-        left.innerHTML = `
-          <p class="gameName">🕹️ ${escapeHtml(g.name)}</p>
-          <p class="gameMeta">${escapeHtml(g.meta || "")}</p>
-          ${g.link ? `<a class="gameLink" href="${escapeAttr(g.link)}" target="_blank" rel="noopener">🔗 Link tài khoản</a>` : ``}
-        `;
+    left.appendChild(title);
+    left.appendChild(link);
 
-        const tag = document.createElement("div");
-        tag.className = "tag";
-        tag.textContent = g.tag || "tag";
+    const right = document.createElement("div");
+    right.className = "tusRight";
 
-        row.appendChild(left);
-        row.appendChild(tag);
-
-        box.appendChild(row);
-      });
-    }
-
-    // ====== TUS ======
-    function renderTus(){
-      const list = $("tusList");
-      list.innerHTML = "";
-
-      state.tus.forEach((t, idx)=>{
-        const item = document.createElement("div");
-        item.className = "tusItem";
-
-        const left = document.createElement("div");
-        left.className = "tusLeft";
-        left.innerHTML = `
-          <p class="tusName">${escapeHtml(t.title || "Tus")}</p>
-          <a class="tusUrl" href="${escapeAttr(t.url || "#")}" target="_blank" rel="noopener">${escapeHtml(t.url || "")}</a>
-        `;
-
-        const right = document.createElement("div");
-        if(isAdmin){
-          const del = document.createElement("button");
-          del.className = "btn danger";
-          del.textContent = "🗑️ Xóa";
-          del.addEventListener("click", ()=>{
-            if(!confirm("Xóa tus này luôn hả bro?")) return;
-            state.tus.splice(idx,1);
-            saveData();
-            renderTus();
-          });
-          right.appendChild(del);
-        }
-
-        item.appendChild(left);
-        item.appendChild(right);
-        list.appendChild(item);
-      });
-    }
-
-    // ====== ADMIN UI ======
-    function openModal(){
-      $("modalBack").style.display = "flex";
-      $("loginHint").textContent = "";
-    }
-    function closeModal(){
-      $("modalBack").style.display = "none";
-    }
-    $("adminBtn").addEventListener("click", openModal);
-    $("closeModal").addEventListener("click", closeModal);
-    $("modalBack").addEventListener("click", (e)=>{
-      if(e.target === $("modalBack")) closeModal();
-    });
-
-    $("togglePass").addEventListener("click", ()=>{
-      const inp = $("passInput");
-      inp.type = (inp.type === "password") ? "text" : "password";
-    });
-
-    $("loginBtn").addEventListener("click", ()=>{
-      const pass = $("passInput").value.trim();
-      if(pass === "079268"){
-        isAdmin = true;
-        $("loginBox").style.display = "none";
-        $("adminBox").style.display = "block";
-        document.querySelectorAll(".adminOnly").forEach(el=>el.style.display="");
-        hydrateAdminForm();
-        renderTus();
-      }else{
-        $("loginHint").textContent = "Sai mật khẩu rồi bro 💀";
-      }
-    });
-
-    $("logoutBtn").addEventListener("click", ()=>{
-      isAdmin = false;
-      $("adminBox").style.display = "none";
-      $("loginBox").style.display = "block";
-      $("passInput").value = "";
-      document.querySelectorAll(".adminOnly").forEach(el=>el.style.display="none");
+    const btnDel = document.createElement("button");
+    btnDel.className = "danger small";
+    btnDel.type = "button";
+    btnDel.textContent = "🗑️ Xóa";
+    btnDel.addEventListener("click", ()=>{
+      if(!isAdmin()){ alert("Chỉ Admin mới xóa được nha 😤"); return; }
+      data.tus.splice(idx,1);
+      saveData(data);
       renderTus();
     });
 
-    function hydrateAdminForm(){
-      $("fbInput").value = state.fbLink || "";
-      $("dcInput").value = state.discordId || "";
-      $("musicNameInput").value = state.musicTitle || "";
-      $("musicColorMode").value = String(state.musicColorMode ?? 0);
+    right.appendChild(btnDel);
+    wrap.appendChild(left);
+    wrap.appendChild(right);
 
-      // game link editors
-      const editors = $("gameLinkEditors");
-      editors.innerHTML = "";
-      state.games.forEach((g, idx)=>{
-        const wrap = document.createElement("div");
-        wrap.className = "field";
-        wrap.innerHTML = `
-          <label>${escapeHtml(g.name)} - Link tài khoản</label>
-          <input data-game-idx="${idx}" value="${escapeAttr(g.link || "")}" placeholder="Dán link (có thể để trống)" />
-        `;
-        editors.appendChild(wrap);
-      });
-    }
+    box.appendChild(wrap);
+  });
+}
 
-    $("saveAdminBtn").addEventListener("click", ()=>{
-      if(!isAdmin) return alert("Chỉ Admin mới chỉnh nha 🔒");
+/* =========================
+   THEME TOGGLE
+========================= */
+$("#btnTheme").addEventListener("click", ()=>{
+  data.theme = (data.theme === "dark") ? "light" : "dark";
+  saveData(data);
+  applyAll();
+});
 
-      state.fbLink = $("fbInput").value.trim();
-      state.discordId = $("dcInput").value.trim();
-      state.musicTitle = $("musicNameInput").value.trim() || "Tên bài của tôi";
-      state.musicColorMode = Number($("musicColorMode").value);
+/* =========================
+   MUSIC COLOR + EDIT
+========================= */
+document.querySelectorAll("[data-musiccolor]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    data.musicColor = btn.dataset.musiccolor;
+    saveData(data);
+    applyAll();
+  });
+});
 
-      // save game links
-      document.querySelectorAll("[data-game-idx]").forEach(inp=>{
-        const idx = Number(inp.getAttribute("data-game-idx"));
-        state.games[idx].link = inp.value.trim();
-      });
+$("#btnEditMusic").addEventListener("click", ()=>{
+  const newName = prompt("Đổi tên bài nhạc hiển thị:", data.musicName || "");
+  if(newName === null) return;
+  data.musicName = newName.trim() || DEFAULTS.musicName;
+  saveData(data);
+  applyAll();
+});
 
-      saveData();
-      applyLinks();
-      applyMusic();
-      renderGames();
-      alert("Đã lưu ✅");
-    });
+/* =========================
+   ADMIN SESSION (simple gate)
+========================= */
+const ADMIN_PASS = "079268";
+const ADMIN_KEY = "milo_admin_ok";
 
-    $("addTusBtn").addEventListener("click", ()=>{
-      if(!isAdmin) return alert("Chỉ Admin mới thêm/xóa được nha 🔒");
-      // focus admin modal and scroll to add area
-      openModal();
-      $("adminBox").style.display = "block";
-      $("loginBox").style.display = "none";
-      window.setTimeout(()=> $("tusTitleInput").focus(), 50);
-    });
+function isAdmin(){
+  return sessionStorage.getItem(ADMIN_KEY) === "1";
+}
+function setAdmin(on){
+  if(on) sessionStorage.setItem(ADMIN_KEY,"1");
+  else sessionStorage.removeItem(ADMIN_KEY);
+}
 
-    $("saveTusBtn").addEventListener("click", ()=>{
-      if(!isAdmin) return alert("Chỉ Admin mới thêm/xóa được nha 🔒");
-      const title = $("tusTitleInput").value.trim() || "Tus";
-      const url = $("tusUrlInput").value.trim();
+/* =========================
+   MODAL
+========================= */
+const modal = $("#modal");
+function openModal(){
+  modal.classList.remove("hidden");
+  document.body.classList.add("lock");
+  // show correct view
+  if(isAdmin()){
+    $("#loginView").classList.add("hidden");
+    $("#adminView").classList.remove("hidden");
+    fillAdminInputs();
+  }else{
+    $("#loginView").classList.remove("hidden");
+    $("#adminView").classList.add("hidden");
+    $("#adminPass").value = "";
+    $("#loginMsg").textContent = "";
+  }
+}
+function closeModal(){
+  modal.classList.add("hidden");
+  document.body.classList.remove("lock");
+}
 
-      if(!url || !/^https?:\/\//i.test(url)){
-        return alert("Dán link hợp lệ (bắt đầu bằng http/https) nha bro 😭");
-      }
+$("#btnAdmin").addEventListener("click", openModal);
+$("#btnCloseModal").addEventListener("click", closeModal);
+modal.addEventListener("click", (e)=>{
+  if(e.target === modal) closeModal();
+});
 
-      state.tus.unshift({ title, url });
-      $("tusTitleInput").value = "";
-      $("tusUrlInput").value = "";
-      saveData();
-      renderTus();
-    });
+/* =========================
+   LOGIN
+========================= */
+$("#btnLogin").addEventListener("click", ()=>{
+  const pass = $("#adminPass").value.trim();
+  if(pass === ADMIN_PASS){
+    setAdmin(true);
+    $("#loginMsg").textContent = "OK ✅";
+    $("#loginView").classList.add("hidden");
+    $("#adminView").classList.remove("hidden");
+    fillAdminInputs();
+  }else{
+    $("#loginMsg").textContent = "Sai pass rồi bro 💀";
+  }
+});
 
-    // ====== helpers ======
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-    function escapeAttr(s){
-      return escapeHtml(s).replaceAll("`","&#096;");
-    }
+/* =========================
+   ADMIN INPUTS
+========================= */
+function fillAdminInputs(){
+  $("#fbLink").value = data.facebook || "";
+  $("#dcId").value = data.discordId || "";
+  $("#robloxLink").value = (data.gameLinks?.roblox) || "";
+  $("#valorantLink").value = (data.gameLinks?.valorant) || "";
+  $("#tftLink").value = (data.gameLinks?.tft) || "";
+  $("#musicNameInput").value = data.musicName || "";
+  $("#tusTitle").value = "";
+  $("#tusUrl").value = "";
+  $("#saveMsg").textContent = "";
+}
 
-    // ====== INIT ======
-    function init(){
-      applyTheme();
-      applyLinks();
-      applyMusic();
-      renderGames();
-      renderTus();
+$("#btnSaveAll").addEventListener("click", ()=>{
+  if(!isAdmin()){ alert("Chỉ Admin mới lưu nha 😤"); return; }
 
-      // hide admin-only by default
-      document.querySelectorAll(".adminOnly").forEach(el=>el.style.display="none");
-    }
-    init();
-  </script>
+  data.facebook = $("#fbLink").value.trim() || DEFAULTS.facebook;
+  data.discordId = $("#dcId").value.trim() || DEFAULTS.discordId;
+  data.gameLinks = {
+    roblox: $("#robloxLink").value.trim(),
+    valorant: $("#valorantLink").value.trim(),
+    tft: $("#tftLink").value.trim()
+  };
+  data.musicName = $("#musicNameInput").value.trim() || DEFAULTS.musicName;
+
+  saveData(data);
+  $("#saveMsg").textContent = "Đã lưu ✅";
+  applyAll();
+});
+
+$("#btnLogout").addEventListener("click", ()=>{
+  setAdmin(false);
+  $("#saveMsg").textContent = "";
+  closeModal();
+});
+
+/* =========================
+   ADD TUS (must be admin)
+========================= */
+$("#btnAddTus").addEventListener("click", ()=>{
+  if(!isAdmin()){
+    openModal();
+    alert("Muốn thêm tus thì vào Admin trước nha 🔒");
+    return;
+  }
+  openModal();
+  // focus tus fields
+  setTimeout(()=>$("#tusTitle").focus(), 150);
+});
+
+$("#btnSaveTus").addEventListener("click", ()=>{
+  if(!isAdmin()){ alert("Chỉ Admin mới thêm được nha 😤"); return; }
+  const title = $("#tusTitle").value.trim();
+  const url = $("#tusUrl").value.trim();
+
+  if(!title || !url){
+    alert("Nhập đủ Tên tus + Link tus nha bro 😭");
+    return;
+  }
+  data.tus.unshift({ title, url });
+  saveData(data);
+  $("#tusTitle").value = "";
+  $("#tusUrl").value = "";
+  $("#saveMsg").textContent = "Đã thêm tus ✅";
+  applyAll();
+});
+
+/* =========================
+   INIT
+========================= */
+applyAll();
+</script>
 </body>
 </html>
