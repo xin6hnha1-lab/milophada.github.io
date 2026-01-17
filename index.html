@@ -444,192 +444,211 @@
 
     </div>
   </div>
+<script>
+  // ===== CONFIG =====
+  const ADMIN_PASS = "milo123"; // đổi mật khẩu ở đây
 
-  <script>
-    // ===== CONFIG =====
-    const ADMIN_PASS = "milo123"; // <-- ĐỔI MẬT KHẨU Ở ĐÂY
+  const LS_ADMIN = "milo_admin_ok";
+  const LS_TUS   = "milo_tus_links_v3";
+  const LS_THEME = "milo_theme_v3";
+  const LS_MUSIC_TITLE = "milo_music_title_v2";
 
-    const LS_ADMIN = "milo_admin_ok";
-    const LS_TUS   = "milo_tus_links_v3";
-    const LS_THEME = "milo_theme_v3";
-    const LS_MUSIC_TITLE = "milo_music_title_v2";
+  // ===== ELEMENTS =====
+  const html = document.documentElement;
+  const themeBtn = document.getElementById("themeBtn");
+  const adminBtn = document.getElementById("adminBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-    // ===== ELEMENTS =====
-    const html = document.documentElement;
-    const themeBtn = document.getElementById("themeBtn");
-    const adminBtn = document.getElementById("adminBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
+  const tusListEl = document.getElementById("tusList");
+  const addLinkBtn = document.getElementById("addLinkBtn");
 
-    const tusListEl = document.getElementById("tusList");
-    const addLinkBtn = document.getElementById("addLinkBtn");
+  const musicTitleEl = document.getElementById("musicTitle");
+  const editMusicTitleBtn = document.getElementById("editMusicTitleBtn");
+  const player = document.getElementById("player");
+  const musicStatus = document.getElementById("musicStatus");
 
-    const musicTitleEl = document.getElementById("musicTitle");
-    const editMusicTitleBtn = document.getElementById("editMusicTitleBtn");
-    const player = document.getElementById("player");
-    const musicStatus = document.getElementById("musicStatus");
-
-    // ===== THEME =====
-    function applyTheme(t){
-      html.setAttribute("data-theme", t);
-      themeBtn.textContent = (t === "dark") ? "🌙 Dark" : "☀️ Light";
-      localStorage.setItem(LS_THEME, t);
+  // ===== HARD GUARD: nếu thiếu element thì báo luôn =====
+  function must(el, name){
+    if(!el){
+      alert("Thiếu element: " + name + " (bro dán thiếu HTML rồi) 💀");
+      throw new Error("Missing " + name);
     }
-    applyTheme(localStorage.getItem(LS_THEME) || "dark");
-    themeBtn.addEventListener("click", () => {
-      const cur = html.getAttribute("data-theme") || "dark";
-      applyTheme(cur === "dark" ? "light" : "dark");
-    });
+    return el;
+  }
+  must(themeBtn,"#themeBtn");
+  must(adminBtn,"#adminBtn");
+  must(logoutBtn,"#logoutBtn");
+  must(tusListEl,"#tusList");
+  must(addLinkBtn,"#addLinkBtn");
+  must(musicTitleEl,"#musicTitle");
+  must(editMusicTitleBtn,"#editMusicTitleBtn");
+  must(player,"#player");
+  must(musicStatus,"#musicStatus");
 
-    // ===== ADMIN =====
-    function isAdmin(){ return localStorage.getItem(LS_ADMIN) === "1"; }
-    function setAdmin(on){
-      if(on){
-        localStorage.setItem(LS_ADMIN, "1");
-        document.body.classList.add("isAdmin");
-      }else{
-        localStorage.removeItem(LS_ADMIN);
-        document.body.classList.remove("isAdmin");
-      }
-      renderTus();
-    }
-    setAdmin(isAdmin());
+  // ===== JS ALIVE BADGE =====
+  musicStatus.textContent = "JS đang chạy ✅";
 
-    adminBtn.addEventListener("click", () => {
-      if(isAdmin()){
-        alert("Admin đang bật rồi 😎 (bấm Logout để thoát)");
-        return;
-      }
-      const pass = prompt("Nhập mật khẩu Admin:");
-      if(pass === null) return;
-      if(pass === ADMIN_PASS){
-        setAdmin(true);
-        alert("Admin ON 😤🔥");
-      }else{
-        alert("Sai mật khẩu 💀");
-      }
-    });
-    logoutBtn.addEventListener("click", () => setAdmin(false));
+  // ===== THEME =====
+  function applyTheme(t){
+    html.setAttribute("data-theme", t);
+    themeBtn.textContent = (t === "dark") ? "🌙 Dark" : "☀️ Light";
+    localStorage.setItem(LS_THEME, t);
+  }
+  applyTheme(localStorage.getItem(LS_THEME) || "dark");
 
-    // ===== MUSIC =====
-    // Anti-cache + check file tồn tại
-    async function loadMusic(){
-      const url = "music.mp3?v=" + Date.now();
-      try{
-        const res = await fetch(url, { method: "HEAD" });
-        if(!res.ok) throw new Error("not_found");
-        player.src = url;
-        musicStatus.textContent = "Load OK ✅ bấm Play là chạy";
-      }catch(e){
-        player.removeAttribute("src");
-        player.load();
-        musicStatus.textContent = "Không thấy music.mp3 ❌ (upload đúng tên + cùng thư mục index.html)";
-      }
-    }
-    loadMusic();
+  themeBtn.addEventListener("click", () => {
+    const cur = html.getAttribute("data-theme") || "dark";
+    applyTheme(cur === "dark" ? "light" : "dark");
+  });
 
-    const savedTitle = localStorage.getItem(LS_MUSIC_TITLE);
-    if(savedTitle) musicTitleEl.textContent = savedTitle;
-
-    editMusicTitleBtn.addEventListener("click", () => {
-      if(!isAdmin()){
-        alert("Chỉ admin mới đổi tên được nha bro 🔒");
-        return;
-      }
-      const next = prompt("Nhập tên bài mới:", musicTitleEl.textContent);
-      if(!next) return;
-      musicTitleEl.textContent = next.trim();
-      localStorage.setItem(LS_MUSIC_TITLE, musicTitleEl.textContent);
-    });
-
-    player.addEventListener("play", () => musicStatus.textContent = "Đang phát 🎧");
-    player.addEventListener("pause", () => musicStatus.textContent = "Tạm dừng ⏸️");
-    player.addEventListener("ended", () => musicStatus.textContent = "Hết bài ✅");
-
-    // ===== TUS =====
-    const defaultTus = [
-      { title: "Facebook của tôi", url: "https://facebook.com/" },
-    ];
-
-    function loadTus(){
-      try{
-        const raw = localStorage.getItem(LS_TUS);
-        if(!raw){
-          localStorage.setItem(LS_TUS, JSON.stringify(defaultTus));
-          return defaultTus;
-        }
-        const data = JSON.parse(raw);
-        return Array.isArray(data) ? data : defaultTus;
-      }catch{
-        return defaultTus;
-      }
-    }
-    function saveTus(list){
-      localStorage.setItem(LS_TUS, JSON.stringify(list));
-    }
-    function esc(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-    function renderTus(){
-      const list = loadTus();
-      tusListEl.innerHTML = "";
-
-      list.forEach((it, idx) => {
-        const row = document.createElement("div");
-        row.className = "item";
-
-        const left = document.createElement("div");
-        left.className = "left";
-        left.innerHTML = `
-          <a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title || it.url)}</a>
-          <span>${esc(it.url)}</span>
-        `;
-        row.appendChild(left);
-
-        if(isAdmin()){
-          const del = document.createElement("button");
-          del.className = "btnMini danger";
-          del.textContent = "🗑 Xóa";
-          del.onclick = () => {
-            if(!confirm("Xóa link này nha bro?")) return;
-            const cur = loadTus();
-            cur.splice(idx, 1);
-            saveTus(cur);
-            renderTus();
-          };
-          row.appendChild(del);
-        }
-
-        tusListEl.appendChild(row);
-      });
+  // ===== ADMIN =====
+  function isAdmin(){ return localStorage.getItem(LS_ADMIN) === "1"; }
+  function setAdmin(on){
+    if(on){
+      localStorage.setItem(LS_ADMIN, "1");
+      document.body.classList.add("isAdmin");
+    }else{
+      localStorage.removeItem(LS_ADMIN);
+      document.body.classList.remove("isAdmin");
     }
     renderTus();
+  }
+  setAdmin(isAdmin());
 
-    addLinkBtn.addEventListener("click", () => {
-      if(!isAdmin()){
-        alert("Chỉ admin mới thêm được nha bro 🔒");
-        return;
+  adminBtn.addEventListener("click", () => {
+    if(isAdmin()){
+      alert("Admin đang bật 😎 (bấm Logout để thoát)");
+      return;
+    }
+    const pass = prompt("Nhập mật khẩu Admin:");
+    if(pass === null) return;
+    if(pass === ADMIN_PASS){
+      setAdmin(true);
+      alert("Admin ON 🔥");
+    }else{
+      alert("Sai mật khẩu 💀");
+    }
+  });
+
+  logoutBtn.addEventListener("click", () => setAdmin(false));
+
+  // ===== MUSIC (không HEAD fetch nữa) =====
+  // Quy ước: file tên music.mp3 nằm cùng thư mục index.html
+  function loadMusic(){
+    const url = "music.mp3?v=" + Date.now(); // anti-cache
+    player.src = url;
+
+    musicStatus.textContent = "Đang thử load music.mp3… ⏳";
+
+    player.addEventListener("canplay", () => {
+      musicStatus.textContent = "Load OK ✅ bấm Play là chạy";
+    }, { once:true });
+
+    player.addEventListener("error", () => {
+      musicStatus.textContent = "Không thấy music.mp3 ❌ (upload đúng tên + đúng chỗ)";
+    }, { once:true });
+  }
+  loadMusic();
+
+  const savedTitle = localStorage.getItem(LS_MUSIC_TITLE);
+  if(savedTitle) musicTitleEl.textContent = savedTitle;
+
+  editMusicTitleBtn.addEventListener("click", () => {
+    if(!isAdmin()){
+      alert("Chỉ admin mới đổi tên được nha 🔒");
+      return;
+    }
+    const next = prompt("Nhập tên bài mới:", musicTitleEl.textContent);
+    if(!next) return;
+    musicTitleEl.textContent = next.trim();
+    localStorage.setItem(LS_MUSIC_TITLE, musicTitleEl.textContent);
+  });
+
+  // ===== TUS =====
+  const defaultTus = [
+    { title: "Tus AV", url: "https://www.facebook.com/" }
+  ];
+
+  function loadTus(){
+    try{
+      const raw = localStorage.getItem(LS_TUS);
+      if(!raw){
+        localStorage.setItem(LS_TUS, JSON.stringify(defaultTus));
+        return defaultTus;
       }
-      const title = prompt("Tên tus (vd: Tus hôm nay):");
-      if(title === null) return;
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : defaultTus;
+    }catch{
+      return defaultTus;
+    }
+  }
+  function saveTus(list){ localStorage.setItem(LS_TUS, JSON.stringify(list)); }
 
-      let url = prompt("Dán link (https://...):");
-      if(!url) return;
-      url = url.trim();
-      if(!/^https?:\/\//i.test(url)) url = "https://" + url;
+  function esc(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
 
-      try{ new URL(url); }
-      catch{ alert("Link không hợp lệ 💀"); return; }
+  function renderTus(){
+    const list = loadTus();
+    tusListEl.innerHTML = "";
 
-      const cur = loadTus();
-      cur.unshift({ title: (title || "").trim() || "Tus mới", url });
-      saveTus(cur);
-      renderTus();
+    list.forEach((it, idx) => {
+      const row = document.createElement("div");
+      row.className = "item";
+
+      const left = document.createElement("div");
+      left.className = "left";
+      left.innerHTML = `
+        <a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title || it.url)}</a>
+        <span>${esc(it.url)}</span>
+      `;
+      row.appendChild(left);
+
+      if(isAdmin()){
+        const del = document.createElement("button");
+        del.className = "btnMini danger";
+        del.textContent = "🗑 Xóa";
+        del.onclick = () => {
+          if(!confirm("Xóa link này nha?")) return;
+          const cur = loadTus();
+          cur.splice(idx, 1);
+          saveTus(cur);
+          renderTus();
+        };
+        row.appendChild(del);
+      }
+
+      tusListEl.appendChild(row);
     });
-  </script>
+  }
+  renderTus();
+
+  addLinkBtn.addEventListener("click", () => {
+    if(!isAdmin()){
+      alert("Chỉ admin mới thêm được nha 🔒");
+      return;
+    }
+    const title = prompt("Tên tus:");
+    if(title === null) return;
+
+    let url = prompt("Dán link (https://...):");
+    if(!url) return;
+    url = url.trim();
+    if(!/^https?:\/\//i.test(url)) url = "https://" + url;
+
+    try{ new URL(url); }
+    catch{ alert("Link không hợp lệ 💀"); return; }
+
+    const cur = loadTus();
+    cur.unshift({ title: (title || "").trim() || "Tus mới", url });
+    saveTus(cur);
+    renderTus();
+  });
+</script>
 </body>
 </html>
