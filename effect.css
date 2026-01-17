@@ -1,20 +1,36 @@
-/* effect.css
-   ✅ Đổi file này là đổi vòng avatar
-   Tip: muốn đổi style -> thay toàn bộ nội dung file, GIỮ TÊN effect.css
-*/
+/* =========================================================
+   effect.css
+   ✅ Chỉ cần thay nội dung file này là đổi hiệu ứng (giữ tên)
+   Style hiện tại: Discord-ish "Orb ripple remix" (nhẹ)
+   ========================================================= */
 
 .effect-orb::before{
   content:"";
   position:absolute;
-  inset:-12px;
+  inset:-14px;
   border-radius:50%;
+
+  /* 2 lớp: orb glow + vòng gradient (discord vibe) */
   background:
-    radial-gradient(circle, rgba(56,189,248,.45) 0%, rgba(129,140,248,.25) 38%, rgba(56,189,248,.10) 60%, transparent 72%),
-    conic-gradient(from 0deg, rgba(56,189,248,.95), rgba(129,140,248,.95), rgba(34,211,238,.95), rgba(56,189,248,.95));
-  filter: blur(6px);
-  opacity: .9;
-  animation: orbPulse 3.8s ease-in-out infinite;
-  z-index: 0;
+    radial-gradient(circle,
+      rgba(56,189,248,0.45) 0%,
+      rgba(129,140,248,0.25) 38%,
+      rgba(56,189,248,0.10) 60%,
+      transparent 72%
+    ),
+    conic-gradient(from 0deg,
+      rgba(56,189,248,0.95),
+      rgba(129,140,248,0.95),
+      rgba(34,211,238,0.95),
+      rgba(56,189,248,0.95)
+    );
+
+  filter: blur(7px);
+  opacity: 0.9;
+  z-index:0;
+
+  /* remix nhảy nhẹ */
+  animation: orbPulse 3.9s ease-in-out infinite;
 }
 
 @keyframes orbPulse{
@@ -23,4 +39,3 @@
   75%  { transform: scale(1.03); opacity: .70; }
   100% { transform: scale(1);    opacity: .55; }
 }
-
