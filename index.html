@@ -2,687 +2,693 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Milo Pha Đá</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="effect.css" />
+
   <style>
-    /* ========= Base / Theme ========= */
     :root{
-      --bg: #070b14;
-      --panel: rgba(17,25,40,.62);
-      --panel2: rgba(17,25,40,.48);
+      --card-w: 1040px;
+      --radius: 22px;
+      --glass: rgba(12,18,30,.55);
+      --glass2: rgba(12,18,30,.40);
       --stroke: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --shadow: 0 18px 60px rgba(0,0,0,.42);
-      --radius: 22px;
-      --chip: rgba(0,0,0,.18);
-      --btn: rgba(255,255,255,.08);
-      --btn2: rgba(255,255,255,.12);
-      --accent: rgba(56,189,248,.95);
+      --muted: rgba(255,255,255,.70);
+      --btn: rgba(0,0,0,.28);
+      --shadow: 0 30px 80px rgba(0,0,0,.40);
+      --accent: rgba(80,180,255,.95);
     }
-    body[data-theme="light"]{
-      --bg: #f6f7fb;
-      --panel: rgba(255,255,255,.78);
-      --panel2: rgba(255,255,255,.68);
-      --stroke: rgba(0,0,0,.10);
-      --text: rgba(10,15,25,.92);
-      --muted: rgba(10,15,25,.65);
-      --shadow: 0 18px 60px rgba(0,0,0,.18);
-      --chip: rgba(0,0,0,.06);
-      --btn: rgba(0,0,0,.06);
-      --btn2: rgba(0,0,0,.08);
+    body.light{
+      --glass: rgba(255,255,255,.75);
+      --glass2: rgba(255,255,255,.65);
+      --stroke: rgba(0,0,0,.08);
+      --text: rgba(10,12,16,.92);
+      --muted: rgba(10,12,16,.65);
+      --btn: rgba(255,255,255,.65);
+      --shadow: 0 25px 70px rgba(0,0,0,.18);
+      --accent: rgba(30,120,255,.95);
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background: var(--bg);
+      color: var(--text);
+      background: #071021;
       overflow-x:hidden;
     }
 
-    /* background gif */
+    /* Background */
     .bg{
       position:fixed; inset:0;
-      background: url("bg.gif") center/cover no-repeat fixed;
-      filter: blur(0px);
-      transform: translateZ(0);
-      z-index:-3;
+      background: url("bg.gif") center / cover no-repeat fixed;
+      filter: saturate(1.05);
+      z-index:0;
+      pointer-events:none;
     }
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background: radial-gradient(1200px 600px at 10% 20%, rgba(56,189,248,.18), transparent 55%),
-                  radial-gradient(1200px 600px at 90% 40%, rgba(167,139,250,.18), transparent 55%),
-                  linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.55));
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(100,180,255,.22), transparent 60%),
+                  radial-gradient(1200px 700px at 80% 10%, rgba(200,120,255,.18), transparent 55%),
+                  rgba(0,0,0,.30);
+      pointer-events:none;
     }
-    body[data-theme="light"] .bg::after{
-      background: radial-gradient(1200px 600px at 10% 20%, rgba(56,189,248,.10), transparent 55%),
-                  radial-gradient(1200px 600px at 90% 40%, rgba(167,139,250,.10), transparent 55%),
-                  linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.55));
-    }
+    body.light .bg{ filter: blur(0px) saturate(1.05) brightness(1.05); }
+    body.light .bg::after{ background: rgba(255,255,255,.10); }
 
-    /* ========= Layout ========= */
-    .wrap{
-      max-width: 1100px;
-      margin: 18px auto 40px;
-      padding: 14px;
-    }
-
-    .topbar{
+    /* Top fixed buttons (ALWAYS clickable) */
+    .top-actions{
+      position:fixed;
+      right: 14px;
+      top: 12px;
       display:flex;
-      justify-content:flex-end;
       gap:10px;
-      margin-bottom:12px;
+      z-index: 9999;
+      pointer-events:auto;
     }
-    .pillBtn{
-      appearance:none; border:1px solid var(--stroke);
+    .pill{
+      border:1px solid var(--stroke);
       background: var(--btn);
       color: var(--text);
-      padding: 10px 14px;
       border-radius: 999px;
-      cursor:pointer;
-      display:flex; align-items:center; gap:8px;
+      padding: 10px 14px;
+      font-weight: 700;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor:pointer;
+      user-select:none;
     }
-    .pillBtn:active{ transform: translateY(1px); }
-    .pillBtn:hover{ background: var(--btn2); }
+    .pill:active{ transform: translateY(1px); }
+    .pill small{opacity:.85; font-weight:700}
 
+    /* Page layout */
+    .wrap{
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      padding: 72px 14px 44px;
+      display:flex;
+      justify-content:center;
+    }
     .card{
-      background: var(--panel);
-      border:1px solid var(--stroke);
+      width:min(var(--card-w), 100%);
       border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: var(--glass);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
       overflow:hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
-    /* Cover */
+    /* Cover (full) */
     .cover{
       position:relative;
-      height: 220px;
-      background: url("cover.gif") center/cover no-repeat;
+      height: 210px;
+      background: url("cover.gif") center / cover no-repeat;
+      pointer-events:none; /* IMPORTANT: never block clicks */
     }
     .cover::after{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.55));
-    }
-    body[data-theme="light"] .cover::after{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.65));
+      background: linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.55));
+      pointer-events:none;
     }
 
-    /* Header content */
-    .header{
+    .profile{
       position:relative;
-      padding: 14px 14px 16px;
-      margin-top: -74px;
+      padding: 0 18px 18px;
+    }
+
+    /* Header row: avatar + info */
+    .header{
       display:grid;
-      grid-template-columns: auto 1fr;
-      gap: 14px;
-      align-items: start;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items:end;
+      margin-top: -92px;
     }
 
-    /* Avatar block uses your effect.css classes */
-    .avatarSlot{
-      width: 210px;
-      height: 210px;
-      flex:0 0 auto;
-    }
-
-    .nameBlock{
+    .info{
+      padding-bottom: 6px;
       min-width:0;
-      padding-top: 74px; /* push down so title never overlaps avatar */
     }
-
-    .title{
-      font-weight: 900;
-      letter-spacing:.2px;
-      font-size: clamp(26px, 2.8vw, 40px);
-      line-height: 1.08;
-      margin: 0 0 6px;
-      text-shadow: 0 10px 30px rgba(0,0,0,.45);
+    .name{
+      margin:0;
+      font-size: 36px;
+      line-height: 1.1;
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
       word-break: break-word;
     }
     .sub{
-      margin:0;
+      margin: 6px 0 0;
       color: var(--muted);
-      font-weight:600;
-      font-size: 14px;
+      font-weight: 700;
     }
     .quote{
-      margin:6px 0 10px;
+      margin: 6px 0 10px;
       color: var(--muted);
       font-style: italic;
-      font-size: 13px;
     }
 
     .chips{
       display:flex;
       flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
+      gap:10px;
+      margin-top: 10px;
     }
     .chip{
-      display:flex; align-items:center; gap:8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: var(--chip);
       border:1px solid var(--stroke);
-      backdrop-filter: blur(10px);
-      font-weight:700;
-      font-size: 13px;
-    }
-
-    /* Music card under avatar, NOT weird */
-    .musicWrap{
-      grid-column: 1 / -1;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin-top: 6px;
-    }
-    .musicCard{
-      display:grid;
-      grid-template-columns: 1fr 420px;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 18px;
-      background: var(--panel2);
-      border:1px solid var(--stroke);
-      align-items:center;
-    }
-    .musicLeft{ min-width:0; }
-    .musicLabel{
-      font-weight: 900;
-      font-size: 16px;
-      margin: 0 0 6px;
-      display:flex; align-items:center; gap:8px;
-    }
-    .musicTitle{
-      font-weight: 1000;
-      font-size: 22px;
-      margin: 0 0 4px;
-      line-height: 1.05;
-      word-break: break-word;
-    }
-    .musicHint{
-      margin:0;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 13px;
-    }
-    audio{
-      width:100%;
-      max-width: 520px;
-      height: 42px;
-      border-radius: 14px;
-      outline:none;
-    }
-
-    /* music title styles (admin selectable) */
-    .musicTitle.white{ color:#fff; text-shadow: 0 10px 30px rgba(0,0,0,.45); }
-    .musicTitle.black{ color:#0b1220; text-shadow: none; }
-    .musicTitle.rainbow{
-      background: linear-gradient(90deg,#ff2d55,#ff9500,#ffcc00,#34c759,#00c7ff,#5856d6,#ff2d55);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-      text-shadow:none;
-      filter: drop-shadow(0 10px 22px rgba(0,0,0,.22));
-    }
-    body[data-theme="light"] .musicTitle.black{ color:#0b1220; }
-    body[data-theme="light"] .musicTitle.white{ color:#111827; text-shadow:none; }
-
-    /* Main grid sections */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 0 14px 14px;
-    }
-    .panel{
-      background: var(--panel2);
-      border:1px solid var(--stroke);
-      border-radius: 18px;
-      padding: 14px;
-      min-height: 140px;
-    }
-    .panel h3{
-      margin: 0 0 10px;
-      font-size: 18px;
-      font-weight: 900;
-    }
-    ul{ margin:0; padding-left: 18px; }
-    li{ margin: 6px 0; color: var(--text); font-weight: 650; }
-
-    .gameItem{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.10);
-      border:1px solid var(--stroke);
-      margin: 10px 0;
-      gap: 10px;
-    }
-    body[data-theme="light"] .gameItem{ background: rgba(255,255,255,.35); }
-    .gameLeft{ display:flex; flex-direction:column; gap:2px; }
-    .gameName{ font-weight: 950; }
-    .gameSub{ color: var(--muted); font-weight: 650; font-size: 13px; }
-    .tag{
+      background: var(--glass2);
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(56,189,248,.18);
-      border: 1px solid rgba(56,189,248,.35);
-      font-weight: 900;
-      font-size: 13px;
+      font-weight: 800;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: var(--text);
+    }
+    .chip .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      display:inline-block;
     }
 
-    /* contact buttons */
-    .contactRow{
-      padding: 0 14px 14px;
+    /* Music block under avatar+info */
+    .music{
+      margin-top: 14px;
+      border:1px solid var(--stroke);
+      background: var(--glass2);
+      border-radius: 18px;
+      padding: 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .music-left{
+      min-width: 160px;
+    }
+    .music-title{
+      font-weight: 900;
+      font-size: 14px;
+      opacity:.9;
+      margin-bottom: 6px;
+    }
+    .song-name{
+      font-weight: 1000;
+      font-size: 22px;
+      line-height:1.1;
+      margin:0 0 6px;
+    }
+    .song-sub{
+      color: var(--muted);
+      font-weight:800;
+      margin:0;
+    }
+
+    /* song color modes */
+    .song-normal{ color: var(--text); }
+    .song-white{ color: #fff; text-shadow: 0 8px 30px rgba(0,0,0,.45); }
+    .song-black{ color: #0b0f18; text-shadow: 0 10px 30px rgba(255,255,255,.22); }
+    .song-rainbow{
+      background: linear-gradient(90deg,#ff4d4d,#ffb84d,#fff04d,#4dff88,#4dd8ff,#6a6aff,#ff4dff);
+      -webkit-background-clip: text;
+      background-clip:text;
+      color: transparent;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.25));
+    }
+
+    .music audio{
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* Grid sections */
+    .grid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .box{
+      border:1px solid var(--stroke);
+      background: var(--glass2);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 150px;
+    }
+    .box h3{
+      margin:0 0 10px;
+      font-size: 22px;
+    }
+
+    .games .game{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px;
+      border:1px solid var(--stroke);
+      border-radius: 14px;
+      background: rgba(0,0,0,.08);
+      margin-bottom: 10px;
+      gap:10px;
+    }
+    body.light .games .game{ background: rgba(255,255,255,.35); }
+    .game strong{display:block}
+    .tag{
+      border:1px solid var(--stroke);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: rgba(80,180,255,.18);
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    /* Social */
+    .social{
+      margin-top: 14px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    .linkBtn{
-      display:flex; justify-content:center; align-items:center; gap:10px;
-      padding: 14px;
-      border-radius: 18px;
-      background: var(--panel2);
-      border:1px solid var(--stroke);
+    .social a{
       text-decoration:none;
       color: var(--text);
+      border:1px solid var(--stroke);
+      background: var(--glass2);
+      border-radius: 16px;
+      padding: 14px;
       font-weight: 900;
-    }
-    .linkBtn:active{ transform: translateY(1px); }
-    .linkBtn.disabled{
-      opacity:.65;
-      pointer-events:none;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
     }
 
     /* Tus section */
-    .tusPanel{
-      margin: 0 14px 14px;
-      padding: 14px;
-      border-radius: 18px;
-      background: var(--panel2);
+    .tus{
+      margin-top: 14px;
       border:1px solid var(--stroke);
+      background: var(--glass2);
+      border-radius: 18px;
+      padding: 14px;
     }
-    .tusHead{
-      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+    .tus-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
       flex-wrap:wrap;
-      margin-bottom: 10px;
     }
-    .tusTitle{
+    .tus-title{
       margin:0;
       font-size: 18px;
       font-weight: 1000;
-      display:flex; align-items:center; gap:8px;
     }
-    .help{ color: var(--muted); font-weight: 650; font-size: 13px; margin:0; }
-    .adminMini{
-      display:flex; gap:8px; flex-wrap:wrap;
+    .tus-sub{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-weight:800;
     }
-    .miniBtn{
-      appearance:none;
-      border:1px solid var(--stroke);
-      background: var(--btn);
-      color: var(--text);
-      padding: 9px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 900;
-    }
-    .miniBtn:hover{ background: var(--btn2); }
 
-    .tusRow{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px;
-      padding: 12px;
-      border-radius: 16px;
+    .btn{
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.10);
-      margin-top: 10px;
-    }
-    body[data-theme="light"] .tusRow{ background: rgba(255,255,255,.35); }
-    .tusRow a{
-      color: var(--text);
-      text-decoration:none;
-      font-weight: 900;
-      word-break: break-word;
-      flex: 1;
-    }
-    .btnDanger{
-      appearance:none;
-      border:1px solid rgba(255,0,80,.28);
-      background: rgba(255,0,80,.10);
+      background: rgba(80,180,255,.22);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 14px;
+      font-weight: 1000;
       cursor:pointer;
-      font-weight: 900;
+      user-select:none;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
     }
-    .btnDanger:hover{ background: rgba(255,0,80,.14); }
+    .btn:active{ transform: translateY(1px); }
 
-    /* hide admin-only unless admin */
-    .adminOnly{ display:none !important; }
-    #root.isAdmin .adminOnly{ display: inline-flex !important; }
+    .tus-list{
+      margin-top: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .tus-item{
+      border:1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(0,0,0,.10);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    body.light .tus-item{ background: rgba(255,255,255,.35); }
+    .tus-item a{
+      color: var(--text);
+      font-weight: 900;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .tus-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .mini{
+      border:1px solid var(--stroke);
+      background: rgba(255,80,80,.16);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 1000;
+      cursor:pointer;
+      user-select:none;
+      display:none; /* only admin */
+    }
+    .admin-on .mini{ display:inline-flex; }
 
-    /* ========= Modal ========= */
-    .backdrop{
+    /* Admin modal */
+    .modal-backdrop{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
+      z-index: 10000;
       display:none;
       align-items:center;
       justify-content:center;
       padding: 14px;
-      z-index: 9999;
     }
-    .backdrop.show{ display:flex; }
     .modal{
       width: min(920px, 100%);
-      max-height: 86vh;
-      overflow:auto;
-      background: var(--panel);
+      max-height: min(86vh, 680px);
+      overflow:auto; /* IMPORTANT: see the bottom on phone */
+      border-radius: 18px;
       border:1px solid var(--stroke);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
+      background: var(--glass);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
       padding: 14px;
-      position:relative;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
-    .modalHead{
-      display:flex; justify-content:space-between; align-items:center;
+    .modal-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
       gap:10px;
-      margin-bottom: 10px;
+      position:sticky;
+      top:0;
+      padding: 6px 0 10px;
+      background: linear-gradient(to bottom, var(--glass), rgba(0,0,0,0));
+      z-index:1;
     }
-    .modalHead h2{
-      margin:0;
-      font-size: 22px;
-      font-weight: 1000;
-      display:flex; align-items:center; gap:8px;
-    }
-    .closeBtn{
-      appearance:none;
+    .xbtn{
+      width:42px;height:42px;border-radius:14px;
       border:1px solid var(--stroke);
       background: var(--btn);
       color: var(--text);
-      width: 40px; height: 40px;
-      border-radius: 14px;
-      cursor:pointer;
       font-weight: 1000;
+      cursor:pointer;
     }
-    .formGrid{
+    .formgrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    .field{
-      background: var(--panel2);
-      border:1px solid var(--stroke);
-      border-radius: 16px;
-      padding: 12px;
-    }
     .field label{
       display:block;
       font-weight: 1000;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .field input, .field select{
       width:100%;
-      padding: 12px;
+      padding: 12px 12px;
       border-radius: 14px;
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.10);
+      background: rgba(0,0,0,.12);
       color: var(--text);
       outline:none;
       font-weight: 800;
     }
-    body[data-theme="light"] .field input, body[data-theme="light"] .field select{
-      background: rgba(255,255,255,.55);
-      color: rgba(10,15,25,.92);
-    }
-    .rowBtns{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top: 12px;
-    }
-    .primaryBtn{
-      appearance:none;
-      border:1px solid rgba(56,189,248,.35);
-      background: rgba(56,189,248,.22);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 16px;
-      cursor:pointer;
-      font-weight: 1000;
-    }
-    .primaryBtn:hover{ background: rgba(56,189,248,.28); }
+    body.light .field input, body.light .field select{ background: rgba(255,255,255,.55); color: rgba(10,12,16,.92); }
+    .hr{ height:1px;background: var(--stroke); margin: 12px 0; }
 
-    /* ========= Mobile-first adjustments ========= */
-    @media (max-width: 920px){
-      .wrap{ margin: 10px auto 30px; }
-      .cover{ height: 190px; }
+    .admin-only-note{
+      color: var(--muted);
+      font-weight: 800;
+      margin: 6px 0 0;
+    }
 
-      .header{
-        grid-template-columns: 1fr;
-        margin-top: -88px;
-        justify-items:center;
-        text-align:center;
-      }
-      .nameBlock{ padding-top: 0; }
+    /* Mobile */
+    @media (max-width: 860px){
+      .header{ grid-template-columns: 1fr; align-items:center; margin-top:-120px; }
+      .info{ text-align:center; }
       .chips{ justify-content:center; }
-      .avatarSlot{ width:210px; height:210px; }
-
-      .musicCard{
-        grid-template-columns: 1fr;
-        text-align:left;
-      }
-      audio{ max-width: 100%; height: 44px; }
-      .grid{ grid-template-columns: 1fr; }
-      .contactRow{ grid-template-columns: 1fr; }
-      .formGrid{ grid-template-columns: 1fr; }
-    }
-
-    /* fix for notch/safe area */
-    .safeBottom{
-      height: env(safe-area-inset-bottom);
+      .music{ flex-direction:column; align-items:stretch; }
+      .music-left{ min-width:unset; width:100%; text-align:center; }
+      .grid{ grid-template-columns:1fr; }
+      .social{ grid-template-columns:1fr; }
+      .cover{ height: 230px; }
+      .name{ font-size: 32px; }
     }
   </style>
-
-  <!-- your discord-frame effect -->
-  <link rel="stylesheet" href="effect.css">
 </head>
 
-<body data-theme="dark">
-  <div class="bg"></div>
+<body class="dark">
+  <div class="bg" aria-hidden="true"></div>
 
-  <div class="wrap" id="root">
-    <div class="topbar">
-      <button class="pillBtn" id="themeBtn" type="button">🌙 Dark</button>
-      <button class="pillBtn" id="adminBtn" type="button">🔒 Admin</button>
-    </div>
+  <!-- Top buttons (fixed) -->
+  <div class="top-actions">
+    <button class="pill" id="btnTheme" type="button">🌙 <span id="themeTxt">Dark</span></button>
+    <button class="pill" id="btnAdmin" type="button">🔐 <span id="adminTxt">Admin</span></button>
+  </div>
 
-    <div class="card">
-      <div class="cover" aria-label="cover"></div>
+  <div class="wrap">
+    <div class="card" id="mainCard">
+      <div class="cover"></div>
 
-      <div class="header">
-        <!-- Avatar -->
-        <div class="avatarSlot">
+      <div class="profile">
+        <div class="header">
+          <!-- Avatar with discord frame (from effect.css) -->
           <div class="avatar-wrap">
-            <div class="ring"></div>
-            <img class="avatar" src="avatar.jpg" alt="avatar">
-            <img class="frame" src="frame.png" alt="frame">
+            <div class="ring" aria-hidden="true"></div>
+            <img class="avatar" src="avatar.jpg" alt="avatar" />
+            <!-- decoration frame (optional) -->
+            <img class="frame" src="frame.png" alt="frame" />
           </div>
-        </div>
 
-        <!-- Info -->
-        <div class="nameBlock">
-          <h1 class="title">Milo Pha Đá (Nhạt boy)</h1>
-          <p class="sub">IT Student • Software Engineering</p>
-          <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
+          <div class="info">
+            <h1 class="name">Milo Pha Đá (Nhat boy)</h1>
+            <div class="sub">IT Student • Software Engineering</div>
+            <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
-          <div class="chips">
-            <div class="chip">📍 Hồ Chí Minh</div>
-            <div class="chip">🎂 19</div>
-            <div class="chip">🎮 gamer</div>
-          </div>
-        </div>
-
-        <!-- Music -->
-        <div class="musicWrap">
-          <div class="musicCard">
-            <div class="musicLeft">
-              <p class="musicLabel">🎵 Nhạc tôi nghe</p>
-              <h2 id="songTitle" class="musicTitle rainbow">Ai ngoài anh</h2>
-              <p class="musicHint">Bấm Play để nghe 🎧</p>
+            <div class="chips">
+              <div class="chip"><span class="dot"></span> 📍 <span>Hồ Chí Minh</span></div>
+              <div class="chip">🎂 <span>19</span></div>
+              <div class="chip">🎮 <span>gamer</span></div>
             </div>
-            <div class="musicRight">
-              <audio id="player" controls preload="metadata">
-                <source src="music.mp3" type="audio/mpeg">
+
+            <!-- Music -->
+            <div class="music">
+              <div class="music-left">
+                <div class="music-title">🎵 Nhạc tôi nghe</div>
+                <h2 class="song-name song-rainbow" id="songName">Ai ngoài anh</h2>
+                <p class="song-sub" id="songSub">Bấm Play để nghe 🎧</p>
+              </div>
+              <audio id="audio" controls preload="metadata">
+                <source src="music.mp3" type="audio/mpeg" />
               </audio>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="grid">
-        <div class="panel">
-          <h3>Giới thiệu</h3>
-          <ul>
-            <li>✨ Chạy Ngay Đi</li>
-            <li>🐻 Chạy Vào Trái Tim Em</li>
-            <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
-          </ul>
-        </div>
+        <div class="grid">
+          <div class="box">
+            <h3>Giới thiệu</h3>
+            <ul style="margin:0; padding-left:18px; font-weight:900; line-height:1.9">
+              <li>✨ Chạy Ngay Đi</li>
+              <li>🧸 Chạy Vào Trái Tim Em</li>
+              <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+            </ul>
+          </div>
 
-        <div class="panel">
-          <h3>Game mình hay chơi</h3>
+          <div class="box games">
+            <h3>Game mình hay chơi</h3>
 
-          <div class="gameItem">
-            <div class="gameLeft">
-              <div class="gameName">🕹 Roblox</div>
-              <div class="gameSub">chill / sandbox</div>
+            <div class="game">
+              <div>
+                <strong>🕹️ Roblox</strong>
+                <small style="color:var(--muted); font-weight:800">chill / sandbox</small>
+              </div>
+              <div class="tag" data-game="roblox">casual</div>
             </div>
-            <a id="robloxLink" class="tag" href="#" target="_blank" rel="noopener">casual</a>
-          </div>
 
-          <div class="gameItem">
-            <div class="gameLeft">
-              <div class="gameName">🎯 Valorant</div>
-              <div class="gameSub">FPS / tryhard</div>
+            <div class="game">
+              <div>
+                <strong>🎯 Valorant</strong>
+                <small style="color:var(--muted); font-weight:800">FPS / tryhard</small>
+              </div>
+              <div class="tag" data-game="valorant">rank</div>
             </div>
-            <a id="valorantLink" class="tag" href="#" target="_blank" rel="noopener">rank</a>
-          </div>
 
-          <div class="gameItem">
-            <div class="gameLeft">
-              <div class="gameName">🧠 TFT</div>
-              <div class="gameSub">auto chess</div>
+            <div class="game">
+              <div>
+                <strong>♟️ TFT</strong>
+                <small style="color:var(--muted); font-weight:800">auto chess</small>
+              </div>
+              <div class="tag" data-game="tft">brain</div>
             </div>
-            <a id="tftLink" class="tag" href="#" target="_blank" rel="noopener">brain</a>
-          </div>
 
-          <p class="help">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
-        </div>
-      </div>
-
-      <div class="contactRow">
-        <a class="linkBtn" id="fbLink" href="https://facebook.com/" target="_blank" rel="noopener">🌐 Facebook</a>
-        <a class="linkBtn" id="dcLink" href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord</a>
-      </div>
-
-      <div class="tusPanel">
-        <div class="tusHead">
-          <div>
-            <p class="tusTitle">🧾 Đây là nơi check các tus của tôi</p>
-            <p class="help">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</p>
-          </div>
-
-          <div class="adminMini">
-            <button id="adminOffBtn" class="miniBtn adminOnly" type="button">🚪 Tắt Admin mode</button>
-            <button id="openTusAdd" class="miniBtn adminOnly" type="button">➕ Thêm tus</button>
+            <div class="admin-only-note">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
           </div>
         </div>
 
-        <div id="tusBox"></div>
+        <div class="social">
+          <a href="#" id="fbLink">🌐 Facebook</a>
+          <a href="#" id="dcLink">🎮 Discord</a>
+        </div>
 
-        <!-- Add tus inline panel (ONLY admin) -->
-        <div id="tusAddPanel" class="field adminOnly" style="margin-top:12px;">
-          <label>Thêm tus mới</label>
-          <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
-          <div style="height:10px;"></div>
-          <input id="tusLink" placeholder="Dán link tus Facebook..." />
-          <div class="rowBtns">
-            <button id="addTusBtn" class="primaryBtn" type="button">➕ Lưu tus</button>
-            <button id="closeTusAdd" class="miniBtn" type="button">✖ Đóng</button>
+        <div class="tus">
+          <div class="tus-head">
+            <div>
+              <p class="tus-title">📝 Đây là nơi check các tus của tôi</p>
+              <p class="tus-sub">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</p>
+            </div>
+            <button class="btn" id="btnAddTus" type="button" style="display:none;">➕ Thêm tus</button>
           </div>
-          <p class="help">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</p>
+
+          <div class="tus-list" id="tusList"></div>
         </div>
       </div>
-
-      <div class="safeBottom"></div>
     </div>
   </div>
 
-  <!-- ========= Admin Modal ========= -->
-  <div class="backdrop" id="modalBack">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalHead">
-        <h2>🔐 Admin Panel</h2>
-        <button class="closeBtn" id="closeModal" type="button">✖</button>
+  <!-- Admin Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-top">
+        <div style="font-weight:1000; font-size:22px;">🔐 Admin Panel</div>
+        <button class="xbtn" id="btnCloseModal" type="button">✕</button>
       </div>
 
-      <!-- Login area -->
-      <div id="loginArea">
+      <!-- Login -->
+      <div id="loginBox">
         <div class="field">
           <label>Nhập mật khẩu admin</label>
-          <input id="adminPass" type="password" inputmode="numeric" placeholder="••••••" />
-          <div class="rowBtns">
-            <button class="primaryBtn" id="loginBtn" type="button">✅ Vào Admin</button>
-          </div>
-          <p class="help">Chỉ admin mới sửa được link game + Facebook/Discord + tên nhạc + màu chữ.</p>
+          <input id="adminPass" type="password" placeholder="••••••" autocomplete="current-password" />
+        </div>
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="btnLogin" type="button">✅ Vào Admin</button>
+          <div class="admin-only-note" id="loginMsg"></div>
         </div>
       </div>
 
-      <!-- Settings area (only admin) -->
-      <div id="settingsArea" style="display:none;">
-        <div class="formGrid">
+      <!-- Settings (only after admin on) -->
+      <div id="settingsBox" style="display:none;">
+        <div class="formgrid">
           <div class="field">
             <label>Link Facebook (dán link profile)</label>
-            <input id="fbInput" placeholder="https://facebook.com/..." />
-            <p class="help">Người xem bấm Facebook sẽ mở link này.</p>
+            <input id="setFb" placeholder="https://facebook.com/..." />
           </div>
-
           <div class="field">
             <label>Discord ID (chỉ cần ID)</label>
-            <input id="dcInput" placeholder="9103..." />
-            <p class="help">Tự build: discord.com/users/&lt;ID&gt;</p>
+            <input id="setDcId" placeholder="9103..." />
           </div>
 
           <div class="field">
             <label>Link Roblox (tài khoản)</label>
-            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
+            <input id="setRoblox" placeholder="Dán link (có thể để trống)" />
+          </div>
+          <div class="field">
+            <label>Link Valorant (tài khoản / tracker...)</label>
+            <input id="setValorant" placeholder="Dán link (có thể để trống)" />
           </div>
 
           <div class="field">
-            <label>Link Valorant (tài khoản / tracker)</label>
-            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
-          </div>
-
-          <div class="field">
-            <label>Link TFT (tài khoản / tracker)</label>
-            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+            <label>Link TFT (tài khoản / tracker...)</label>
+            <input id="setTft" placeholder="Dán link (có thể để trống)" />
           </div>
 
           <div class="field">
             <label>Tên bài nhạc hiển thị</label>
-            <input id="songNameInput" placeholder="Ai ngoài anh" />
+            <input id="setSong" placeholder="Ai ngoài anh" />
           </div>
 
           <div class="field">
-            <
+            <label>Màu chữ tên nhạc</label>
+            <select id="setSongColor">
+              <option value="rainbow">7 sắc cầu vồng 🌈</option>
+              <option value="white">Trắng</option>
+              <option value="black">Đen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="btnSaveSettings" type="button">💾 Lưu cài đặt</button>
+          <button class="btn" id="btnLogout" type="button" style="background: rgba(255,80,80,.16);">🚪 Thoát Admin</button>
+        </div>
+
+        <div class="admin-only-note" id="saveMsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== Storage keys
+    const KEY_SETTINGS = "milo_settings_v3";
+    const KEY_TUS = "milo_tus_v3";
+    const ADMIN_PASS = "079268";
+
+    // ====== Elements
+    const body = document.body;
+    const btnTheme = document.getElementById("btnTheme");
+    const themeTxt = document.getElementById("themeTxt");
+    const btnAdmin = document.getElementById("btnAdmin");
+
+    const modal = document.getElementById("modalBackdrop");
+    const btnCloseModal = document.getElementById("btnCloseModal");
+
+    const loginBox = document.getElementById("loginBox");
+    const settingsBox = document.getElementById("settingsBox");
+    const adminPass = document.getElementById("adminPass");
+    const btnLogin = document.getElementById("btnLogin");
+    const loginMsg = document.getElementById("loginMsg");
+
+    const setFb = document.getElementById("setFb");
+    const setDcId = document.getElementById("setDcId");
+    const setRoblox = document.getElementById("setRoblox");
+    const setValorant = document.getElementById("setValorant");
+    const setTft = document.getElementById("setTft");
+    const setSong = document.getElementById("setSong");
+    const setSongColor = document.getElementById("setSongColor");
+    const btnSaveSettings = document.getElementById("btnSaveSettings");
+    const btnLogout = document.getElementById("btnLogout");
+    const saveMsg = document.getElementById("saveMsg");
+
+    const fbLink = document.getElementById("fbLink");
+    const dcLink = document.getElementById("dcLink");
+
+    const songName = document.getElementById("songName");
+    const songSub = document.getElementById("songSub");
+
+    const tusList = document.getElementById("tusList");
+    const btnAddTus = document.getElementById("btnAddTus");
+
+    // game click tags
+    document.querySelectorAll(".tag").forEach(tag=>{
+      tag.addEventListener("click", ()=>{
+        const game = tag.dataset.game;
+        const s = loadSettings();
+        const url
