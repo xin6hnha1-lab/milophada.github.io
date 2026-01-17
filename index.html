@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <!-- Effect riêng để bạn đổi cho tiện -->
-  <link rel="stylesheet" href="effect.css?v=1" />
+  <link rel="stylesheet" href="effect.css?v=2" />
 
   <style>
     :root{
@@ -17,7 +16,6 @@
       --shadow:0 22px 70px rgba(0,0,0,.48);
       --accent:#38bdf8;
     }
-
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
 
@@ -32,9 +30,7 @@
       padding:24px;
     }
 
-    .wrap{
-      width:min(1100px, 100%);
-    }
+    .wrap{ width:min(1100px, 100%); }
 
     .card{
       background:var(--card);
@@ -45,7 +41,7 @@
       overflow:hidden;
     }
 
-    /* ✅ COVER full giống mobile (ưu tiên phần trên) */
+    /* ✅ COVER */
     .cover{
       width:100%;
       height:min(42vh, 380px);
@@ -53,8 +49,6 @@
       background:url("cover.gif") center top / cover no-repeat;
       position:relative;
     }
-
-    /* lớp tối nhẹ cho chữ dễ đọc */
     .cover::after{
       content:"";
       position:absolute; inset:0;
@@ -62,21 +56,31 @@
       pointer-events:none;
     }
 
-    .inner{ padding:18px 22px 22px; }
+    /* ✅ Header zone kiểu Facebook: dành sẵn chỗ cho avatar => không bao giờ đè chữ */
+    .profile{
+      position:relative;
+      padding:18px 22px 22px;
+      padding-top:110px; /* ✅ chỗ đứng cho avatar */
+    }
 
-    /* ✅ Header kiểu Facebook (PC) */
     .header{
       display:flex;
-      align-items:flex-end;
-      gap:26px;
-      margin-top:-110px;     /* avatar đè cover nhưng không đè tên */
-      padding:0 8px;
+      align-items:flex-start;
+      gap:22px;
+    }
+
+    /* ✅ Avatar đặt ABSOLUTE trên profile zone, không ảnh hưởng chữ */
+    .avatar-slot{
+      position:absolute;
+      left:22px;
+      top:-86px; /* avatar nổi lên cover */
+      width:210px;
+      height:210px;
     }
 
     .info{
+      margin-left:240px; /* chừa chỗ avatar bên trái */
       min-width:0;
-      padding-bottom:6px;
-      text-align:left;
     }
 
     .name{
@@ -89,13 +93,11 @@
       overflow:hidden;
       text-overflow:ellipsis;
     }
-
     .sub{
       margin-top:6px;
       font-size:14px;
       color:var(--muted);
     }
-
     .quote{
       margin-top:8px;
       font-size:14px;
@@ -108,7 +110,6 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-start;
     }
     .chip{
       padding:7px 12px;
@@ -133,13 +134,11 @@
       border-radius:16px;
       padding:14px;
     }
-
     .section h2{
       margin:0 0 10px;
       font-size:16px;
       letter-spacing:.2px;
     }
-
     ul{
       margin:0;
       padding-left:18px;
@@ -162,7 +161,6 @@
       color:rgba(229,231,235,.7);
       margin-top:2px;
     }
-
     .tag{
       font-size:12px;
       padding:6px 12px;
@@ -178,7 +176,6 @@
       grid-template-columns: 1fr 1fr;
       gap:10px;
     }
-
     .btn{
       display:flex;
       align-items:center;
@@ -198,21 +195,26 @@
       border-color:rgba(56,189,248,.35);
     }
 
-    /* ✅ Mobile: giống Facebook mobile (center) */
+    /* ✅ Mobile: center như Facebook */
     @media (max-width: 820px){
       body{ padding:16px; }
-      .cover{
-        height:220px;
-        background-position:center top;
-      }
-      .header{
-        flex-direction:column;
-        align-items:center;
+      .cover{ height:220px; }
+
+      .profile{
+        padding:16px;
+        padding-top:130px; /* chừa chỗ avatar ở giữa */
         text-align:center;
-        margin-top:-120px;
-        gap:14px;
       }
-      .info{ text-align:center; }
+
+      .avatar-slot{
+        left:50%;
+        transform:translateX(-50%);
+        top:-96px;
+      }
+
+      .header{ display:block; }
+      .info{ margin-left:0; }
+
       .name{
         font-size:26px;
         white-space:normal;
@@ -229,15 +231,17 @@
     <main class="card">
       <div class="cover"></div>
 
-      <div class="inner">
-        <div class="header">
-          <!-- Avatar + effect (đổi file frame.png là đổi effect) -->
+      <div class="profile">
+        <!-- ✅ Avatar fixed position (không đè chữ) -->
+        <div class="avatar-slot">
           <div class="avatar-wrap">
             <img src="avatar.jpg" class="avatar" alt="avatar">
             <img src="frame.png" class="frame" alt="effect">
             <span class="ring"></span>
           </div>
+        </div>
 
+        <div class="header">
           <div class="info">
             <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
             <div class="sub">IT Student • Software Engineering</div>
@@ -288,6 +292,7 @@
             <a class="btn" href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord</a>
           </div>
         </section>
+
       </div>
     </main>
   </div>
