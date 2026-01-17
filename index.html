@@ -1,343 +1,322 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!doctype html>
+<html lang="vi" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <link rel="stylesheet" href="effect.css" />
+  <!-- effect.css chứa avatar ring + frame discord -->
+  <link rel="stylesheet" href="effect.css">
 
   <style>
     :root{
-      --bg: #071022;
-      --card: rgba(14, 24, 44, .62);
-      --card-2: rgba(14, 24, 44, .50);
+      --radius: 22px;
+      --card: rgba(16, 32, 52, .62);
+      --card2: rgba(16, 32, 52, .40);
       --stroke: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --chip: rgba(255,255,255,.10);
-      --shadow: 0 20px 70px rgba(0,0,0,.45);
-      --radius: 22px;
+      --muted: rgba(255,255,255,.70);
+      --chip: rgba(255,255,255,.12);
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
       --accent: rgba(56,189,248,.95);
+      --blur: 10px;
+
+      --page-pad: 18px;
+      --wrap-max: 1040px;
+      --cover-h: 260px;
+      --header-pad-top: 84px; /* chừa chỗ cho avatar đè cover */
     }
 
-    /* LIGHT THEME (không làm background bị “mất nét”) */
-    [data-theme="light"]{
-      --bg: #eaf1ff;
-      --card: rgba(255,255,255,.78);
-      --card-2: rgba(255,255,255,.68);
-      --stroke: rgba(10,20,40,.12);
-      --text: rgba(10,20,40,.90);
-      --muted: rgba(10,20,40,.62);
-      --chip: rgba(10,20,40,.08);
-      --shadow: 0 22px 70px rgba(0,0,0,.22);
-      --accent: rgba(2,132,199,.95);
+    html[data-theme="light"]{
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.52);
+      --stroke: rgba(0,0,0,.08);
+      --text: rgba(10,15,25,.92);
+      --muted: rgba(10,15,25,.64);
+      --chip: rgba(0,0,0,.07);
+      --shadow: 0 22px 60px rgba(0,0,0,.18);
+      --blur: 2px;
     }
 
     *{ box-sizing:border-box; }
-    html, body{ height:100%; }
     body{
       margin:0;
       min-height:100vh;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
       color: var(--text);
-      background: var(--bg);
-      overflow-x:hidden;
+      background: url("bg.gif") center / cover no-repeat fixed;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: var(--page-pad);
     }
 
-    /* Background GIF outside */
-    .bg{
-      position: fixed;
-      inset:0;
-      z-index:-3;
-      background: url("bg.gif") center/cover no-repeat fixed;
-      transform: scale(1.02);
-      filter: saturate(1.05);
-    }
-    /* overlay để chữ nổi */
-    .bg::after{
+    /* overlay nền (dark vs light) */
+    body::before{
       content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 25% 20%, rgba(0,0,0,.25), transparent 55%),
-        radial-gradient(circle at 70% 70%, rgba(0,0,0,.35), transparent 55%),
-        linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));
-      opacity: .9;
+      position:fixed;
+      inset:0;
       pointer-events:none;
+      z-index:-1;
+      backdrop-filter: blur(var(--blur));
+      background: rgba(0,0,0,.55);
     }
-    /* light mode: giảm overlay để sáng nhưng vẫn rõ */
-    [data-theme="light"] .bg::after{
-      background:
-        radial-gradient(circle at 25% 20%, rgba(255,255,255,.55), transparent 55%),
-        radial-gradient(circle at 70% 70%, rgba(255,255,255,.45), transparent 55%),
-        linear-gradient(to bottom, rgba(255,255,255,.30), rgba(255,255,255,.55));
-      opacity: .95;
+    html[data-theme="light"] body::before{
+      background: rgba(255,255,255,.10);
     }
 
     .wrap{
-      width:min(1100px, calc(100% - 32px));
-      margin: 28px auto 54px;
-      position:relative;
+      width: min(var(--wrap-max), 100%);
     }
 
-    /* MAIN CARD */
     .card{
+      position:relative;
+      border-radius: var(--radius);
       background: var(--card);
       border: 1px solid var(--stroke);
-      border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
-      backdrop-filter: blur(14px);
     }
 
-    /* COVER (inside) */
     .cover{
-      position:relative;
-      height: 300px;
-      overflow:hidden;
-      border-bottom: 1px solid var(--stroke);
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.40)),
-        url("cover.gif") center/cover no-repeat;
-    }
-    /* phủ thêm layer để không “bệt” */
-    .cover::after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 18% 30%, rgba(255,255,255,.12), transparent 50%),
-        radial-gradient(circle at 78% 55%, rgba(0,0,0,.22), transparent 55%);
-      pointer-events:none;
+      height: var(--cover-h);
+      background: url("cover.gif") center / cover no-repeat;
     }
 
-    /* Theme toggle */
-    .toggle{
+    /* nút theme */
+    .theme-btn{
       position:absolute;
-      top: 16px;
-      right: 16px;
+      top:14px;
+      right:14px;
       z-index: 20;
-      display:flex;
-      align-items:center;
-      gap:10px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.28);
+      color: var(--text);
       padding: 10px 14px;
       border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
       backdrop-filter: blur(10px);
       cursor:pointer;
+      font-weight:700;
+      display:flex;
+      gap:8px;
+      align-items:center;
       user-select:none;
-      font-weight: 650;
     }
-    [data-theme="light"] .toggle{
+    html[data-theme="light"] .theme-btn{
       background: rgba(255,255,255,.55);
     }
 
-    /* HEADER = Facebook-ish: avatar left, info right */
+    /* header giống FB: avatar trái, info phải */
     .header{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap: 22px;
-      padding: 16px 24px 18px 24px;
-      margin-top: -92px; /* kéo header lên đè lên cover giống FB */
-      align-items: end;
-    }
-
-    .avatar-zone{
       display:flex;
-      justify-content:flex-start;
+      gap: 18px;
+      padding: 0 22px 18px;
+      margin-top: calc(var(--header-pad-top) * -1);
+      align-items:flex-end;
+    }
+    .avatar-zone{
+      flex: 0 0 auto;
+      margin-left: 4px;
     }
 
     .info{
-      min-width:0;
+      flex:1;
       padding-bottom: 6px;
+      min-width: 0;
     }
-
     h1{
       margin: 0;
-      font-size: 44px;
-      line-height: 1.05;
-      letter-spacing: -0.6px;
-      text-shadow: 0 14px 50px rgba(0,0,0,.35);
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: .2px;
+      white-space: normal;
+      word-break: break-word;
     }
-
     .sub{
       margin-top: 6px;
-      font-weight: 520;
       color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
     }
-
     .quote{
       margin-top: 8px;
-      font-style: italic;
       color: var(--muted);
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 14px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: var(--chip);
-      color: var(--text);
-      font-weight: 650;
+      font-style: italic;
       font-size: 14px;
     }
 
-    /* CONTENT GRID */
+    .chips{
+      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 8px 12px;
+      border-radius:999px;
+      background: var(--chip);
+      border: 1px solid var(--stroke);
+      font-weight:700;
+      font-size: 13px;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(56,189,248,.18);
+    }
+
+    /* content grid */
     .content{
-      padding: 18px 24px 24px;
+      padding: 0 22px 20px;
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
     }
 
     .panel{
+      background: var(--card2);
       border: 1px solid var(--stroke);
-      background: var(--card-2);
       border-radius: 18px;
-      padding: 16px 16px;
+      padding: 16px;
       backdrop-filter: blur(12px);
+      min-height: 160px;
     }
     .panel h2{
-      margin: 0 0 10px;
+      margin:0 0 12px;
       font-size: 18px;
-      letter-spacing: .2px;
+      letter-spacing:.2px;
     }
-
-    .bullets{
-      margin: 0;
+    ul{
+      margin:0;
       padding-left: 18px;
-      color: var(--text);
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 600;
     }
-    .bullets li{ margin: 8px 0; }
+    ul b{ color: var(--text); }
 
     .game{
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
+      border:1px solid var(--stroke);
+      border-radius: 14px;
       background: rgba(0,0,0,.10);
-      margin: 10px 0;
+      margin-bottom: 10px;
     }
-    [data-theme="light"] .game{
-      background: rgba(10,20,40,.04);
+    html[data-theme="light"] .game{
+      background: rgba(255,255,255,.55);
     }
-
     .g-left{
       display:flex;
       flex-direction:column;
       gap:2px;
-      min-width:0;
+      min-width: 0;
     }
-    .g-title{ font-weight: 800; }
-    .g-sub{ color: var(--muted); font-size: 13px; }
-
+    .g-title{
+      font-weight: 900;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .g-sub{
+      font-weight:700;
+      color: var(--muted);
+      font-size: 12px;
+    }
     .tag{
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(56,189,248,.18);
-      border: 1px solid rgba(56,189,248,.28);
+      background: rgba(56,189,248,.22);
+      border: 1px solid rgba(56,189,248,.35);
+      font-weight: 900;
       color: var(--text);
-      font-weight: 800;
-      font-size: 13px;
-      flex: 0 0 auto;
-    }
-    [data-theme="light"] .tag{
-      background: rgba(2,132,199,.12);
-      border-color: rgba(2,132,199,.20);
+      font-size: 12px;
     }
 
-    /* LINKS */
-    .links{
-      padding: 0 24px 24px;
+    /* contact row */
+    .contact{
+      padding: 0 22px 22px;
+    }
+    .contact .row{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    .btn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
+    a.btn{
       text-decoration:none;
-      padding: 14px 14px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      padding: 14px 12px;
       border-radius: 16px;
+      background: var(--card2);
       border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.10);
       color: var(--text);
-      font-weight: 850;
+      font-weight: 900;
+      backdrop-filter: blur(12px);
     }
-    [data-theme="light"] .btn{
-      background: rgba(10,20,40,.04);
-    }
+    a.btn:active{ transform: translateY(1px); }
 
-    /* MOBILE */
+    /* ===== Mobile: 1 cột, không bao giờ đè chữ ===== */
     @media (max-width: 920px){
-      .wrap{ width: min(940px, calc(100% - 18px)); margin-top: 16px; }
-      .cover{ height: 240px; }
-
-      .header{
-        grid-template-columns: 1fr;
-        margin-top: -70px;
-        gap: 12px;
-        align-items: center;
-        padding-top: 0;
+      :root{
+        --cover-h: 220px;
+        --header-pad-top: 74px;
+        --page-pad: 14px;
       }
-      .avatar-zone{ justify-content:center; margin-top: 6px; }
-      .info{ text-align:center; padding-bottom: 0; }
-      h1{ font-size: 32px; }
+      .header{
+        flex-direction: column;
+        align-items:center;
+        text-align:center;
+        padding: 0 16px 14px;
+        gap: 10px;
+      }
+      .avatar-zone{ margin-left:0; }
       .chips{ justify-content:center; }
-
       .content{
         grid-template-columns: 1fr;
-        padding-top: 14px;
+        padding: 0 16px 16px;
       }
-      .links{ grid-template-columns: 1fr; }
+      .contact{ padding: 0 16px 18px; }
+      .contact .row{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
-<body data-theme="dark">
-  <div class="bg"></div>
-
+<body>
   <div class="wrap">
     <div class="card">
-      <div class="cover">
-        <div class="toggle" id="themeBtn">🌙 Dark</div>
-      </div>
+      <button class="theme-btn" id="themeBtn">🌙 <span id="themeText">Dark</span></button>
+
+      <div class="cover"></div>
 
       <div class="header">
-        <!-- AVATAR (left like Facebook) -->
+        <!-- AVATAR (discord frame + ring) -->
         <div class="avatar-zone">
           <div class="avatar-wrap">
             <div class="ring"></div>
             <img class="avatar" src="avatar.jpg" alt="avatar">
-            <!-- Discord PNG decoration: đổi link ở đây -->
-            <img class="frame"
-              src="https://cdn.discordapp.com/avatar-decoration-presets/a_d7634185acdee36579be8ac5fc6e2ba2.png?size=240&passthrough=true"
-              alt="frame">
+            <!-- file png frame của discord: để tên frame.png -->
+            <img class="frame" src="frame.png" alt="frame">
           </div>
         </div>
 
-        <!-- INFO -->
         <div class="info">
           <h1>Milo Pha Đá (Nhạt boy)</h1>
           <div class="sub">IT Student • Software Engineering</div>
           <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
           <div class="chips">
-            <div class="chip">📍 Hồ Chí Minh</div>
+            <div class="chip"><span class="dot"></span> Hồ Chí Minh</div>
             <div class="chip">🎂 19</div>
             <div class="chip">💻 Dev vibes</div>
           </div>
@@ -347,10 +326,10 @@
       <div class="content">
         <div class="panel">
           <h2>Giới thiệu</h2>
-          <ul class="bullets">
-            <li>🏃‍♂️ Chạy Ngay Đi</li>
-            <li>🐧 Chạy Vào Trái Tim Em</li>
-            <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+          <ul>
+            <li>🏃‍♂️ <b>Chạy Ngay Đi</b></li>
+            <li>🐧 <b>Chạy Vào Trái Tim Em</b></li>
+            <li>😵 <b>Đùa Thôi Anh Làm Gì Có Em</b></li>
           </ul>
         </div>
 
@@ -359,7 +338,7 @@
 
           <div class="game">
             <div class="g-left">
-              <div class="g-title">🕹️ Roblox</div>
+              <div class="g-title">🕹 Roblox</div>
               <div class="g-sub">chill / sandbox</div>
             </div>
             <div class="tag">casual</div>
@@ -375,7 +354,7 @@
 
           <div class="game">
             <div class="g-left">
-              <div class="g-title">♟️ TFT</div>
+              <div class="g-title">♟ TFT</div>
               <div class="g-sub">auto chess</div>
             </div>
             <div class="tag">brain</div>
@@ -383,34 +362,39 @@
         </div>
       </div>
 
-      <div class="links">
-        <a class="btn" href="#" target="_blank">🌐 Facebook</a>
-        <a class="btn" href="#" target="_blank">🎮 Discord: quan_boy</a>
+      <div class="contact">
+        <div class="row">
+          <a class="btn" href="https://facebook.com/" target="_blank" rel="noopener">🌐 Facebook</a>
+          <a class="btn" href="#" onclick="navigator.clipboard.writeText('quan_boy'); alert('Đã copy Discord: quan_boy'); return false;">🎮 Discord: quan_boy</a>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    const root = document.documentElement;
     const btn = document.getElementById("themeBtn");
-    const root = document.body;
+    const text = document.getElementById("themeText");
 
-    function setTheme(t){
+    function applyTheme(t){
       root.setAttribute("data-theme", t);
-      if(t === "light"){
-        btn.textContent = "☀️ Light";
-      }else{
-        btn.textContent = "🌙 Dark";
-      }
       localStorage.setItem("theme", t);
+      if(t === "light"){
+        btn.firstChild.textContent = "☀️ ";
+        text.textContent = "Light";
+      }else{
+        btn.firstChild.textContent = "🌙 ";
+        text.textContent = "Dark";
+      }
     }
 
-    btn.addEventListener("click", () => {
-      const cur = root.getAttribute("data-theme") || "dark";
-      setTheme(cur === "dark" ? "light" : "dark");
-    });
+    const saved = localStorage.getItem("theme") || "dark";
+    applyTheme(saved);
 
-    const saved = localStorage.getItem("theme");
-    if(saved) setTheme(saved);
+    btn.addEventListener("click", ()=>{
+      const cur = root.getAttribute("data-theme");
+      applyTheme(cur === "dark" ? "light" : "dark");
+    });
   </script>
 </body>
 </html>
