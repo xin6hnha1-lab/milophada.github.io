@@ -9,38 +9,28 @@
     :root{
       --bg: #0b1220;
       --bg2:#0a0f1b;
-
       --card: rgba(255,255,255,.10);
       --card2: rgba(255,255,255,.14);
-
       --text:#e8f0ff;
       --muted: rgba(232,240,255,.70);
       --line: rgba(255,255,255,.12);
-
       --shadow: 0 14px 40px rgba(0,0,0,.35);
       --radius: 22px;
       --radius2: 16px;
-
       --accent: #4ea1ff;
       --danger: #ff4b4b;
       --chip: rgba(0,0,0,.25);
-
       --glass: blur(12px);
-
-      --rainbow: 0; /* 0/1 */
     }
 
     body.light{
       --bg: #cfe7ff;
       --bg2:#e8f3ff;
-
       --card: rgba(255,255,255,.72);
       --card2: rgba(255,255,255,.82);
-
       --text:#0b1a33;
       --muted: rgba(11,26,51,.70);
       --line: rgba(11,26,51,.12);
-
       --shadow: 0 14px 40px rgba(0,0,0,.18);
       --chip: rgba(11,26,51,.10);
     }
@@ -55,7 +45,7 @@
       overflow-x:hidden;
     }
 
-    /* Background */
+    /* ===== Background (CHỈ 1 LẦN) ===== */
     .bg{
       position: fixed;
       inset:0;
@@ -72,23 +62,23 @@
       inset:0;
       background: url("bg.gif") center/cover no-repeat;
       opacity:.22;
-      filter: saturate(1.1) contrast(1.05);
+      filter: saturate(1.08) contrast(1.03);
     }
 
-    /* Layout */
     .wrap{
       width: min(1100px, calc(100vw - 24px));
       margin: 14px auto 40px;
       padding-bottom: 30px;
     }
 
+    /* ===== top buttons ===== */
     .top-actions{
       display:flex;
       justify-content:flex-end;
       gap:10px;
       position: sticky;
       top: 10px;
-      z-index: 10;
+      z-index: 20;
       padding-top: 10px;
     }
 
@@ -110,82 +100,72 @@
     body.light .pill{ background: rgba(255,255,255,.55); }
     .pill:active{ transform: scale(.98); }
 
-    /* Card base */
+    /* ===== card ===== */
     .card{
-      position: relative;
-      border-radius: 28px;
-      overflow: hidden;
-      border:1px solid var(--line);
       background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
       box-shadow: var(--shadow);
       backdrop-filter: var(--glass);
       -webkit-backdrop-filter: var(--glass);
+      overflow: hidden;
     }
 
-    /* Header */
-    .header{ margin-top: 10px; }
+    /* ===== Header ===== */
+    .header{
+      position: relative;
+      margin-top: 10px;
+    }
 
     .cover{
-      height: 220px;
+      height: 240px;
       width: 100%;
       object-fit: cover;
       display:block;
       border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.2);
     }
 
     .header-inner{
+      position: relative;
       display:flex;
       gap:18px;
-      padding: 14px 16px 16px;
+      padding: 16px 16px 18px;
       align-items:flex-end;
       flex-wrap:wrap;
-      position: relative;
     }
 
-    /* ===== AVATAR FIX (không che chữ + không bay ra ngoài) ===== */
+    /* ===== Avatar (FIX: KHÔNG CHE CHỮ + KHÔNG BAY RA NGOÀI) ===== */
     .avatar-wrap{
       position: relative;
-      width: 120px;
-      height: 120px;
+      width: 118px;
+      height: 118px;
+      margin-top: -62px; /* avatar chồng lên cover */
       flex: 0 0 auto;
-      margin-top: -70px;     /* kéo avatar lên đè nhẹ lên cover */
-      margin-left: 8px;
     }
     .avatar{
       width: 100%;
       height: 100%;
-      border-radius: 50%;
+      border-radius: 999px;
       object-fit: cover;
-      display:block;
-      border: 4px solid rgba(255,255,255,.90);
-      background:#000;
-      box-shadow: 0 16px 30px rgba(0,0,0,.35);
+      position: relative;
+      z-index: 2;
+      border: 4px solid rgba(255,255,255,.85);
+      background: rgba(0,0,0,.25);
+      box-shadow: 0 16px 40px rgba(0,0,0,.25);
     }
-    body.light .avatar{ border-color: rgba(255,255,255,.95); }
 
-/* KHUNG DISCORD THẬT – KHÔNG ĐỤNG HÌNH */
-.avatar-frame{
-  position: absolute;
-  inset: -18px;        /* tuỳ khung, có thể -16 / -20 */
-  pointer-events: none;
-  z-index: 5;
-}
+    /* ===== Khung discord PNG (PHẢI là IMG) ===== */
+    .avatar-frame{
+      position: absolute;
+      inset: -18px;   /* chỉnh size khung */
+      width: calc(100% + 36px);
+      height: calc(100% + 36px);
+      z-index: 3;
+      pointer-events: none;
+      object-fit: contain;
+    }
 
-  /* viền ngoài trắng */
-  border: 3px solid rgba(255,255,255,.85);
-
-  /* vòng glow kiểu Discord */
-  box-shadow:
-    0 0 0 6px rgba(78,161,255,.35),
-    0 12px 28px rgba(0,0,0,.4);
-
-  /* ánh sáng nhẹ cho khung */
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(255,255,255,.18),
-    transparent 60%
-  );
-}
     .who{
       min-width: 260px;
       flex: 1 1 280px;
@@ -195,7 +175,7 @@
       margin:0;
       font-size: 28px;
       line-height: 1.1;
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: .2px;
     }
     .subtitle{
@@ -224,11 +204,11 @@
       border-radius: 999px;
       border: 1px solid var(--line);
       background: var(--chip);
-      font-weight: 900;
+      font-weight: 850;
       color: var(--text);
     }
 
-    /* Grid main */
+    /* ===== Grid ===== */
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -236,7 +216,10 @@
       margin-top: 14px;
     }
 
-    .section{ padding: 14px 14px 12px; }
+    .section{
+      padding: 14px 14px 12px;
+    }
+
     .h{
       display:flex;
       align-items:center;
@@ -244,16 +227,24 @@
       gap:10px;
       margin:0 0 10px;
       font-size: 16px;
-      font-weight: 900;
+      font-weight: 950;
     }
-    .p{ margin:0; color: var(--muted); font-weight:800; }
+    .p{ margin:0; color: var(--muted); font-weight:750; }
 
     /* Music */
-    .music-title{ font-weight: 900; margin:0 0 6px; }
+    .music-title{
+      font-weight: 950;
+      margin:0 0 6px;
+    }
     audio{ width:100%; }
 
     /* List */
-    .list{ display:flex; flex-direction:column; gap:10px; margin-top: 10px; }
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
     .item{
       display:flex;
       justify-content:space-between;
@@ -268,7 +259,7 @@
 
     .tag{
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 950;
       padding: 6px 10px;
       border-radius: 999px;
       border:1px solid var(--line);
@@ -301,7 +292,7 @@
     }
     .btn:active{ transform: scale(.98); }
 
-    /* Contacts row */
+    /* Contacts */
     .contacts{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -325,7 +316,7 @@
     body.light .contact-btn{ background: rgba(255,255,255,.55); }
     .contact-btn:active{ transform: scale(.98); }
 
-    /* TUS box */
+    /* TUS */
     .tus-box{ margin-top: 14px; padding: 14px; }
     .tus-head{
       display:flex;
@@ -333,10 +324,14 @@
       gap:10px;
       align-items:center;
       margin-bottom: 10px;
-      font-weight: 900;
-      flex-wrap: wrap;
+      font-weight: 950;
     }
-    .tus-list{ display:flex; flex-direction:column; gap:10px; }
+    .tus-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
     .tus-link{
       display:flex;
       align-items:center;
@@ -354,7 +349,13 @@
 
     /* Schedule */
     .schedule{ margin-top: 14px; padding: 14px; }
-    .day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
+    .day-tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
     .tab{
       padding: 8px 10px;
       border-radius: 999px;
@@ -389,10 +390,10 @@
       min-width: 240px;
       flex: 1 1 260px;
     }
-    .slot-title{ font-weight: 900; }
+    .slot-title{ font-weight: 950; }
     .slot-time{ color: var(--muted); font-weight:800; font-size: 13px; }
 
-    /* Modal */
+    /* ===== Modal ===== */
     .modal{
       position: fixed;
       inset: 0;
@@ -418,7 +419,6 @@
       -webkit-backdrop-filter: var(--glass);
       padding: 14px;
       position: relative;
-      padding-bottom: 22px; /* để không bị che nút lưu */
     }
     .modal-close{
       position:absolute;
@@ -448,9 +448,12 @@
       gap: 12px;
       margin-top: 10px;
     }
-    .field{ display:flex; flex-direction:column; gap:8px; }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
     label{ font-weight: 900; }
-
     input, select, textarea{
       width:100%;
       border-radius: 14px;
@@ -461,64 +464,50 @@
       color: var(--text);
       font-weight: 800;
     }
-    body.light input, body.light select, body.light textarea{ background: rgba(255,255,255,.55); }
+    body.light input, body.light select, body.light textarea{
+      background: rgba(255,255,255,.55);
+    }
     textarea{ min-height: 90px; resize: vertical; }
-    input::placeholder, textarea::placeholder{ color: var(--muted); }
 
-    .help{ color: var(--muted); font-weight: 700; margin: 6px 0 0; }
+    .help{ color: var(--muted); font-weight: 750; margin: 6px 0 0; }
 
+    /* nút save luôn thấy */
     .modal-actions{
       position: sticky;
       bottom: 0;
       display:flex;
       gap: 10px;
-      padding: 10px 0 4px;
-      margin-top: 12px;
-      background: linear-gradient(180deg, transparent, rgba(0,0,0,.25));
+      padding: 12px 0 4px;
+      margin-top: 10px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-    body.light .modal-actions{
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,.45));
-    }
 
-    /* ===== Rainbow chữ FIX (không làm transparent, không phá input/button) ===== */
-    @property --hue {
-      syntax: "<number>";
-      inherits: true;
-      initial-value: 0;
+    /* ===== Rainbow (FIX: KHÔNG PHÁ INPUT/AUDIO/ICON/IMG) ===== */
+    .rainbow-on .rainbow-text{
+      background: linear-gradient(90deg,
+        #ff3b3b, #ff8c2f, #ffe94a, #35e17a, #36b9ff, #7a5cff, #ff4fd8
+      );
+      -webkit-background-clip: text;
+      background-clip:text;
+      color: transparent !important;
+      animation: rainbowMove 3.2s linear infinite;
+      background-size: 200% 100%;
     }
-    .rainbow-on{
-      animation: hueCycle 3.2s linear infinite;
+    @keyframes rainbowMove{
+      0%{ background-position: 0% 50%; }
+      100%{ background-position: 200% 50%; }
     }
-    @keyframes hueCycle{
-      from{ --hue: 0; }
-      to{ --hue: 360; }
-    }
-    /* Chỉ đổi màu CHỮ, không đụng background */
-    .rainbow-on :where(h1,h2,h3,p,span,a,label,strong,em,i,b,small,.h,.p,.music-title,.slot-title,.slot-time){
-      color: hsl(var(--hue) 92% 62%);
-    }
-    /* Giữ nút/controls vẫn dễ nhìn */
-    .rainbow-on .btn,
-    .rainbow-on .pill,
-    .rainbow-on input,
-    .rainbow-on textarea,
-    .rainbow-on select,
-    .rainbow-on option,
-    .rainbow-on audio{
-      color: var(--text);
-    }
-    .rainbow-on .btn-primary{ color: #fff; }
 
     /* Responsive */
     @media (max-width: 860px){
       .grid{ grid-template-columns: 1fr; }
       .contacts{ grid-template-columns: 1fr 1fr; }
       .name{ font-size: 24px; }
-      .avatar-wrap{ width: 96px; height: 96px; margin-top:-62px; }
-      .cover{ height: 200px; }
+      .cover{ height: 210px; }
       .row{ grid-template-columns: 1fr; }
+      .avatar-wrap{ width: 100px; height: 100px; margin-top:-54px; }
+      .avatar-frame{ inset:-16px; width:calc(100% + 32px); height:calc(100% + 32px); }
     }
     @media (max-width: 420px){
       .contacts{ grid-template-columns: 1fr; }
@@ -527,7 +516,7 @@
   </style>
 </head>
 
-<body>
+<body class="dark">
   <div class="bg"></div>
 
   <div class="wrap">
@@ -541,26 +530,25 @@
     </div>
 
     <div class="card header">
+      <!-- CHỈ 1 COVER DUY NHẤT -->
       <img class="cover" src="cover.gif" alt="Cover" />
 
-   <div class="card header">
-  <img class="cover" src="cover.gif" alt="Cover" />
-
-  <div class="header-inner">
-    <div class="avatar-wrap">
-      <img class="avatar" src="avatar.jpg" alt="Avatar">
-      <img class="avatar-frame" src="frame.png" alt="">
-    </div>
+      <div class="header-inner">
+        <div class="avatar-wrap">
+          <img class="avatar" src="avatar.jpg" alt="Avatar" />
+          <!-- Khung discord PNG -->
+          <img class="avatar-frame" src="frame.png" alt="" />
+        </div>
 
         <div class="who">
-          <h1 class="name" id="nameText">Milo Pha Đá (Nhat boy)</h1>
-          <div class="subtitle" id="subtitleText">IT Student • Software Engineering</div>
-          <div class="quote" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</div>
+          <h1 class="name rainbow-target" id="nameText">Milo Pha Đá (Nhat boy)</h1>
+          <div class="subtitle rainbow-target" id="subtitleText">IT Student • Software Engineering</div>
+          <div class="quote rainbow-target" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</div>
 
           <div class="chips">
-            <div class="chip">📍 <span id="cityText">Hồ Chí Minh</span></div>
-            <div class="chip">🎂 <span id="ageText">19</span></div>
-            <div class="chip">🎮 <span id="tagText">gamer</span></div>
+            <div class="chip"><span class="rainbow-target">📍</span> <span class="rainbow-target" id="cityText">Hồ Chí Minh</span></div>
+            <div class="chip"><span class="rainbow-target">🎂</span> <span class="rainbow-target" id="ageText">19</span></div>
+            <div class="chip"><span class="rainbow-target">🎮</span> <span class="rainbow-target" id="tagText">gamer</span></div>
           </div>
         </div>
       </div>
@@ -568,48 +556,46 @@
 
     <div class="grid">
       <div class="card section">
-        <div class="h">🎧 Nhạc tôi nghe</div>
-        <div class="music-title">Đang nghe: <span id="songName">Ai ngoài anh</span></div>
-        <p class="p">Bấm Play để nghe 🎧</p>
+        <div class="h"><span class="rainbow-target">🎧</span> <span class="rainbow-target">Nhạc tôi nghe</span></div>
+        <div class="music-title"><span class="rainbow-target">Đang nghe:</span> <span class="rainbow-target" id="songName">Ai ngoài anh</span></div>
+        <div class="p rainbow-target">Bấm Play để nghe 🎧</div>
         <div style="height:10px"></div>
         <audio id="audio" controls src="music.mp3"></audio>
       </div>
 
       <div class="card section">
-        <div class="h">📌 Giới thiệu</div>
+        <div class="h"><span class="rainbow-target">📌</span> <span class="rainbow-target">Giới thiệu</span></div>
         <div class="list" id="introList"></div>
       </div>
 
       <div class="card section">
-        <div class="h">🎮 Game mình hay chơi</div>
+        <div class="h"><span class="rainbow-target">🎮</span> <span class="rainbow-target">Game mình hay chơi</span></div>
         <div class="list" id="gameList"></div>
-        <p class="help">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
+        <p class="help rainbow-target">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
       </div>
 
       <div class="card section">
-        <div class="h">🔗 Liên hệ</div>
+        <div class="h"><span class="rainbow-target">🔗</span> <span class="rainbow-target">Liên hệ</span></div>
         <div class="contacts">
-          <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
-          <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
+          <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">🌐 Facebook</span></a>
+          <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener"><span class="rainbow-target">💬 Discord</span></a>
         </div>
-        <p class="help">Discord: nhập ID là tự tạo link profile.</p>
+        <p class="help rainbow-target">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </div>
 
     <div class="card tus-box">
       <div class="tus-head">
-        <div>📝 Đây là nơi check các tus của tôi</div>
+        <div class="rainbow-target">📝 Đây là nơi check các tus của tôi</div>
         <button class="btn btn-primary" id="btnAddTus">➕ Thêm tus</button>
       </div>
-      <p class="p">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</p>
-      <div style="height:10px"></div>
+      <div class="p rainbow-target">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</div>
       <div class="tus-list" id="tusList"></div>
     </div>
 
     <div class="card schedule">
-      <div class="h">📅 Lịch bận / rảnh</div>
-      <p class="p">Chọn ngày để xem lịch.</p>
-      <div style="height:10px"></div>
+      <div class="h"><span class="rainbow-target">📅</span> <span class="rainbow-target">Lịch bận / rảnh</span></div>
+      <div class="p rainbow-target">Set theo từng ngày trong tuần ✅</div>
       <div class="day-tabs" id="dayTabs"></div>
       <div id="daySlots"></div>
     </div>
@@ -619,12 +605,11 @@
   <div class="modal" id="adminModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <button class="modal-close" id="adminClose" aria-label="Close">✕</button>
-      <h2 class="modal-title">🔐 Admin Panel</h2>
+      <h2 class="modal-title rainbow-target">🔐 Admin Panel</h2>
 
       <div class="field">
-        <label>Mật khẩu admin</label>
+        <label class="rainbow-target">Mật khẩu admin</label>
         <input id="adminPassInput" type="password" placeholder="Nhập pass..." />
-        <div class="help">Pass demo: <b id="passDemo"></b></div>
       </div>
 
       <div class="modal-actions">
@@ -636,48 +621,48 @@
 
       <div class="row">
         <div class="field">
-          <label>Link Facebook (dán link profile)</label>
+          <label class="rainbow-target">Link Facebook (dán link profile)</label>
           <input id="fbInput" placeholder="https://facebook.com/..." />
         </div>
         <div class="field">
-          <label>Discord ID (chỉ cần ID)</label>
+          <label class="rainbow-target">Discord ID (chỉ cần ID)</label>
           <input id="dcIdInput" placeholder="9103..." />
         </div>
       </div>
 
       <div class="row">
         <div class="field">
-          <label>Link Roblox (tài khoản)</label>
+          <label class="rainbow-target">Link Roblox (tài khoản)</label>
           <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
         </div>
         <div class="field">
-          <label>Link Valorant (tài khoản / tracker)</label>
+          <label class="rainbow-target">Link Valorant (tài khoản / tracker)</label>
           <input id="valoInput" placeholder="Dán link (có thể để trống)" />
         </div>
       </div>
 
       <div class="row">
         <div class="field">
-          <label>Link TFT (tài khoản / tracker)</label>
+          <label class="rainbow-target">Link TFT (tài khoản / tracker)</label>
           <input id="tftInput" placeholder="Dán link (có thể để trống)" />
         </div>
         <div class="field">
-          <label>Tên bài nhạc hiển thị</label>
+          <label class="rainbow-target">Tên bài nhạc hiển thị</label>
           <input id="songInput" placeholder="Ai ngoài anh" />
         </div>
       </div>
 
       <div class="row">
         <div class="field">
-          <label>Rainbow chữ</label>
+          <label class="rainbow-target">Rainbow chữ</label>
           <select id="rainbowSelect">
             <option value="0">Tắt</option>
             <option value="1">Bật</option>
           </select>
-          <div class="help">Bật là chữ trên web đổi màu liên tục 🌈 (không phá nút/input nữa)</div>
+          <div class="help rainbow-target">Bật là chữ đổi màu 🌈 (không phá input nữa)</div>
         </div>
         <div class="field">
-          <label>Đổi mật khẩu admin (tuỳ chọn)</label>
+          <label class="rainbow-target">Đổi mật khẩu admin (tuỳ chọn)</label>
           <input id="newPassInput" placeholder="Để trống nếu không đổi" />
         </div>
       </div>
@@ -686,23 +671,22 @@
 
       <div class="row">
         <div class="field">
-          <label>➕ Thêm tus mới (Admin only)</label>
+          <label class="rainbow-target">➕ Thêm tus mới (Admin only)</label>
           <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
           <input id="tusLinkInput" placeholder="Dán link tus Facebook..." />
-          <div class="help">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
           <button class="btn btn-ghost" id="btnAddTusAdmin">➕ Thêm tus</button>
         </div>
 
         <div class="field">
-          <label>📅 Chỉnh lịch bận / rảnh (Admin only)</label>
+          <label class="rainbow-target">📅 Chỉnh lịch bận / rảnh (Admin only)</label>
           <select id="daySelect"></select>
           <div class="row" style="margin-top:0">
             <div class="field">
-              <label>Từ giờ</label>
+              <label class="rainbow-target">Từ giờ</label>
               <input id="fromInput" placeholder="09:00" />
             </div>
             <div class="field">
-              <label>Đến giờ</label>
+              <label class="rainbow-target">Đến giờ</label>
               <input id="toInput" placeholder="11:30" />
             </div>
           </div>
@@ -718,8 +702,8 @@
   </div>
 
   <script>
-    // ====== Storage helpers ======
-    const KEY = "milo_site_v1";
+    const KEY = "milo_site_v2";
+
     const defaultState = {
       theme: "dark",
       adminPass: "079268",
@@ -729,27 +713,15 @@
       fbLink: "https://www.facebook.com/milo.pha.a",
       discordId: "910327589309145109",
 
-      gameLinks: { roblox: "", valorant: "", tft: "" },
+      gameLinks: { roblox:"", valorant:"", tft:"" },
       songName: "Ai ngoài anh",
 
-      intro: [
-        "✨ Chạy Ngay Đi",
-        "🐻 Chạy Vào Trái Tim Em",
-        "😳 Đùa Thôi Anh Làm Gì Có Em"
-      ],
-
-      tus: [
-        { title: "Tus AV", link: "https://www.facebook.com/" }
-      ],
+      intro: ["✨ Chạy Ngay Đi", "🐻 Chạy Vào Trái Tim Em", "😳 Đùa Thôi Anh Làm Gì Có Em"],
+      tus: [{ title:"Tus AV", link:"https://www.facebook.com/" }],
 
       schedule: {
-        "Thứ 2": [],
-        "Thứ 3": [],
-        "Thứ 4": [],
-        "Thứ 5": [],
-        "Thứ 6": [],
-        "Thứ 7": [],
-        "Chủ nhật": []
+        "Thứ 2": [], "Thứ 3": [], "Thứ 4": [], "Thứ 5": [],
+        "Thứ 6": [], "Thứ 7": [], "Chủ nhật": []
       }
     };
 
@@ -764,15 +736,16 @@
           gameLinks: { ...structuredClone(defaultState.gameLinks), ...(s.gameLinks||{}) },
           schedule: { ...structuredClone(defaultState.schedule), ...(s.schedule||{}) }
         };
-      }catch(e){
+      }catch{
         return structuredClone(defaultState);
       }
     }
-    function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+    function saveState(){
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
 
     let state = loadState();
-
-    // ====== Elements ======
     const $ = (id)=>document.getElementById(id);
 
     const btnTheme = $("btnTheme");
@@ -781,14 +754,13 @@
     const adminModal = $("adminModal");
     const adminClose = $("adminClose");
 
+    const songName = $("songName");
     const introList = $("introList");
     const gameList = $("gameList");
     const tusList = $("tusList");
     const fbBtn = $("fbBtn");
     const dcBtn = $("dcBtn");
 
-    // Admin fields
-    const passDemo = $("passDemo");
     const adminPassInput = $("adminPassInput");
     const btnLogin = $("btnLogin");
     const btnLogout = $("btnLogout");
@@ -805,22 +777,20 @@
     const tusTitleInput = $("tusTitleInput");
     const tusLinkInput = $("tusLinkInput");
     const btnAddTusAdmin = $("btnAddTusAdmin");
+    const btnAddTus = $("btnAddTus");
+
+    const dayTabs = $("dayTabs");
+    const daySlots = $("daySlots");
 
     const daySelect = $("daySelect");
     const fromInput = $("fromInput");
     const toInput = $("toInput");
     const taskInput = $("taskInput");
     const btnAddSlot = $("btnAddSlot");
-
     const btnSave = $("btnSave");
-    const btnAddTus = $("btnAddTus");
 
-    // Schedule UI
-    const dayTabs = $("dayTabs");
-    const daySlots = $("daySlots");
     let activeDay = "Thứ 2";
 
-    // ====== Render ======
     function applyTheme(){
       document.body.classList.toggle("light", state.theme === "light");
       themeText.textContent = state.theme === "light" ? "Light" : "Dark";
@@ -828,6 +798,9 @@
 
     function applyRainbow(){
       document.body.classList.toggle("rainbow-on", Number(state.rainbow) === 1);
+      document.querySelectorAll(".rainbow-target").forEach(el=>{
+        el.classList.toggle("rainbow-text", Number(state.rainbow) === 1);
+      });
     }
 
     function renderContacts(){
@@ -841,9 +814,10 @@
       state.intro.forEach(t=>{
         const div = document.createElement("div");
         div.className = "item";
-        div.innerHTML = `<div style="font-weight:900">${escapeHtml(t)}</div>`;
+        div.innerHTML = `<div class="rainbow-target" style="font-weight:900">${escapeHtml(t)}</div>`;
         introList.appendChild(div);
       });
+      applyRainbow();
     }
 
     function renderGames(){
@@ -861,19 +835,19 @@
           <div style="display:flex;gap:10px;align-items:center">
             <div style="font-size:18px">${g.icon}</div>
             <div>
-              <div style="font-weight:1000">${g.name}</div>
-              <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
-              ${
-                link
-                ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
-                : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
+              <div class="rainbow-target" style="font-weight:1000">${g.name}</div>
+              <div class="rainbow-target" style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
+              ${link
+                ? `<a class="rainbow-target" href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
+                : `<div class="rainbow-target" style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
               }
             </div>
           </div>
-          <div class="tag">${g.tag}</div>
+          <div class="tag rainbow-target">${g.tag}</div>
         `;
         gameList.appendChild(row);
       });
+      applyRainbow();
     }
 
     function renderTus(){
@@ -885,13 +859,9 @@
         a.target = "_blank";
         a.rel = "noopener";
         a.innerHTML = `
-          <div>🔗 ${escapeHtml(t.title || "Tus")}</div>
+          <div class="rainbow-target">🔗 ${escapeHtml(t.title || "Tus")}</div>
           <div style="display:flex;gap:10px;align-items:center">
-            ${
-              state.isAdmin
-              ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
-              : `<span style="color:var(--muted);font-weight:900">Mở</span>`
-            }
+            ${state.isAdmin ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>` : `<span class="rainbow-target" style="color:var(--muted);font-weight:900">Mở</span>`}
           </div>
         `;
         tusList.appendChild(a);
@@ -908,6 +878,7 @@
           });
         });
       }
+      applyRainbow();
     }
 
     function renderScheduleTabs(){
@@ -935,8 +906,9 @@
       if(items.length === 0){
         const p = document.createElement("div");
         p.className = "item";
-        p.innerHTML = `<div style="font-weight:900">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
+        p.innerHTML = `<div class="rainbow-target" style="font-weight:900">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
         daySlots.appendChild(p);
+        applyRainbow();
         return;
       }
 
@@ -945,11 +917,11 @@
         div.className = "slot";
         div.innerHTML = `
           <div class="slot-left">
-            <div class="slot-title">${escapeHtml(it.task || "Việc")}</div>
-            <div class="slot-time">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
+            <div class="slot-title rainbow-target">${escapeHtml(it.task || "Việc")}</div>
+            <div class="slot-time rainbow-target">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
           </div>
           <div style="display:flex;gap:10px;align-items:center">
-            <span class="tag">${it.type === "busy" ? "bận" : "rảnh"}</span>
+            <span class="tag rainbow-target">${it.type === "busy" ? "bận" : "rảnh"}</span>
             ${state.isAdmin ? `<button class="btn btn-danger" data-slot-del="${idx}" type="button">Xoá</button>` : ""}
           </div>
         `;
@@ -966,12 +938,11 @@
           });
         });
       }
+      applyRainbow();
     }
 
     function renderText(){
-      $("songName").textContent = state.songName || "Nhạc";
-      passDemo.textContent = state.adminPass;
-
+      songName.textContent = state.songName || "Nhạc";
       renderContacts();
       renderIntro();
       renderGames();
@@ -991,7 +962,7 @@
       newPassInput.value = "";
     }
 
-    // ====== Events ======
+    // ===== Events =====
     btnTheme.addEventListener("click", ()=>{
       state.theme = (state.theme === "light") ? "dark" : "light";
       saveState();
@@ -1039,11 +1010,9 @@
 
       state.fbLink = fbInput.value.trim();
       state.discordId = dcIdInput.value.trim();
-
       state.gameLinks.roblox = robloxInput.value.trim();
       state.gameLinks.valorant = valoInput.value.trim();
       state.gameLinks.tft = tftInput.value.trim();
-
       state.songName = songInput.value.trim() || "Nhạc";
       state.rainbow = Number(rainbowSelect.value) || 0;
 
@@ -1122,14 +1091,6 @@
       renderScheduleDay();
     });
 
-    // Fix: nếu link trống thì disable click
-    [fbBtn, dcBtn].forEach(a=>{
-      a.addEventListener("click",(e)=>{
-        if(!a.href || a.href.endsWith("#")) e.preventDefault();
-      });
-    });
-
-    // ====== Utils ======
     function escapeHtml(str){
       return String(str).replace(/[&<>"']/g, s=>({
         "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -1137,10 +1098,17 @@
     }
     function escapeAttr(str){ return escapeHtml(str); }
 
-    // ====== Init ======
+    // init
     applyTheme();
-    applyRainbow();
     renderText();
+    applyRainbow();
+
+    // disable empty links
+    [fbBtn, dcBtn].forEach(a=>{
+      a.addEventListener("click",(e)=>{
+        if(!a.href || a.href.endsWith("#")) e.preventDefault();
+      });
+    });
   </script>
 </body>
 </html>
