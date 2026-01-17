@@ -1,148 +1,148 @@
 <!doctype html>
-<html lang="vi" data-theme="dark">
+<html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Milo Pha Đá</title>
 
-  <!-- effect.css chứa avatar ring + frame discord -->
-  <link rel="stylesheet" href="effect.css">
+  <!-- effect ring + discord frame -->
+  <link rel="stylesheet" href="effect.css?v=1" />
 
   <style>
     :root{
-      --radius: 22px;
-      --card: rgba(16, 32, 52, .62);
-      --card2: rgba(16, 32, 52, .40);
-      --stroke: rgba(255,255,255,.10);
+      --bg-dim: rgba(7,12,22,.55);
+      --card: rgba(16, 24, 40, .58);
+      --card2: rgba(16, 24, 40, .42);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --chip: rgba(255,255,255,.12);
-      --shadow: 0 24px 80px rgba(0,0,0,.45);
-      --accent: rgba(56,189,248,.95);
-      --blur: 10px;
-
-      --page-pad: 18px;
-      --wrap-max: 1040px;
-      --cover-h: 260px;
-      --header-pad-top: 84px; /* chừa chỗ cho avatar đè cover */
+      --muted: rgba(255,255,255,.72);
+      --chip: rgba(0,0,0,.34);
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 24px 70px rgba(0,0,0,.35);
+      --radius: 26px;
+      --radius2: 18px;
     }
 
-    html[data-theme="light"]{
+    body.light{
+      --bg-dim: rgba(255,255,255,.45);
       --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.52);
-      --stroke: rgba(0,0,0,.08);
-      --text: rgba(10,15,25,.92);
-      --muted: rgba(10,15,25,.64);
-      --chip: rgba(0,0,0,.07);
-      --shadow: 0 22px 60px rgba(0,0,0,.18);
-      --blur: 2px;
+      --card2: rgba(255,255,255,.55);
+      --text: rgba(14,18,26,.92);
+      --muted: rgba(14,18,26,.72);
+      --chip: rgba(255,255,255,.55);
+      --border: rgba(0,0,0,.08);
+      --shadow: 0 24px 70px rgba(0,0,0,.20);
     }
 
     *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
     body{
       margin:0;
-      min-height:100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      min-height:100svh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       background: url("bg.gif") center / cover no-repeat fixed;
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:center;
-      padding: var(--page-pad);
+      padding: 22px 14px;
     }
 
-    /* overlay nền (dark vs light) */
+    /* overlay để background không bị “bể nét” light mode */
     body::before{
       content:"";
       position:fixed;
       inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.70));
+      opacity: 1;
       pointer-events:none;
-      z-index:-1;
-      backdrop-filter: blur(var(--blur));
-      background: rgba(0,0,0,.55);
     }
-    html[data-theme="light"] body::before{
-      background: rgba(255,255,255,.10);
+    body.light::before{
+      background: linear-gradient(180deg, rgba(255,255,255,.40), rgba(0,0,0,.30));
     }
 
     .wrap{
-      width: min(var(--wrap-max), 100%);
+      position:relative;
+      width:min(980px, 100%);
+      z-index:1;
     }
 
     .card{
       position:relative;
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadow);
       overflow:hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     .cover{
-      height: var(--cover-h);
+      height: 280px;
       background: url("cover.gif") center / cover no-repeat;
+      border-bottom: 1px solid var(--border);
     }
 
-    /* nút theme */
-    .theme-btn{
+    .topbar{
       position:absolute;
-      top:14px;
-      right:14px;
-      z-index: 20;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.28);
+      top:14px; right:14px;
+      z-index:50;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .btn{
+      border:1px solid var(--border);
+      background: var(--chip);
       color: var(--text);
       padding: 10px 14px;
       border-radius: 999px;
-      backdrop-filter: blur(10px);
       cursor:pointer;
-      font-weight:700;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      user-select:none;
+      font-weight: 650;
+      letter-spacing:.2px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    html[data-theme="light"] .theme-btn{
-      background: rgba(255,255,255,.55);
-    }
+    .btn:active{ transform: translateY(1px); }
 
-    /* header giống FB: avatar trái, info phải */
+    /* HEADER kiểu Facebook: avatar trái - info phải */
     .header{
-      display:flex;
+      display:grid;
+      grid-template-columns: 240px 1fr;
       gap: 18px;
-      padding: 0 22px 18px;
-      margin-top: calc(var(--header-pad-top) * -1);
-      align-items:flex-end;
-    }
-    .avatar-zone{
-      flex: 0 0 auto;
-      margin-left: 4px;
+      padding: 16px 22px 6px;
+      margin-top: -90px; /* kéo lên chồng lên cover */
+      align-items:end;
     }
 
-    .info{
-      flex:1;
-      padding-bottom: 6px;
-      min-width: 0;
+    .avatar-zone{
+      display:flex;
+      justify-content:flex-start;
+      align-items:flex-end;
+      padding-left: 6px;
     }
-    h1{
-      margin: 0;
-      font-size: 34px;
-      line-height: 1.1;
-      letter-spacing: .2px;
-      white-space: normal;
+
+    /* Info */
+    .info h1{
+      margin:0;
+      font-size: 42px;
+      line-height: 1.12;
+      letter-spacing:.2px;
+      text-shadow: 0 10px 26px rgba(0,0,0,.30);
       word-break: break-word;
     }
     .sub{
-      margin-top: 6px;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .quote{
       margin-top: 8px;
       color: var(--muted);
+      font-weight: 650;
+    }
+    .quote{
+      margin-top: 6px;
+      color: var(--muted);
       font-style: italic;
-      font-size: 14px;
+      opacity:.95;
     }
 
     .chips{
@@ -150,163 +150,247 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
     .chip{
       display:inline-flex;
-      gap:8px;
       align-items:center;
-      padding: 8px 12px;
-      border-radius:999px;
+      gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
       background: var(--chip);
-      border: 1px solid var(--stroke);
-      font-weight:700;
-      font-size: 13px;
       color: var(--text);
+      font-weight: 650;
+      font-size: 14px;
       backdrop-filter: blur(10px);
-    }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(56,189,248,.18);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    /* content grid */
-    .content{
-      padding: 0 22px 20px;
+    /* MAIN */
+    .main{
+      padding: 18px 22px 22px;
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.1fr .9fr;
       gap: 16px;
     }
 
     .panel{
+      border-radius: var(--radius2);
+      border: 1px solid var(--border);
       background: var(--card2);
-      border: 1px solid var(--stroke);
-      border-radius: 18px;
-      padding: 16px;
       backdrop-filter: blur(12px);
-      min-height: 160px;
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
     }
+
     .panel h2{
-      margin:0 0 12px;
+      margin:0 0 10px;
       font-size: 18px;
       letter-spacing:.2px;
     }
-    ul{
+
+    .list{
       margin:0;
       padding-left: 18px;
       color: var(--muted);
       line-height: 1.65;
-      font-weight: 600;
+      font-weight: 650;
     }
-    ul b{ color: var(--text); }
 
     .game{
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding: 12px 12px;
-      border:1px solid var(--stroke);
-      border-radius: 14px;
-      background: rgba(0,0,0,.10);
-      margin-bottom: 10px;
-    }
-    html[data-theme="light"] .game{
-      background: rgba(255,255,255,.55);
-    }
-    .g-left{
-      display:flex;
       flex-direction:column;
+      gap:10px;
+    }
+
+    .gameItem{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+    }
+    body.light .gameItem{ background: rgba(255,255,255,.35); }
+
+    .gLeft{
+      display:flex; flex-direction:column;
       gap:2px;
-      min-width: 0;
     }
-    .g-title{
-      font-weight: 900;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .g-sub{
-      font-weight:700;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .gTitle{ font-weight: 800; }
+    .gSub{ color: var(--muted); font-weight: 650; font-size: 13px; }
+
     .tag{
-      padding: 8px 12px;
       border-radius: 999px;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
       background: rgba(56,189,248,.22);
-      border: 1px solid rgba(56,189,248,.35);
-      font-weight: 900;
-      color: var(--text);
+      font-weight: 800;
       font-size: 12px;
     }
 
-    /* contact row */
-    .contact{
+    /* FOOTER */
+    .footer{
       padding: 0 22px 22px;
-    }
-    .contact .row{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    a.btn{
-      text-decoration:none;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      padding: 14px 12px;
-      border-radius: 16px;
-      background: var(--card2);
-      border: 1px solid var(--stroke);
-      color: var(--text);
-      font-weight: 900;
-      backdrop-filter: blur(12px);
-    }
-    a.btn:active{ transform: translateY(1px); }
 
-    /* ===== Mobile: 1 cột, không bao giờ đè chữ ===== */
+    .linkBtn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 800;
+    }
+
+    /* “Tus + Add link” */
+    .tus{
+      padding: 0 22px 24px;
+    }
+    .tusBox{
+      border-radius: var(--radius2);
+      border: 1px solid var(--border);
+      background: var(--card2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+    }
+    .tusTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .tusTitle{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .tusTitle b{ font-size: 18px; }
+    .tusTitle span{ color: var(--muted); font-weight:650; }
+
+    .tusActions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+    }
+
+    input[type="url"]{
+      width: min(420px, 68vw);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      font-weight: 650;
+    }
+    body.light input[type="url"]{ background: rgba(255,255,255,.35); }
+
+    .miniBtn{
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(56,189,248,.22);
+      color: var(--text);
+      font-weight: 850;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .links{
+      margin-top: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .linkRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+    }
+    body.light .linkRow{ background: rgba(255,255,255,.35); }
+
+    .linkRow a{
+      color: var(--text);
+      font-weight: 800;
+      text-decoration:none;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 70%;
+    }
+
+    .del{
+      border:1px solid var(--border);
+      background: rgba(239,68,68,.18);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 900;
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 920px){
-      :root{
-        --cover-h: 220px;
-        --header-pad-top: 74px;
-        --page-pad: 14px;
-      }
+      .cover{ height: 220px; }
       .header{
-        flex-direction: column;
-        align-items:center;
-        text-align:center;
-        padding: 0 16px 14px;
+        grid-template-columns: 1fr;
+        margin-top: -70px;
+        padding: 14px 16px 6px;
         gap: 10px;
+        text-align:center;
       }
-      .avatar-zone{ margin-left:0; }
-      .chips{ justify-content:center; }
-      .content{
+      .avatar-zone{ justify-content:center; }
+      .main{
+        grid-template-columns: 1fr;
+        padding: 14px 16px 16px;
+      }
+      .footer{
         grid-template-columns: 1fr;
         padding: 0 16px 16px;
       }
-      .contact{ padding: 0 16px 18px; }
-      .contact .row{ grid-template-columns: 1fr; }
+      .tus{ padding: 0 16px 18px; }
+      .info h1{ font-size: 32px; }
+      input[type="url"]{ width: 100%; }
+      .linkRow a{ max-width: 62%; }
     }
   </style>
 </head>
 
-<body>
+<body class="dark">
   <div class="wrap">
     <div class="card">
-      <button class="theme-btn" id="themeBtn">🌙 <span id="themeText">Dark</span></button>
-
       <div class="cover"></div>
 
+      <div class="topbar">
+        <button class="btn" id="modeBtn">🌙 Dark</button>
+      </div>
+
       <div class="header">
-        <!-- AVATAR (discord frame + ring) -->
         <div class="avatar-zone">
+          <!-- AVATAR + EFFECT (chỗ này dùng effect.css của bro) -->
           <div class="avatar-wrap">
             <div class="ring"></div>
-            <img class="avatar" src="avatar.jpg" alt="avatar">
-            <!-- file png frame của discord: để tên frame.png -->
-            <img class="frame" src="frame.png" alt="frame">
+            <img class="avatar" src="avatar.jpg" alt="avatar" />
+            <!-- ✅ đúng tên file của bro: frame.png -->
+            <img class="frame" src="frame.png" alt="discord frame" />
           </div>
         </div>
 
@@ -316,85 +400,199 @@
           <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
           <div class="chips">
-            <div class="chip"><span class="dot"></span> Hồ Chí Minh</div>
-            <div class="chip">🎂 19</div>
-            <div class="chip">💻 Dev vibes</div>
+            <span class="chip">📍 Hồ Chí Minh</span>
+            <span class="chip">🎂 19</span>
+            <span class="chip">💻 Dev vibes</span>
           </div>
         </div>
       </div>
 
-      <div class="content">
+      <div class="main">
         <div class="panel">
           <h2>Giới thiệu</h2>
-          <ul>
-            <li>🏃‍♂️ <b>Chạy Ngay Đi</b></li>
-            <li>🐧 <b>Chạy Vào Trái Tim Em</b></li>
-            <li>😵 <b>Đùa Thôi Anh Làm Gì Có Em</b></li>
+          <ul class="list">
+            <li>✨ Chạy Ngay Đi</li>
+            <li>🧠 Chạy Vào Trái Tim Em</li>
+            <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
           </ul>
         </div>
 
         <div class="panel">
           <h2>Game mình hay chơi</h2>
-
           <div class="game">
-            <div class="g-left">
-              <div class="g-title">🕹 Roblox</div>
-              <div class="g-sub">chill / sandbox</div>
+            <div class="gameItem">
+              <div class="gLeft">
+                <div class="gTitle">🎮 Roblox</div>
+                <div class="gSub">chill / sandbox</div>
+              </div>
+              <span class="tag">casual</span>
             </div>
-            <div class="tag">casual</div>
-          </div>
 
-          <div class="game">
-            <div class="g-left">
-              <div class="g-title">🎯 Valorant</div>
-              <div class="g-sub">FPS / tryhard</div>
+            <div class="gameItem">
+              <div class="gLeft">
+                <div class="gTitle">🎯 Valorant</div>
+                <div class="gSub">FPS / tryhard</div>
+              </div>
+              <span class="tag">rank</span>
             </div>
-            <div class="tag">rank</div>
-          </div>
 
-          <div class="game">
-            <div class="g-left">
-              <div class="g-title">♟ TFT</div>
-              <div class="g-sub">auto chess</div>
+            <div class="gameItem">
+              <div class="gLeft">
+                <div class="gTitle">♟️ TFT</div>
+                <div class="gSub">auto chess</div>
+              </div>
+              <span class="tag">brain</span>
             </div>
-            <div class="tag">brain</div>
           </div>
         </div>
       </div>
 
-      <div class="contact">
-        <div class="row">
-          <a class="btn" href="https://facebook.com/" target="_blank" rel="noopener">🌐 Facebook</a>
-          <a class="btn" href="#" onclick="navigator.clipboard.writeText('quan_boy'); alert('Đã copy Discord: quan_boy'); return false;">🎮 Discord: quan_boy</a>
+      <div class="footer">
+        <a class="linkBtn" href="https://facebook.com" target="_blank" rel="noopener">🌐 Facebook</a>
+        <a class="linkBtn" href="#" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
+      </div>
+
+      <!-- ✅ KHU CHECK TUS + THÊM LINK (không cần code lại) -->
+      <div class="tus">
+        <div class="tusBox">
+          <div class="tusTop">
+            <div class="tusTitle">
+              <b>📝 Đây là nơi check các tus của tôi</b>
+              <span>Thêm link bất kỳ → lưu lại luôn, lần sau mở web vẫn còn 😎</span>
+            </div>
+
+            <div class="tusActions">
+              <input id="urlInput" type="url" placeholder="Dán link Facebook / bài viết / bất kỳ..." />
+              <button class="miniBtn" id="addBtn">➕ Thêm link</button>
+            </div>
+          </div>
+
+          <div class="links" id="links"></div>
         </div>
       </div>
+
     </div>
   </div>
 
   <script>
-    const root = document.documentElement;
-    const btn = document.getElementById("themeBtn");
-    const text = document.getElementById("themeText");
+    // ===== Dark/Light toggle (lưu lại) =====
+    const modeBtn = document.getElementById("modeBtn");
+    const savedMode = localStorage.getItem("mode") || "dark";
 
-    function applyTheme(t){
-      root.setAttribute("data-theme", t);
-      localStorage.setItem("theme", t);
-      if(t === "light"){
-        btn.firstChild.textContent = "☀️ ";
-        text.textContent = "Light";
-      }else{
-        btn.firstChild.textContent = "🌙 ";
-        text.textContent = "Dark";
+    function applyMode(mode){
+      document.body.classList.toggle("light", mode === "light");
+      modeBtn.textContent = (mode === "light") ? "☀️ Light" : "🌙 Dark";
+      localStorage.setItem("mode", mode);
+    }
+    applyMode(savedMode);
+
+    modeBtn.addEventListener("click", () => {
+      const next = document.body.classList.contains("light") ? "dark" : "light";
+      applyMode(next);
+    });
+
+    // ===== Link list (Tus) - lưu link bằng localStorage =====
+    const urlInput = document.getElementById("urlInput");
+    const addBtn = document.getElementById("addBtn");
+    const linksBox = document.getElementById("links");
+
+    function loadLinks(){
+      try{
+        return JSON.parse(localStorage.getItem("tus_links") || "[]");
+      }catch{
+        return [];
       }
     }
 
-    const saved = localStorage.getItem("theme") || "dark";
-    applyTheme(saved);
+    function saveLinks(arr){
+      localStorage.setItem("tus_links", JSON.stringify(arr));
+    }
 
-    btn.addEventListener("click", ()=>{
-      const cur = root.getAttribute("data-theme");
-      applyTheme(cur === "dark" ? "light" : "dark");
+    function prettyName(url){
+      try{
+        const u = new URL(url);
+        // lấy hostname + path ngắn gọn
+        let path = u.pathname.replace(/\/$/, "");
+        if(path.length > 22) path = path.slice(0,22) + "…";
+        return u.hostname + (path && path !== "/" ? path : "");
+      }catch{
+        return url;
+      }
+    }
+
+    function render(){
+      const arr = loadLinks();
+      linksBox.innerHTML = "";
+
+      if(arr.length === 0){
+        const empty = document.createElement("div");
+        empty.style.color = "rgba(255,255,255,.65)";
+        if(document.body.classList.contains("light")) empty.style.color = "rgba(14,18,26,.65)";
+        empty.style.fontWeight = "650";
+        empty.textContent = "Chưa có link nào. Dán link vào và bấm “Thêm link” nha bro 😎";
+        linksBox.appendChild(empty);
+        return;
+      }
+
+      arr.forEach((url, idx) => {
+        const row = document.createElement("div");
+        row.className = "linkRow";
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = prettyName(url);
+
+        const del = document.createElement("button");
+        del.className = "del";
+        del.textContent = "Xóa";
+        del.onclick = () => {
+          const next = loadLinks().filter((_, i) => i !== idx);
+          saveLinks(next);
+          render();
+        };
+
+        row.appendChild(a);
+        row.appendChild(del);
+        linksBox.appendChild(row);
+      });
+    }
+
+    function addLink(){
+      const url = (urlInput.value || "").trim();
+      if(!url) return;
+
+      // auto thêm https:// nếu bro quên
+      let finalUrl = url;
+      if(!/^https?:\/\//i.test(finalUrl)) finalUrl = "https://" + finalUrl;
+
+      try{ new URL(finalUrl); }
+      catch{
+        alert("Link này không hợp lệ bro 😭 (ví dụ: https://facebook.com/...)");
+        return;
+      }
+
+      const arr = loadLinks();
+      // tránh trùng
+      if(arr.includes(finalUrl)){
+        urlInput.value = "";
+        render();
+        return;
+      }
+
+      arr.unshift(finalUrl);
+      saveLinks(arr);
+      urlInput.value = "";
+      render();
+    }
+
+    addBtn.addEventListener("click", addLink);
+    urlInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter") addLink();
     });
+
+    render();
   </script>
 </body>
 </html>
