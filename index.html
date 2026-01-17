@@ -1,598 +1,745 @@
-<!doctype html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <!-- effect ring + discord frame -->
-  <link rel="stylesheet" href="effect.css?v=1" />
+  <!-- Avatar effects (ring + frame + remix wave) -->
+  <link rel="stylesheet" href="effect.css" />
 
   <style>
     :root{
-      --bg-dim: rgba(7,12,22,.55);
-      --card: rgba(16, 24, 40, .58);
-      --card2: rgba(16, 24, 40, .42);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --chip: rgba(0,0,0,.34);
-      --border: rgba(255,255,255,.10);
-      --shadow: 0 24px 70px rgba(0,0,0,.35);
-      --radius: 26px;
-      --radius2: 18px;
+      --bg: #07101e;
+      --card: rgba(10, 18, 34, .62);
+      --card2: rgba(10, 18, 34, .38);
+      --text: #eaf2ff;
+      --muted: rgba(234,242,255,.72);
+      --stroke: rgba(255,255,255,.10);
+      --shadow: 0 28px 80px rgba(0,0,0,.45);
+      --pill: rgba(255,255,255,.10);
+      --btn: rgba(255,255,255,.10);
+      --btn2: rgba(255,255,255,.18);
+      --accent: rgba(56,189,248,.9);
     }
 
-    body.light{
-      --bg-dim: rgba(255,255,255,.45);
-      --card: rgba(255,255,255,.72);
+    html[data-theme="light"]{
+      --bg: #eef4ff;
+      --card: rgba(255,255,255,.78);
       --card2: rgba(255,255,255,.55);
-      --text: rgba(14,18,26,.92);
-      --muted: rgba(14,18,26,.72);
-      --chip: rgba(255,255,255,.55);
-      --border: rgba(0,0,0,.08);
-      --shadow: 0 24px 70px rgba(0,0,0,.20);
+      --text: #0b1220;
+      --muted: rgba(11,18,32,.70);
+      --stroke: rgba(11,18,32,.12);
+      --shadow: 0 22px 70px rgba(10,18,34,.20);
+      --pill: rgba(11,18,32,.08);
+      --btn: rgba(11,18,32,.08);
+      --btn2: rgba(11,18,32,.12);
+      --accent: rgba(2,132,199,.95);
     }
 
     *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-
     body{
       margin:0;
-      min-height:100svh;
+      min-height:100vh;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: url("bg.gif") center / cover no-repeat fixed;
+
+      /* nền động ngoài */
+      background: var(--bg) url("bg.gif") center / cover no-repeat fixed;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 22px 14px;
+      padding: 28px 14px;
     }
 
-    /* overlay để background không bị “bể nét” light mode */
+    /* nền phủ tối để chữ nổi (không bị “mất nét” kiểu blur) */
     body::before{
       content:"";
-      position:fixed;
-      inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.70));
-      opacity: 1;
+      position:fixed; inset:0;
+      background: radial-gradient(80% 60% at 20% 10%, rgba(56,189,248,.20), transparent 55%),
+                  radial-gradient(70% 70% at 80% 20%, rgba(99,102,241,.18), transparent 55%),
+                  linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.55));
       pointer-events:none;
     }
-    body.light::before{
-      background: linear-gradient(180deg, rgba(255,255,255,.40), rgba(0,0,0,.30));
+    html[data-theme="light"] body::before{
+      background: radial-gradient(80% 60% at 20% 10%, rgba(56,189,248,.20), transparent 55%),
+                  radial-gradient(70% 70% at 80% 20%, rgba(99,102,241,.14), transparent 55%),
+                  linear-gradient(to bottom, rgba(255,255,255,.20), rgba(255,255,255,.45));
     }
 
     .wrap{
+      width:min(1040px, 100%);
       position:relative;
-      width:min(980px, 100%);
       z-index:1;
-    }
-
-    .card{
-      position:relative;
-      overflow:hidden;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .cover{
-      height: 280px;
-      background: url("cover.gif") center / cover no-repeat;
-      border-bottom: 1px solid var(--border);
     }
 
     .topbar{
       position:absolute;
-      top:14px; right:14px;
-      z-index:50;
+      top: 14px;
+      right: 14px;
       display:flex;
       gap:10px;
-      align-items:center;
+      z-index:5;
     }
 
-    .btn{
-      border:1px solid var(--border);
-      background: var(--chip);
+    .chipBtn{
+      border:1px solid var(--stroke);
+      background: var(--btn);
       color: var(--text);
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 999px;
+      font-weight: 650;
       cursor:pointer;
-      font-weight: 650;
-      letter-spacing:.2px;
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    .btn:active{ transform: translateY(1px); }
-
-    /* HEADER kiểu Facebook: avatar trái - info phải */
-    .header{
-      display:grid;
-      grid-template-columns: 240px 1fr;
-      gap: 18px;
-      padding: 16px 22px 6px;
-      margin-top: -90px; /* kéo lên chồng lên cover */
-      align-items:end;
-    }
-
-    .avatar-zone{
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
       display:flex;
-      justify-content:flex-start;
-      align-items:flex-end;
-      padding-left: 6px;
-    }
-
-    /* Info */
-    .info h1{
-      margin:0;
-      font-size: 42px;
-      line-height: 1.12;
-      letter-spacing:.2px;
-      text-shadow: 0 10px 26px rgba(0,0,0,.30);
-      word-break: break-word;
-    }
-    .sub{
-      margin-top: 8px;
-      color: var(--muted);
-      font-weight: 650;
-    }
-    .quote{
-      margin-top: 6px;
-      color: var(--muted);
-      font-style: italic;
-      opacity:.95;
-    }
-
-    .chips{
-      margin-top: 12px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .chip{
-      display:inline-flex;
       align-items:center;
       gap:8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--text);
-      font-weight: 650;
-      font-size: 14px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      user-select:none;
+    }
+    .chipBtn:hover{ background: var(--btn2); }
+
+    /* Card chính */
+    .card{
+      border:1px solid var(--stroke);
+      background: var(--card);
+      border-radius: 24px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
 
-    /* MAIN */
-    .main{
+    /* Cover (full chiều ngang như mobile) */
+    .cover{
+      height: 260px;
+      background: url("cover.gif") center / cover no-repeat;
+      position:relative;
+    }
+    .cover::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.55));
+    }
+    html[data-theme="light"] .cover::after{
+      background: linear-gradient(to bottom, rgba(255,255,255,.10), rgba(255,255,255,.60));
+    }
+
+    /* Header kiểu Facebook */
+    .profileHead{
+      position:relative;
+      padding: 18px 22px 18px 22px;
+      display:grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items:flex-end;
+      margin-top: -78px; /* kéo lên đè lên cover như FB */
+    }
+
+    /* Avatar (wrap effect.css) */
+    .avatar-wrap{ margin-left: 4px; }
+    /* nâng size cho đẹp */
+    .avatar-wrap{ width: 220px; height: 220px; }
+    .avatar{ inset: 30px; width: 160px; height: 160px; }
+    .ring{ inset:-12px; }
+    .frame{ content: ""; }
+
+    /* thông tin */
+    .info{
+      padding-bottom: 8px;
+      min-width:0;
+    }
+    .name{
+      font-size: clamp(28px, 3.2vw, 40px);
+      line-height: 1.1;
+      margin: 0 0 6px 0;
+      font-weight: 850;
+      letter-spacing: .2px;
+      word-break: break-word;
+      text-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .role{
+      margin: 0 0 8px 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .quote{
+      margin: 0 0 12px 0;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .pill{
+      border:1px solid var(--stroke);
+      background: var(--pill);
+      padding: 10px 12px;
+      border-radius: 999px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight: 700;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(56,189,248,.35);
+    }
+
+    /* body sections */
+    .content{
       padding: 18px 22px 22px;
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.15fr .85fr;
       gap: 16px;
     }
 
     .panel{
-      border-radius: var(--radius2);
-      border: 1px solid var(--border);
+      border: 1px solid var(--stroke);
       background: var(--card2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 16px;
+      border-radius: 18px;
+      padding: 16px 16px;
+      backdrop-filter: blur(10px);
     }
-
-    .panel h2{
-      margin:0 0 10px;
+    .panel h3{
+      margin:0 0 10px 0;
       font-size: 18px;
       letter-spacing:.2px;
     }
-
     .list{
       margin:0;
       padding-left: 18px;
       color: var(--muted);
-      line-height: 1.65;
       font-weight: 650;
+      line-height: 1.65;
     }
 
-    .game{
+    .gameList{
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap: 10px;
     }
-
     .gameItem{
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      padding: 12px 12px;
+      border-radius: 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.18);
     }
-    body.light .gameItem{ background: rgba(255,255,255,.35); }
+    html[data-theme="light"] .gameItem{ background: rgba(11,18,32,.04); }
 
-    .gLeft{
-      display:flex; flex-direction:column;
-      gap:2px;
+    .gameLeft{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
     }
-    .gTitle{ font-weight: 800; }
-    .gSub{ color: var(--muted); font-weight: 650; font-size: 13px; }
+    .gameTitle{ font-weight: 850; }
+    .gameSub{ color: var(--muted); font-weight: 650; font-size: 13px; }
 
     .tag{
+      padding: 8px 10px;
       border-radius: 999px;
-      padding: 7px 10px;
-      border: 1px solid var(--border);
-      background: rgba(56,189,248,.22);
-      font-weight: 800;
-      font-size: 12px;
+      background: rgba(56,189,248,.18);
+      border: 1px solid rgba(56,189,248,.25);
+      font-weight: 850;
+      color: var(--text);
+      white-space:nowrap;
     }
 
-    /* FOOTER */
-    .footer{
+    /* Links panel */
+    .linksRow{
       padding: 0 22px 22px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-
     .linkBtn{
+      width:100%;
+      text-decoration:none;
+      border:1px solid var(--stroke);
+      background: var(--btn);
+      color: var(--text);
+      padding: 14px 14px;
+      border-radius: 16px;
       display:flex;
       align-items:center;
       justify-content:center;
       gap:10px;
-      padding: 14px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--text);
-      text-decoration:none;
-      font-weight: 800;
+      font-weight: 850;
+      backdrop-filter: blur(10px);
     }
+    .linkBtn:hover{ background: var(--btn2); }
 
-    /* “Tus + Add link” */
-    .tus{
-      padding: 0 22px 24px;
+    /* TUS / Links editable */
+    .tusWrap{
+      padding: 0 22px 22px;
     }
-    .tusBox{
-      border-radius: var(--radius2);
-      border: 1px solid var(--border);
-      background: var(--card2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 16px;
-    }
-    .tusTop{
+    .tusHead{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+      gap: 10px;
+      margin-bottom: 10px;
     }
-    .tusTitle{
+    .tusHead h3{
+      margin:0;
+      font-size: 18px;
+    }
+    .smallMuted{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .tusList{
       display:flex;
       flex-direction:column;
-      gap:4px;
+      gap: 10px;
     }
-    .tusTitle b{ font-size: 18px; }
-    .tusTitle span{ color: var(--muted); font-weight:650; }
-
-    .tusActions{
-      display:flex; gap:10px; flex-wrap:wrap;
+    .tusItem{
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      border-radius: 16px;
+      padding: 12px 12px;
+      display:flex;
       align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      backdrop-filter: blur(10px);
     }
-
-    input[type="url"]{
-      width: min(420px, 68vw);
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline:none;
-      font-weight: 650;
-    }
-    body.light input[type="url"]{ background: rgba(255,255,255,.35); }
-
-    .miniBtn{
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(56,189,248,.22);
+    .tusItem a{
       color: var(--text);
       font-weight: 850;
-      cursor:pointer;
-      user-select:none;
-    }
-
-    .links{
-      margin-top: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .linkRow{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.18);
-    }
-    body.light .linkRow{ background: rgba(255,255,255,.35); }
-
-    .linkRow a{
-      color: var(--text);
-      font-weight: 800;
       text-decoration:none;
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
-      max-width: 70%;
+      max-width: 100%;
+    }
+    .tusItem span{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .tusLeft{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
     }
 
-    .del{
-      border:1px solid var(--border);
-      background: rgba(239,68,68,.18);
+    .adminOnly{ display:none; }
+    .isAdmin .adminOnly{ display:inline-flex; }
+    .isAdmin .adminOnlyBlock{ display:block; }
+
+    .btnMini{
+      border:1px solid var(--stroke);
+      background: var(--btn);
       color: var(--text);
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 12px;
       cursor:pointer;
-      font-weight: 900;
+      font-weight: 850;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btnMini:hover{ background: var(--btn2); }
+
+    /* Modal */
+    .modalBg{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 99;
+    }
+    .modal{
+      width: min(520px, 100%);
+      border:1px solid var(--stroke);
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      backdrop-filter: blur(14px);
+    }
+    .modal h3{ margin:0 0 10px 0; }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .inp{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      color: var(--text);
+      outline:none;
+      font-weight: 750;
+    }
+    html[data-theme="light"] .inp{ background: rgba(11,18,32,.04); }
+
+    .hint{
+      margin-top:10px;
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+      line-height:1.5;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 920px){
-      .cover{ height: 220px; }
-      .header{
+    /* Responsive */
+    @media (max-width: 880px){
+      .profileHead{
         grid-template-columns: 1fr;
-        margin-top: -70px;
-        padding: 14px 16px 6px;
-        gap: 10px;
-        text-align:center;
+        align-items:center;
+        margin-top: -92px;
       }
-      .avatar-zone{ justify-content:center; }
-      .main{
-        grid-template-columns: 1fr;
-        padding: 14px 16px 16px;
+      .avatar-wrap{
+        margin-left: 0;
       }
-      .footer{
-        grid-template-columns: 1fr;
-        padding: 0 16px 16px;
+      .info{
+        text-align:left;
       }
-      .tus{ padding: 0 16px 18px; }
-      .info h1{ font-size: 32px; }
-      input[type="url"]{ width: 100%; }
-      .linkRow a{ max-width: 62%; }
+      .content{ grid-template-columns: 1fr; }
+      .linksRow{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
-<body class="dark">
+<body>
   <div class="wrap">
+    <div class="topbar">
+      <button class="chipBtn" id="themeBtn" type="button">🌙 Dark</button>
+      <button class="chipBtn" id="adminBtn" type="button">🔒 Admin</button>
+      <button class="chipBtn adminOnly" id="logoutBtn" type="button">🚪 Logout</button>
+    </div>
+
     <div class="card">
       <div class="cover"></div>
 
-      <div class="topbar">
-        <button class="btn" id="modeBtn">🌙 Dark</button>
-      </div>
-
-      <div class="header">
-        <div class="avatar-zone">
-          <!-- AVATAR + EFFECT (chỗ này dùng effect.css của bro) -->
-          <div class="avatar-wrap">
-            <div class="ring"></div>
-            <img class="avatar" src="avatar.jpg" alt="avatar" />
-            <!-- ✅ đúng tên file của bro: frame.png -->
-            <img class="frame" src="frame.png" alt="discord frame" />
-          </div>
+      <div class="profileHead">
+        <!-- Avatar + effect -->
+        <div class="avatar-wrap">
+          <div class="ring"></div>
+          <img class="avatar" src="avatar.jpg" alt="avatar">
+          <!-- Discord frame PNG -->
+          <img class="frame" src="frame.png" alt="frame">
         </div>
 
         <div class="info">
-          <h1>Milo Pha Đá (Nhạt boy)</h1>
-          <div class="sub">IT Student • Software Engineering</div>
-          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
+          <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
+          <p class="role">IT Student • Software Engineering</p>
+          <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
 
-          <div class="chips">
-            <span class="chip">📍 Hồ Chí Minh</span>
-            <span class="chip">🎂 19</span>
-            <span class="chip">💻 Dev vibes</span>
+          <div class="pills">
+            <div class="pill"><span class="dot"></span> Hồ Chí Minh</div>
+            <div class="pill">🎂 19</div>
+            <div class="pill">💻 Dev vibes</div>
           </div>
         </div>
       </div>
 
-      <div class="main">
+      <div class="content">
         <div class="panel">
-          <h2>Giới thiệu</h2>
+          <h3>Giới thiệu</h3>
           <ul class="list">
             <li>✨ Chạy Ngay Đi</li>
-            <li>🧠 Chạy Vào Trái Tim Em</li>
-            <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
+            <li>🧸 Chạy Vào Trái Tim Em</li>
+            <li>🥵 Đùa Thôi Anh Làm Gì Có Em</li>
           </ul>
         </div>
 
         <div class="panel">
-          <h2>Game mình hay chơi</h2>
-          <div class="game">
+          <h3>Game mình hay chơi</h3>
+          <div class="gameList">
             <div class="gameItem">
-              <div class="gLeft">
-                <div class="gTitle">🎮 Roblox</div>
-                <div class="gSub">chill / sandbox</div>
+              <div class="gameLeft">
+                <div class="gameTitle">🕹 Roblox</div>
+                <div class="gameSub">chill / sandbox</div>
               </div>
-              <span class="tag">casual</span>
+              <div class="tag">casual</div>
             </div>
 
             <div class="gameItem">
-              <div class="gLeft">
-                <div class="gTitle">🎯 Valorant</div>
-                <div class="gSub">FPS / tryhard</div>
+              <div class="gameLeft">
+                <div class="gameTitle">🎯 Valorant</div>
+                <div class="gameSub">FPS / tryhard</div>
               </div>
-              <span class="tag">rank</span>
+              <div class="tag">rank</div>
             </div>
 
             <div class="gameItem">
-              <div class="gLeft">
-                <div class="gTitle">♟️ TFT</div>
-                <div class="gSub">auto chess</div>
+              <div class="gameLeft">
+                <div class="gameTitle">♟ TFT</div>
+                <div class="gameSub">auto chess</div>
               </div>
-              <span class="tag">brain</span>
+              <div class="tag">brain</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="footer">
-        <a class="linkBtn" href="https://facebook.com" target="_blank" rel="noopener">🌐 Facebook</a>
-        <a class="linkBtn" href="#" target="_blank" rel="noopener">🎮 Discord: quan_boy</a>
+      <div class="linksRow">
+        <a class="linkBtn" href="https://facebook.com/" target="_blank" rel="noreferrer">🌐 Facebook</a>
+        <a class="linkBtn" href="https://discord.com/" target="_blank" rel="noreferrer">🎮 Discord</a>
       </div>
 
-      <!-- ✅ KHU CHECK TUS + THÊM LINK (không cần code lại) -->
-      <div class="tus">
-        <div class="tusBox">
-          <div class="tusTop">
-            <div class="tusTitle">
-              <b>📝 Đây là nơi check các tus của tôi</b>
-              <span>Thêm link bất kỳ → lưu lại luôn, lần sau mở web vẫn còn 😎</span>
-            </div>
-
-            <div class="tusActions">
-              <input id="urlInput" type="url" placeholder="Dán link Facebook / bài viết / bất kỳ..." />
-              <button class="miniBtn" id="addBtn">➕ Thêm link</button>
-            </div>
+      <!-- Tus / Link list -->
+      <div class="tusWrap">
+        <div class="tusHead">
+          <div>
+            <h3>📝 Đây là nơi check các tus của tôi</h3>
+            <div class="smallMuted">Người xem chỉ bấm link • Muốn chỉnh phải vào Admin 🔒</div>
           </div>
 
-          <div class="links" id="links"></div>
+          <button class="btnMini adminOnly" id="addLinkBtn" type="button">➕ Thêm link</button>
         </div>
+
+        <div class="tusList" id="tusList"></div>
       </div>
 
     </div>
   </div>
 
+  <!-- Modal Login -->
+  <div class="modalBg" id="modalBg" aria-hidden="true">
+    <div class="modal">
+      <h3>🔒 Admin Login</h3>
+      <input class="inp" id="passInp" type="password" placeholder="Nhập mật khẩu admin..." autocomplete="current-password">
+      <div class="row" style="margin-top:10px;">
+        <button class="btnMini" id="loginOk" type="button">✅ Đăng nhập</button>
+        <button class="btnMini" id="loginCancel" type="button">❌ Hủy</button>
+      </div>
+      <div class="hint">
+        ⚠️ Lưu ý thật: vì đây là web tĩnh nên “khóa admin” chỉ ngăn người dùng bình thường.  
+        Ai rành DevTools vẫn có thể phá. Muốn bảo mật thật phải có backend + login.
+      </div>
+      <div class="hint">
+        👉 Đổi mật khẩu ở dòng: <b>ADMIN_PASS</b> trong script.
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Add Link -->
+  <div class="modalBg" id="addBg" aria-hidden="true">
+    <div class="modal">
+      <h3>➕ Thêm link tus</h3>
+      <input class="inp" id="titleInp" placeholder="Tên hiển thị (vd: Tus hôm nay)" />
+      <div style="height:10px;"></div>
+      <input class="inp" id="urlInp" placeholder="Dán link (https://...)" />
+      <div class="row" style="margin-top:10px;">
+        <button class="btnMini" id="addOk" type="button">✅ Lưu</button>
+        <button class="btnMini" id="addCancel" type="button">❌ Hủy</button>
+      </div>
+      <div class="hint">Tip: nhớ dán link có <b>https://</b> cho chắc ăn 😎</div>
+    </div>
+  </div>
+
   <script>
-    // ===== Dark/Light toggle (lưu lại) =====
-    const modeBtn = document.getElementById("modeBtn");
-    const savedMode = localStorage.getItem("mode") || "dark";
+    // ====== CONFIG ======
+    // Đổi mật khẩu ở đây cho riêng bro (đừng để dễ đoán)
+    const ADMIN_PASS = "079268"; // <-- đổi cái này
 
-    function applyMode(mode){
-      document.body.classList.toggle("light", mode === "light");
-      modeBtn.textContent = (mode === "light") ? "☀️ Light" : "🌙 Dark";
-      localStorage.setItem("mode", mode);
+    const LS_ADMIN = "milo_admin_ok";
+    const LS_TUS = "milo_tus_links_v1";
+    const LS_THEME = "milo_theme_v1";
+
+    // ====== THEME ======
+    const html = document.documentElement;
+    const themeBtn = document.getElementById("themeBtn");
+
+    function applyTheme(t){
+      html.setAttribute("data-theme", t);
+      themeBtn.textContent = (t === "dark") ? "🌙 Dark" : "☀️ Light";
+      localStorage.setItem(LS_THEME, t);
     }
-    applyMode(savedMode);
+    applyTheme(localStorage.getItem(LS_THEME) || "dark");
 
-    modeBtn.addEventListener("click", () => {
-      const next = document.body.classList.contains("light") ? "dark" : "light";
-      applyMode(next);
+    themeBtn.addEventListener("click", () => {
+      const t = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(t);
     });
 
-    // ===== Link list (Tus) - lưu link bằng localStorage =====
-    const urlInput = document.getElementById("urlInput");
-    const addBtn = document.getElementById("addBtn");
-    const linksBox = document.getElementById("links");
+    // ====== ADMIN ======
+    const adminBtn = document.getElementById("adminBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const modalBg = document.getElementById("modalBg");
+    const passInp = document.getElementById("passInp");
+    const loginOk = document.getElementById("loginOk");
+    const loginCancel = document.getElementById("loginCancel");
 
-    function loadLinks(){
+    function setAdmin(on){
+      if(on){
+        localStorage.setItem(LS_ADMIN, "1");
+        document.body.classList.add("isAdmin");
+      }else{
+        localStorage.removeItem(LS_ADMIN);
+        document.body.classList.remove("isAdmin");
+      }
+      renderTus();
+    }
+    setAdmin(localStorage.getItem(LS_ADMIN) === "1");
+
+    adminBtn.addEventListener("click", () => {
+      modalBg.style.display = "flex";
+      passInp.value = "";
+      passInp.focus();
+    });
+    loginCancel.addEventListener("click", () => modalBg.style.display = "none");
+    modalBg.addEventListener("click", (e) => { if(e.target === modalBg) modalBg.style.display="none"; });
+
+    loginOk.addEventListener("click", () => {
+      if(passInp.value === ADMIN_PASS){
+        modalBg.style.display = "none";
+        setAdmin(true);
+      }else{
+        alert("Sai mật khẩu rồi bro 💀");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => setAdmin(false));
+
+    // ====== TUS LINKS (admin add/remove) ======
+    const tusListEl = document.getElementById("tusList");
+    const addLinkBtn = document.getElementById("addLinkBtn");
+
+    const addBg = document.getElementById("addBg");
+    const titleInp = document.getElementById("titleInp");
+    const urlInp = document.getElementById("urlInp");
+    const addOk = document.getElementById("addOk");
+    const addCancel = document.getElementById("addCancel");
+
+    function loadTus(){
       try{
-        return JSON.parse(localStorage.getItem("tus_links") || "[]");
+        const raw = localStorage.getItem(LS_TUS);
+        if(!raw) return [
+          { title: "Facebook của tôi", url: "https://facebook.com/" },
+        ];
+        return JSON.parse(raw);
       }catch{
         return [];
       }
     }
 
-    function saveLinks(arr){
-      localStorage.setItem("tus_links", JSON.stringify(arr));
+    function saveTus(list){
+      localStorage.setItem(LS_TUS, JSON.stringify(list));
     }
 
-    function prettyName(url){
-      try{
-        const u = new URL(url);
-        // lấy hostname + path ngắn gọn
-        let path = u.pathname.replace(/\/$/, "");
-        if(path.length > 22) path = path.slice(0,22) + "…";
-        return u.hostname + (path && path !== "/" ? path : "");
-      }catch{
-        return url;
-      }
+    function isAdmin(){
+      return localStorage.getItem(LS_ADMIN) === "1";
     }
 
-    function render(){
-      const arr = loadLinks();
-      linksBox.innerHTML = "";
+    function renderTus(){
+      const list = loadTus();
+      tusListEl.innerHTML = "";
 
-      if(arr.length === 0){
-        const empty = document.createElement("div");
-        empty.style.color = "rgba(255,255,255,.65)";
-        if(document.body.classList.contains("light")) empty.style.color = "rgba(14,18,26,.65)";
-        empty.style.fontWeight = "650";
-        empty.textContent = "Chưa có link nào. Dán link vào và bấm “Thêm link” nha bro 😎";
-        linksBox.appendChild(empty);
+      if(list.length === 0){
+        const div = document.createElement("div");
+        div.className = "tusItem";
+        div.innerHTML = `<div class="tusLeft">
+          <a href="#" onclick="return false;">Chưa có link nào</a>
+          <span>Admin bấm “Thêm link” để tạo</span>
+        </div>`;
+        tusListEl.appendChild(div);
         return;
       }
 
-      arr.forEach((url, idx) => {
+      list.forEach((it, idx) => {
         const row = document.createElement("div");
-        row.className = "linkRow";
+        row.className = "tusItem";
 
-        const a = document.createElement("a");
-        a.href = url;
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.textContent = prettyName(url);
+        const left = document.createElement("div");
+        left.className = "tusLeft";
+        left.innerHTML = `
+          <a href="${it.url}" target="_blank" rel="noreferrer">${escapeHtml(it.title || it.url)}</a>
+          <span>${escapeHtml(it.url)}</span>
+        `;
 
-        const del = document.createElement("button");
-        del.className = "del";
-        del.textContent = "Xóa";
-        del.onclick = () => {
-          const next = loadLinks().filter((_, i) => i !== idx);
-          saveLinks(next);
-          render();
-        };
+        const right = document.createElement("div");
+        right.style.display = "flex";
+        right.style.gap = "8px";
+        right.style.flex = "0 0 auto";
 
-        row.appendChild(a);
-        row.appendChild(del);
-        linksBox.appendChild(row);
+        if(isAdmin()){
+          const del = document.createElement("button");
+          del.className = "btnMini";
+          del.textContent = "🗑 Xóa";
+          del.addEventListener("click", () => {
+            const ok = confirm("Xóa link này nha bro?");
+            if(!ok) return;
+            const cur = loadTus();
+            cur.splice(idx, 1);
+            saveTus(cur);
+            renderTus();
+          });
+          right.appendChild(del);
+        }
+
+        row.appendChild(left);
+        row.appendChild(right);
+        tusListEl.appendChild(row);
       });
     }
 
-    function addLink(){
-      const url = (urlInput.value || "").trim();
-      if(!url) return;
-
-      // auto thêm https:// nếu bro quên
-      let finalUrl = url;
-      if(!/^https?:\/\//i.test(finalUrl)) finalUrl = "https://" + finalUrl;
-
-      try{ new URL(finalUrl); }
-      catch{
-        alert("Link này không hợp lệ bro 😭 (ví dụ: https://facebook.com/...)");
-        return;
-      }
-
-      const arr = loadLinks();
-      // tránh trùng
-      if(arr.includes(finalUrl)){
-        urlInput.value = "";
-        render();
-        return;
-      }
-
-      arr.unshift(finalUrl);
-      saveLinks(arr);
-      urlInput.value = "";
-      render();
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    addBtn.addEventListener("click", addLink);
-    urlInput.addEventListener("keydown", (e) => {
-      if(e.key === "Enter") addLink();
+    addLinkBtn.addEventListener("click", () => {
+      if(!isAdmin()){
+        alert("Chỉ admin mới thêm được nha bro 🔒");
+        return;
+      }
+      addBg.style.display = "flex";
+      titleInp.value = "";
+      urlInp.value = "";
+      titleInp.focus();
     });
 
-    render();
+    addCancel.addEventListener("click", () => addBg.style.display="none");
+    addBg.addEventListener("click", (e) => { if(e.target === addBg) addBg.style.display="none"; });
+
+    addOk.addEventListener("click", () => {
+      if(!isAdmin()){
+        alert("Chỉ admin mới thêm được nha bro 🔒");
+        return;
+      }
+      const title = titleInp.value.trim();
+      const url = urlInp.value.trim();
+
+      if(!url.startsWith("http://") && !url.startsWith("https://")){
+        alert("Link phải có https:// nha bro 😭");
+        return;
+      }
+
+      const list = loadTus();
+      list.unshift({ title: title || url, url });
+      saveTus(list);
+      addBg.style.display = "none";
+      renderTus();
+    });
+
+    renderTus();
   </script>
 </body>
 </html>
