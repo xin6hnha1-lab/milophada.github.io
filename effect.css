@@ -1,9 +1,10 @@
-/* Avatar + frame overlay */
+/* ===== AVATAR + FRAME ===== */
 .avatar-wrap{
   position:relative;
   width:196px;
   height:196px;
   flex:0 0 auto;
+  margin-left:6px;
 }
 
 .avatar{
@@ -14,9 +15,10 @@
   border-radius:50%;
   object-fit:cover;
   z-index:2;
-  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+  box-shadow: 0 16px 44px rgba(0,0,0,.35);
 }
 
+/* PNG decoration */
 .frame{
   position:absolute;
   inset:0;
@@ -27,31 +29,34 @@
   filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
 }
 
-/* vòng gợn sóng theo khung to hơn */
+/* ===== “Remix” ring nhẹ ===== */
 .ring{
   position:absolute;
   inset:-10px;
   border-radius:50%;
   z-index:1;
   pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(56,189,248,.35), transparent 46%),
+    radial-gradient(circle at 70% 70%, rgba(99,102,241,.26), transparent 52%);
   filter: blur(6px);
   opacity:.85;
+  animation: ringPulse 2.8s ease-in-out infinite;
 }
 
 .ring::before,
 .ring::after{
   content:"";
   position:absolute;
-  inset:10px;
+  inset:14px;
   border-radius:50%;
-  border:2px solid rgba(56,189,248,.22);
-  filter: blur(.2px);
+  border:2px solid rgba(56,189,248,.20);
   animation: wave 2.2s ease-in-out infinite;
 }
 
 .ring::after{
-  inset:18px;
-  border-color: rgba(99,102,241,.18);
+  inset:24px;
+  border-color: rgba(99,102,241,.16);
   animation-duration: 3.2s;
   animation-direction: reverse;
 }
@@ -64,4 +69,9 @@
 @keyframes wave{
   0%,100%{ transform:scale(1); opacity:.55; }
   50%{ transform:scale(1.08); opacity:.85; }
+}
+
+/* Mobile: nhỏ lại cho vừa */
+@media (max-width:820px){
+  .avatar-wrap{ transform: scale(.88); margin-left:0; }
 }
