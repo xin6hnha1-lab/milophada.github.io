@@ -5,709 +5,684 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Milo Pha Đá</title>
 
-  <!-- External effect (your discord-style avatar frame css) -->
-  <link rel="stylesheet" href="effect.css" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <style>
+    /* ========= Base / Theme ========= */
     :root{
-      --bg1:#0b1630;
-      --bg2:#0a1022;
-      --card: rgba(18, 28, 48, .62);
-      --card2: rgba(18, 28, 48, .75);
+      --bg: #070b14;
+      --panel: rgba(17,25,40,.62);
+      --panel2: rgba(17,25,40,.48);
       --stroke: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --muted: rgba(255,255,255,.68);
+      --shadow: 0 18px 60px rgba(0,0,0,.42);
       --radius: 22px;
-      --radius2: 18px;
-      --chip: rgba(255,255,255,.10);
-      --btn: rgba(255,255,255,.10);
-      --btn2: rgba(74, 222, 128, .18);
-      --accent: #59c3ff;
-      --danger: rgba(248,113,113,.18);
+      --chip: rgba(0,0,0,.18);
+      --btn: rgba(255,255,255,.08);
+      --btn2: rgba(255,255,255,.12);
+      --accent: rgba(56,189,248,.95);
     }
-
-    [data-theme="light"]{
-      --bg1:#f4f6ff;
-      --bg2:#eef2ff;
-      --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.82);
+    body[data-theme="light"]{
+      --bg: #f6f7fb;
+      --panel: rgba(255,255,255,.78);
+      --panel2: rgba(255,255,255,.68);
       --stroke: rgba(0,0,0,.10);
-      --text: rgba(12,18,28,.92);
-      --muted: rgba(12,18,28,.72);
-      --shadow: 0 20px 60px rgba(0,0,0,.18);
-      --chip: rgba(0,0,0,.08);
-      --btn: rgba(0,0,0,.08);
-      --btn2: rgba(74, 222, 128, .22);
-      --danger: rgba(248,113,113,.20);
+      --text: rgba(10,15,25,.92);
+      --muted: rgba(10,15,25,.65);
+      --shadow: 0 18px 60px rgba(0,0,0,.18);
+      --chip: rgba(0,0,0,.06);
+      --btn: rgba(0,0,0,.06);
+      --btn2: rgba(0,0,0,.08);
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      color:var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 20% 0%, rgba(120,180,255,.25), transparent 55%),
-        radial-gradient(800px 500px at 85% 20%, rgba(168,85,247,.20), transparent 55%),
-        linear-gradient(160deg, var(--bg1), var(--bg2));
+      color:var(--text);
+      background: var(--bg);
       overflow-x:hidden;
     }
 
-    /* bg.gif behind */
+    /* background gif */
     .bg{
-      position:fixed;
-      inset:0;
-      background: url("bg.gif") center / cover no-repeat fixed;
+      position:fixed; inset:0;
+      background: url("bg.gif") center/cover no-repeat fixed;
       filter: blur(0px);
-      opacity:.28;
-      pointer-events:none;
-      z-index:-2;
+      transform: translateZ(0);
+      z-index:-3;
     }
     .bg::after{
       content:"";
-      position:absolute;
-      inset:0;
-      background: radial-gradient(circle at 30% 20%, rgba(0,0,0,.35), transparent 55%),
-                  radial-gradient(circle at 80% 60%, rgba(0,0,0,.45), transparent 55%);
-      z-index:-1;
+      position:absolute; inset:0;
+      background: radial-gradient(1200px 600px at 10% 20%, rgba(56,189,248,.18), transparent 55%),
+                  radial-gradient(1200px 600px at 90% 40%, rgba(167,139,250,.18), transparent 55%),
+                  linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.55));
+    }
+    body[data-theme="light"] .bg::after{
+      background: radial-gradient(1200px 600px at 10% 20%, rgba(56,189,248,.10), transparent 55%),
+                  radial-gradient(1200px 600px at 90% 40%, rgba(167,139,250,.10), transparent 55%),
+                  linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.55));
+    }
+
+    /* ========= Layout ========= */
+    .wrap{
+      max-width: 1100px;
+      margin: 18px auto 40px;
+      padding: 14px;
     }
 
     .topbar{
-      position:sticky;
-      top:0;
-      z-index:10;
-      padding:10px max(14px, env(safe-area-inset-left)) 10px max(14px, env(safe-area-inset-right));
       display:flex;
       justify-content:flex-end;
       gap:10px;
-      backdrop-filter: blur(12px);
-      background: linear-gradient(to bottom, rgba(0,0,0,.25), transparent);
+      margin-bottom:12px;
     }
-
-    .pillbtn{
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:999px;
+    .pillBtn{
+      appearance:none; border:1px solid var(--stroke);
+      background: var(--btn);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
       cursor:pointer;
-      font-weight:700;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.18);
-      user-select:none;
+      display:flex; align-items:center; gap:8px;
+      backdrop-filter: blur(10px);
     }
-    [data-theme="light"] .pillbtn{
-      background: rgba(255,255,255,.65);
-    }
-    .pillbtn:active{transform: scale(.98)}
+    .pillBtn:active{ transform: translateY(1px); }
+    .pillBtn:hover{ background: var(--btn2); }
 
-    .wrap{
-      width:min(980px, calc(100% - 28px));
-      margin: 14px auto 44px;
-    }
-
-    .profile{
+    .card{
+      background: var(--panel);
       border:1px solid var(--stroke);
       border-radius: var(--radius);
-      overflow:hidden;
       box-shadow: var(--shadow);
-      background: var(--card);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
+      overflow:hidden;
     }
 
-    /* Cover: always fill header area cleanly */
+    /* Cover */
     .cover{
       position:relative;
-      height: 230px;
-      background: #000;
-      overflow:hidden;
-    }
-    @media (max-width:520px){
-      .cover{ height: 200px; }
-    }
-    .cover img{
-      width:100%;
-      height:100%;
-      object-fit: cover; /* full fill */
-      object-position: center;
-      display:block;
-      filter: saturate(1.05) contrast(1.02);
+      height: 220px;
+      background: url("cover.gif") center/cover no-repeat;
     }
     .cover::after{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.45));
-      pointer-events:none;
+      background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.55));
+    }
+    body[data-theme="light"] .cover::after{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.65));
     }
 
-    .main{
+    /* Header content */
+    .header{
       position:relative;
-      padding: 16px 18px 18px;
-    }
-    @media (max-width:520px){
-      .main{ padding: 14px 14px 16px; }
-    }
-
-    .headerRow{
+      padding: 14px 14px 16px;
+      margin-top: -74px;
       display:grid;
-      grid-template-columns: 230px 1fr;
-      gap: 16px;
-      align-items:start;
-      margin-top: -64px; /* pull avatar up like FB */
-    }
-    @media (max-width:820px){
-      .headerRow{
-        grid-template-columns: 1fr;
-        margin-top: -70px;
-        gap: 12px;
-      }
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
     }
 
-    /* Avatar area: uses your effect.css classes */
-    .avatarCard{
-      display:flex;
-      justify-content:flex-start;
-      align-items:flex-start;
-      padding: 0 0 8px;
-    }
-    @media (max-width:820px){
-      .avatarCard{ justify-content:center; }
-      .avatar-wrap{ margin-left:0 !important; }
+    /* Avatar block uses your effect.css classes */
+    .avatarSlot{
+      width: 210px;
+      height: 210px;
+      flex:0 0 auto;
     }
 
-    /* IMPORTANT: frame.png used here */
-    .frame{ content: none; } /* if effect.css already sets .frame, keep, but we'll set src in HTML */
-
-    .info{
-      padding-top: 64px; /* space for big name line so avatar doesn't cover */
-    }
-    @media (max-width:820px){
-      .info{ padding-top: 8px; text-align:center; }
+    .nameBlock{
+      min-width:0;
+      padding-top: 74px; /* push down so title never overlaps avatar */
     }
 
-    h1{
-      margin:0 0 6px;
-      font-size: clamp(26px, 3.6vw, 40px);
-      line-height:1.05;
+    .title{
+      font-weight: 900;
       letter-spacing:.2px;
-      text-shadow: 0 10px 30px rgba(0,0,0,.25);
+      font-size: clamp(26px, 2.8vw, 40px);
+      line-height: 1.08;
+      margin: 0 0 6px;
+      text-shadow: 0 10px 30px rgba(0,0,0,.45);
+      word-break: break-word;
     }
     .sub{
-      margin:0 0 6px;
-      color:var(--muted);
-      font-weight:650;
+      margin:0;
+      color: var(--muted);
+      font-weight:600;
+      font-size: 14px;
     }
     .quote{
-      margin: 0 0 12px;
-      color:var(--muted);
+      margin:6px 0 10px;
+      color: var(--muted);
       font-style: italic;
+      font-size: 13px;
     }
 
     .chips{
       display:flex;
       flex-wrap:wrap;
-      gap:10px;
+      gap:8px;
       margin-top:10px;
     }
-    @media (max-width:820px){
-      .chips{ justify-content:center; }
-    }
     .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
+      display:flex; align-items:center; gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
       background: var(--chip);
-      color:var(--text);
-      font-weight:700;
-      font-size:14px;
-      user-select:none;
-    }
-
-    /* Music card placed under avatar & before intro */
-    .musicCard{
-      margin-top: 10px;
       border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius: var(--radius2);
-      padding: 12px 12px;
-      display:flex;
-      gap:12px;
+      backdrop-filter: blur(10px);
+      font-weight:700;
+      font-size: 13px;
+    }
+
+    /* Music card under avatar, NOT weird */
+    .musicWrap{
+      grid-column: 1 / -1;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 6px;
+    }
+    .musicCard{
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--panel2);
+      border:1px solid var(--stroke);
       align-items:center;
-      backdrop-filter: blur(14px);
     }
-    @media (max-width:820px){
-      .musicCard{
-        margin-top: 8px;
-        flex-direction:column;
-        align-items:stretch;
-        text-align:left;
-      }
+    .musicLeft{ min-width:0; }
+    .musicLabel{
+      font-weight: 900;
+      font-size: 16px;
+      margin: 0 0 6px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .musicTitle{
+      font-weight: 1000;
+      font-size: 22px;
+      margin: 0 0 4px;
+      line-height: 1.05;
+      word-break: break-word;
+    }
+    .musicHint{
+      margin:0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    audio{
+      width:100%;
+      max-width: 520px;
+      height: 42px;
+      border-radius: 14px;
+      outline:none;
     }
 
-    .songTitle{
-      font-weight:900;
-      font-size: 18px;
-      margin:0 0 4px;
-      letter-spacing:.2px;
-    }
-
-    /* 3 color modes */
-    .songTitle.white{ color: rgba(255,255,255,.92); }
-    [data-theme="light"] .songTitle.white{ color: rgba(12,18,28,.92); }
-    .songTitle.black{ color: #0b0f1a; }
-    [data-theme="light"] .songTitle.black{ color: #0b0f1a; }
-    .songTitle.rainbow{
-      background: linear-gradient(90deg, #ff4d4d, #ffd54d, #4dff7a, #4dd2ff, #7a5cff, #ff4df0);
+    /* music title styles (admin selectable) */
+    .musicTitle.white{ color:#fff; text-shadow: 0 10px 30px rgba(0,0,0,.45); }
+    .musicTitle.black{ color:#0b1220; text-shadow: none; }
+    .musicTitle.rainbow{
+      background: linear-gradient(90deg,#ff2d55,#ff9500,#ffcc00,#34c759,#00c7ff,#5856d6,#ff2d55);
       -webkit-background-clip:text;
       background-clip:text;
-      color: transparent;
-      filter: drop-shadow(0 8px 18px rgba(0,0,0,.18));
+      color:transparent;
+      text-shadow:none;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.22));
     }
+    body[data-theme="light"] .musicTitle.black{ color:#0b1220; }
+    body[data-theme="light"] .musicTitle.white{ color:#111827; text-shadow:none; }
 
-    .songHint{
-      margin:0;
-      color:var(--muted);
-      font-weight:650;
-      font-size:14px;
-    }
-
-    audio{
-      width: min(720px, 100%);
-      height: 42px;
-      border-radius: 12px;
-    }
-
+    /* Main grid sections */
     .grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-      margin-top: 14px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 14px 14px;
     }
-    @media (max-width:820px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-
-    .card{
+    .panel{
+      background: var(--panel2);
       border:1px solid var(--stroke);
-      background: var(--card2);
-      border-radius: var(--radius2);
-      padding: 14px 14px;
-      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 140px;
     }
-    .card h3{
-      margin:0 0 10px;
+    .panel h3{
+      margin: 0 0 10px;
       font-size: 18px;
+      font-weight: 900;
     }
-    ul{margin:0; padding-left: 20px}
-    li{margin: 6px 0; color:var(--text); font-weight:650}
+    ul{ margin:0; padding-left: 18px; }
+    li{ margin: 6px 0; color: var(--text); font-weight: 650; }
 
-    /* Games list with clickable links */
     .gameItem{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid var(--stroke);
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px;
+      border-radius: 16px;
       background: rgba(0,0,0,.10);
-      margin-bottom:10px;
-      text-decoration:none;
-      color:var(--text);
-    }
-    [data-theme="light"] .gameItem{ background: rgba(255,255,255,.55); }
-    .gameItem:active{transform: scale(.99)}
-    .gameLeft{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .gameName{ font-weight:900; }
-    .gameDesc{ color:var(--muted); font-weight:650; font-size:13px; }
-    .badge{
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight:900;
-      font-size:13px;
       border:1px solid var(--stroke);
-      background: rgba(89,195,255,.18);
-      color: var(--text);
-      white-space:nowrap;
+      margin: 10px 0;
+      gap: 10px;
+    }
+    body[data-theme="light"] .gameItem{ background: rgba(255,255,255,.35); }
+    .gameLeft{ display:flex; flex-direction:column; gap:2px; }
+    .gameName{ font-weight: 950; }
+    .gameSub{ color: var(--muted); font-weight: 650; font-size: 13px; }
+    .tag{
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(56,189,248,.18);
+      border: 1px solid rgba(56,189,248,.35);
+      font-weight: 900;
+      font-size: 13px;
     }
 
-    .contacts{
+    /* contact buttons */
+    .contactRow{
+      padding: 0 14px 14px;
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
-      margin-top: 14px;
+      gap: 12px;
     }
-    @media (max-width:520px){
-      .contacts{ grid-template-columns: 1fr; }
+    .linkBtn{
+      display:flex; justify-content:center; align-items:center; gap:10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--panel2);
+      border:1px solid var(--stroke);
+      text-decoration:none;
+      color: var(--text);
+      font-weight: 900;
     }
-    .contactBtn{
-      display:flex;
-      justify-content:center;
-      align-items:center;
+    .linkBtn:active{ transform: translateY(1px); }
+    .linkBtn.disabled{
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    /* Tus section */
+    .tusPanel{
+      margin: 0 14px 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--panel2);
+      border:1px solid var(--stroke);
+    }
+    .tusHead{
+      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .tusTitle{
+      margin:0;
+      font-size: 18px;
+      font-weight: 1000;
+      display:flex; align-items:center; gap:8px;
+    }
+    .help{ color: var(--muted); font-weight: 650; font-size: 13px; margin:0; }
+    .adminMini{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .miniBtn{
+      appearance:none;
+      border:1px solid var(--stroke);
+      background: var(--btn);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+    }
+    .miniBtn:hover{ background: var(--btn2); }
+
+    .tusRow{
+      display:flex; align-items:center; justify-content:space-between;
       gap:10px;
-      padding: 14px 14px;
+      padding: 12px;
       border-radius: 16px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.10);
-      color:var(--text);
-      font-weight:900;
-      text-decoration:none;
-      user-select:none;
+      margin-top: 10px;
     }
-    [data-theme="light"] .contactBtn{ background: rgba(255,255,255,.55); }
-    .contactBtn:active{transform: scale(.99)}
-
-    /* Tus section */
-    .tusHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-top: 14px;
-    }
-    .tusHead h3{ margin:0; }
-
-    .tusList{
-      margin-top:10px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .tusRow{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:10px;
-      align-items:center;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.10);
-    }
-    [data-theme="light"] .tusRow{ background: rgba(255,255,255,.55); }
+    body[data-theme="light"] .tusRow{ background: rgba(255,255,255,.35); }
     .tusRow a{
-      color:var(--text);
-      font-weight:900;
+      color: var(--text);
       text-decoration:none;
+      font-weight: 900;
       word-break: break-word;
+      flex: 1;
     }
-    .tusRow a:hover{ text-decoration: underline; }
-
     .btnDanger{
-      border:1px solid var(--stroke);
-      background: var(--danger);
-      color:var(--text);
+      appearance:none;
+      border:1px solid rgba(255,0,80,.28);
+      background: rgba(255,0,80,.10);
+      color: var(--text);
       padding: 10px 12px;
       border-radius: 14px;
       cursor:pointer;
-      font-weight:900;
+      font-weight: 900;
     }
+    .btnDanger:hover{ background: rgba(255,0,80,.14); }
 
-    /* Add tus is OUTSIDE list */
-    .addTus{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap:10px;
-    }
-    @media (max-width:820px){
-      .addTus{ grid-template-columns: 1fr; }
-    }
-    input, select{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-      color: var(--text);
-      outline:none;
-      font-weight:750;
-    }
-    [data-theme="light"] input,[data-theme="light"] select{
-      background: rgba(255,255,255,.70);
-    }
+    /* hide admin-only unless admin */
+    .adminOnly{ display:none !important; }
+    #root.isAdmin .adminOnly{ display: inline-flex !important; }
 
-    .btn{
-      border:1px solid var(--stroke);
-      background: rgba(89,195,255,.22);
-      color:var(--text);
-      padding: 12px 14px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight:900;
-      user-select:none;
-      white-space:nowrap;
-    }
-    .btn:active{transform: scale(.99)}
-    .btnGray{
-      background: var(--btn);
-    }
-
-    /* Admin modal */
-    .modalBack{
-      position:fixed;
-      inset:0;
+    /* ========= Modal ========= */
+    .backdrop{
+      position:fixed; inset:0;
       background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
-      padding: 18px;
-      z-index:99;
+      padding: 14px;
+      z-index: 9999;
     }
-    .modalBack.show{ display:flex; }
+    .backdrop.show{ display:flex; }
     .modal{
-      width:min(920px, 100%);
-      max-height: min(84vh, 760px);
+      width: min(920px, 100%);
+      max-height: 86vh;
       overflow:auto;
+      background: var(--panel);
+      border:1px solid var(--stroke);
       border-radius: 20px;
-      border:1px solid var(--stroke);
-      background: var(--card2);
-      backdrop-filter: blur(16px);
       box-shadow: var(--shadow);
-      padding: 16px 16px 16px;
+      backdrop-filter: blur(16px);
+      padding: 14px;
+      position:relative;
     }
-    .modalTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+    .modalHead{
+      display:flex; justify-content:space-between; align-items:center;
       gap:10px;
-      position:sticky;
-      top:0;
-      padding-bottom: 10px;
-      background: linear-gradient(to bottom, rgba(0,0,0,.18), transparent);
-      backdrop-filter: blur(10px);
+      margin-bottom: 10px;
     }
-    [data-theme="light"] .modalTop{
-      background: linear-gradient(to bottom, rgba(255,255,255,.55), transparent);
+    .modalHead h2{
+      margin:0;
+      font-size: 22px;
+      font-weight: 1000;
+      display:flex; align-items:center; gap:8px;
     }
-    .modalTop h2{ margin:0; font-size:22px; }
-    .xbtn{
+    .closeBtn{
+      appearance:none;
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.14);
-      color:var(--text);
-      width:40px; height:40px;
+      background: var(--btn);
+      color: var(--text);
+      width: 40px; height: 40px;
       border-radius: 14px;
       cursor:pointer;
-      font-weight:900;
+      font-weight: 1000;
     }
-    [data-theme="light"] .xbtn{ background: rgba(255,255,255,.55); }
-
-    .adminGrid{
+    .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
-      margin-top: 8px;
+      gap: 12px;
     }
-    @media (max-width:820px){
-      .adminGrid{ grid-template-columns: 1fr; }
-    }
-    .adminGroup{
+    .field{
+      background: var(--panel2);
       border:1px solid var(--stroke);
       border-radius: 16px;
       padding: 12px;
+    }
+    .field label{
+      display:block;
+      font-weight: 1000;
+      margin-bottom: 8px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding: 12px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
       background: rgba(0,0,0,.10);
+      color: var(--text);
+      outline:none;
+      font-weight: 800;
     }
-    [data-theme="light"] .adminGroup{ background: rgba(255,255,255,.55); }
-    .adminGroup h4{ margin:0 0 10px; font-size:16px; }
-    .help{ margin:8px 0 0; color:var(--muted); font-weight:650; font-size:13px; }
-
-    .adminFooter{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
+    body[data-theme="light"] .field input, body[data-theme="light"] .field select{
+      background: rgba(255,255,255,.55);
+      color: rgba(10,15,25,.92);
+    }
+    .rowBtns{
+      display:flex; gap:10px; flex-wrap:wrap;
       margin-top: 12px;
-      justify-content:flex-end;
+    }
+    .primaryBtn{
+      appearance:none;
+      border:1px solid rgba(56,189,248,.35);
+      background: rgba(56,189,248,.22);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 16px;
+      cursor:pointer;
+      font-weight: 1000;
+    }
+    .primaryBtn:hover{ background: rgba(56,189,248,.28); }
+
+    /* ========= Mobile-first adjustments ========= */
+    @media (max-width: 920px){
+      .wrap{ margin: 10px auto 30px; }
+      .cover{ height: 190px; }
+
+      .header{
+        grid-template-columns: 1fr;
+        margin-top: -88px;
+        justify-items:center;
+        text-align:center;
+      }
+      .nameBlock{ padding-top: 0; }
+      .chips{ justify-content:center; }
+      .avatarSlot{ width:210px; height:210px; }
+
+      .musicCard{
+        grid-template-columns: 1fr;
+        text-align:left;
+      }
+      audio{ max-width: 100%; height: 44px; }
+      .grid{ grid-template-columns: 1fr; }
+      .contactRow{ grid-template-columns: 1fr; }
+      .formGrid{ grid-template-columns: 1fr; }
     }
 
-    /* Hide admin-only controls when not admin */
-    .adminOnly{ display:none; }
-    .isAdmin .adminOnly{ display:block; }
-    .isAdmin .adminOnlyFlex{ display:flex; }
-    .adminOnlyFlex{ display:none; }
+    /* fix for notch/safe area */
+    .safeBottom{
+      height: env(safe-area-inset-bottom);
+    }
   </style>
+
+  <!-- your discord-frame effect -->
+  <link rel="stylesheet" href="effect.css">
 </head>
 
 <body data-theme="dark">
   <div class="bg"></div>
 
-  <div class="topbar">
-    <button class="pillbtn" id="themeBtn">🌙 <span id="themeText">Dark</span></button>
-    <button class="pillbtn" id="adminBtn">🔒 Admin</button>
-  </div>
+  <div class="wrap" id="root">
+    <div class="topbar">
+      <button class="pillBtn" id="themeBtn" type="button">🌙 Dark</button>
+      <button class="pillBtn" id="adminBtn" type="button">🔒 Admin</button>
+    </div>
 
-  <div class="wrap">
-    <div class="profile" id="root">
-      <div class="cover">
-        <img src="cover.gif" alt="cover" />
-      </div>
+    <div class="card">
+      <div class="cover" aria-label="cover"></div>
 
-      <div class="main">
-        <div class="headerRow">
-          <!-- Avatar -->
-          <div class="avatarCard">
-            <div class="avatar-wrap">
-              <div class="ring"></div>
-              <img class="avatar" src="avatar.jpg" alt="avatar" />
-              <!-- Decoration frame -->
-              <img class="frame" src="frame.png" alt="frame" />
-            </div>
+      <div class="header">
+        <!-- Avatar -->
+        <div class="avatarSlot">
+          <div class="avatar-wrap">
+            <div class="ring"></div>
+            <img class="avatar" src="avatar.jpg" alt="avatar">
+            <img class="frame" src="frame.png" alt="frame">
           </div>
+        </div>
 
-          <!-- Info -->
-          <div class="info">
-            <h1>Milo Pha Đá (Nhạt boy)</h1>
-            <p class="sub">IT Student • Software Engineering</p>
-            <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
+        <!-- Info -->
+        <div class="nameBlock">
+          <h1 class="title">Milo Pha Đá (Nhạt boy)</h1>
+          <p class="sub">IT Student • Software Engineering</p>
+          <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
 
-            <div class="chips">
-              <span class="chip">📍 Hồ Chí Minh</span>
-              <span class="chip">🎂 19</span>
-              <span class="chip">🎮 gamer</span>
+          <div class="chips">
+            <div class="chip">📍 Hồ Chí Minh</div>
+            <div class="chip">🎂 19</div>
+            <div class="chip">🎮 gamer</div>
+          </div>
+        </div>
+
+        <!-- Music -->
+        <div class="musicWrap">
+          <div class="musicCard">
+            <div class="musicLeft">
+              <p class="musicLabel">🎵 Nhạc tôi nghe</p>
+              <h2 id="songTitle" class="musicTitle rainbow">Ai ngoài anh</h2>
+              <p class="musicHint">Bấm Play để nghe 🎧</p>
             </div>
-
-            <!-- Music (under avatar, above intro) -->
-            <div class="musicCard" style="margin-top:14px;">
-              <div style="flex:1;">
-                <p id="songTitle" class="songTitle rainbow">Ai ngoài anh</p>
-                <p class="songHint">Bấm Play để nghe 🎧</p>
-              </div>
-              <audio id="audioPlayer" controls preload="metadata">
-                <source src="music.mp3" type="audio/mpeg" />
+            <div class="musicRight">
+              <audio id="player" controls preload="metadata">
+                <source src="music.mp3" type="audio/mpeg">
               </audio>
             </div>
           </div>
         </div>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Giới thiệu</h3>
-            <ul>
-              <li>✨ Chạy Ngay Đi</li>
-              <li>🧸 Chạy Vào Trái Tim Em</li>
-              <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
-            </ul>
-          </div>
-
-          <div class="card">
-            <h3>Game mình hay chơi</h3>
-
-            <a class="gameItem" id="robloxLink" href="#" target="_blank" rel="noopener">
-              <div class="gameLeft">
-                <div class="gameName">🧍 Roblox</div>
-                <div class="gameDesc">chill / sandbox</div>
-              </div>
-              <div class="badge">casual</div>
-            </a>
-
-            <a class="gameItem" id="valorantLink" href="#" target="_blank" rel="noopener">
-              <div class="gameLeft">
-                <div class="gameName">🎯 Valorant</div>
-                <div class="gameDesc">FPS / tryhard</div>
-              </div>
-              <div class="badge">rank</div>
-            </a>
-
-            <a class="gameItem" id="tftLink" href="#" target="_blank" rel="noopener">
-              <div class="gameLeft">
-                <div class="gameName">♟️ TFT</div>
-                <div class="gameDesc">auto chess</div>
-              </div>
-              <div class="badge">brain</div>
-            </a>
-
-            <p class="help">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
-          </div>
-        </div>
-
-        <div class="contacts">
-          <a class="contactBtn" id="fbLink" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
-          <a class="contactBtn" id="dcLink" href="#" target="_blank" rel="noopener">🎮 Discord</a>
-        </div>
-
-        <!-- Tus Section -->
-        <div class="card" style="margin-top:14px;">
-          <div class="tusHead">
-            <h3>📝 Đây là nơi check các tus của tôi</h3>
-            <div class="adminOnlyFlex" style="gap:10px;">
-              <button class="btn btnGray" id="adminOffBtn">🚪 Tắt Admin</button>
-            </div>
-          </div>
-          <p class="help">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</p>
-
-          <!-- Tus list -->
-          <div class="tusList" id="tusBox"></div>
-
-          <!-- Add tus OUTSIDE list -->
-          <div class="addTus adminOnly" style="margin-top:14px;">
-            <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
-            <input id="tusLink" placeholder="Dán link tus Facebook..." />
-            <button class="btn" id="addTusBtn">➕ Lưu tus</button>
-          </div>
-        </div>
-
       </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h3>Giới thiệu</h3>
+          <ul>
+            <li>✨ Chạy Ngay Đi</li>
+            <li>🐻 Chạy Vào Trái Tim Em</li>
+            <li>😵‍💫 Đùa Thôi Anh Làm Gì Có Em</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Game mình hay chơi</h3>
+
+          <div class="gameItem">
+            <div class="gameLeft">
+              <div class="gameName">🕹 Roblox</div>
+              <div class="gameSub">chill / sandbox</div>
+            </div>
+            <a id="robloxLink" class="tag" href="#" target="_blank" rel="noopener">casual</a>
+          </div>
+
+          <div class="gameItem">
+            <div class="gameLeft">
+              <div class="gameName">🎯 Valorant</div>
+              <div class="gameSub">FPS / tryhard</div>
+            </div>
+            <a id="valorantLink" class="tag" href="#" target="_blank" rel="noopener">rank</a>
+          </div>
+
+          <div class="gameItem">
+            <div class="gameLeft">
+              <div class="gameName">🧠 TFT</div>
+              <div class="gameSub">auto chess</div>
+            </div>
+            <a id="tftLink" class="tag" href="#" target="_blank" rel="noopener">brain</a>
+          </div>
+
+          <p class="help">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
+        </div>
+      </div>
+
+      <div class="contactRow">
+        <a class="linkBtn" id="fbLink" href="https://facebook.com/" target="_blank" rel="noopener">🌐 Facebook</a>
+        <a class="linkBtn" id="dcLink" href="https://discord.com/users/910327589309145109" target="_blank" rel="noopener">🎮 Discord</a>
+      </div>
+
+      <div class="tusPanel">
+        <div class="tusHead">
+          <div>
+            <p class="tusTitle">🧾 Đây là nơi check các tus của tôi</p>
+            <p class="help">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</p>
+          </div>
+
+          <div class="adminMini">
+            <button id="adminOffBtn" class="miniBtn adminOnly" type="button">🚪 Tắt Admin mode</button>
+            <button id="openTusAdd" class="miniBtn adminOnly" type="button">➕ Thêm tus</button>
+          </div>
+        </div>
+
+        <div id="tusBox"></div>
+
+        <!-- Add tus inline panel (ONLY admin) -->
+        <div id="tusAddPanel" class="field adminOnly" style="margin-top:12px;">
+          <label>Thêm tus mới</label>
+          <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
+          <div style="height:10px;"></div>
+          <input id="tusLink" placeholder="Dán link tus Facebook..." />
+          <div class="rowBtns">
+            <button id="addTusBtn" class="primaryBtn" type="button">➕ Lưu tus</button>
+            <button id="closeTusAdd" class="miniBtn" type="button">✖ Đóng</button>
+          </div>
+          <p class="help">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</p>
+        </div>
+      </div>
+
+      <div class="safeBottom"></div>
     </div>
   </div>
 
-  <!-- Admin Modal -->
-  <div class="modalBack" id="modalBack" aria-hidden="true">
-    <div class="modal">
-      <div class="modalTop">
-        <h2>🔒 Admin Panel</h2>
-        <button class="xbtn" id="closeModal">✕</button>
+  <!-- ========= Admin Modal ========= -->
+  <div class="backdrop" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalHead">
+        <h2>🔐 Admin Panel</h2>
+        <button class="closeBtn" id="closeModal" type="button">✖</button>
       </div>
 
       <!-- Login area -->
-      <div id="loginArea" class="adminGroup">
-        <h4>Nhập mật khẩu admin</h4>
-        <input id="adminPass" type="password" placeholder="••••••" />
-        <div class="adminFooter" style="justify-content:flex-start;">
-          <button class="btn" id="loginBtn">✅ Vào Admin</button>
+      <div id="loginArea">
+        <div class="field">
+          <label>Nhập mật khẩu admin</label>
+          <input id="adminPass" type="password" inputmode="numeric" placeholder="••••••" />
+          <div class="rowBtns">
+            <button class="primaryBtn" id="loginBtn" type="button">✅ Vào Admin</button>
+          </div>
+          <p class="help">Chỉ admin mới sửa được link game + Facebook/Discord + tên nhạc + màu chữ.</p>
         </div>
-        <p class="help">Pass: 079268 (chỉ bạn biết 😎)</p>
       </div>
 
-      <!-- Settings area -->
+      <!-- Settings area (only admin) -->
       <div id="settingsArea" style="display:none;">
-        <div class="adminGrid">
-          <div class="adminGroup">
-            <h4>Link Facebook (dán link profile)</h4>
-            <input id="fbInput" type="text" placeholder="https://facebook.com/..." />
-            <p class="help">Người xem bấm Facebook là mở link này.</p>
+        <div class="formGrid">
+          <div class="field">
+            <label>Link Facebook (dán link profile)</label>
+            <input id="fbInput" placeholder="https://facebook.com/..." />
+            <p class="help">Người xem bấm Facebook sẽ mở link này.</p>
           </div>
 
-          <div class="adminGroup">
-            <h4>Discord ID (chỉ cần ID)</h4>
-            <input id="dcInput" type="text" placeholder="VD: 910327589309145109" />
+          <div class="field">
+            <label>Discord ID (chỉ cần ID)</label>
+            <input id="dcInput" placeholder="9103..." />
             <p class="help">Tự build: discord.com/users/&lt;ID&gt;</p>
           </div>
 
-          <div class="adminGroup">
-            <h4>Link Roblox (tài khoản)</h4>
-            <input id="robloxInput" type="text" placeholder="https://roblox.com/users/..." />
+          <div class="field">
+            <label>Link Roblox (tài khoản)</label>
+            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
           </div>
 
-          <div class="adminGroup">
-            <h4>Link Valorant (tài khoản / tracker)</h4>
-            <input id="valoInput" type="text" placeholder="Dán link (có thể để trống)" />
+          <div class="field">
+            <label>Link Valorant (tài khoản / tracker)</label>
+            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
           </div>
 
-          <div class="adminGroup">
-            <h4>Link TFT (tài khoản / tracker)</h4>
-            <input id="tftInput" type="text" placeholder="Dán link (có thể để trống)" />
+          <div class="field">
+            <label>Link TFT (tài khoản / tracker)</label>
+            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
           </div>
 
-          <div class="adminGroup">
-            <h4>Tên bài nhạc hiển thị</h4>
-            <input id="songNameInput" type="text" placeholder="Tên bài của tôi" />
-            <div style="height:10px"></div>
-            <h4>Màu chữ tên nhạc</h4>
-      
+          <div class="field">
+            <label>Tên bài nhạc hiển thị</label>
+            <input id="songNameInput" placeholder="Ai ngoài anh" />
+          </div>
+
+          <div class="field">
+            <
