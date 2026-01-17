@@ -1,41 +1,24 @@
-/* ===== Avatar + Discord-style frame ===== */
-.avatar-wrap{
-  position:relative;
-  width:210px;
-  height:210px;
-  flex:0 0 auto;
-  margin-left:6px;
+/* ===== Discord-ish effect for NEW index.html ===== */
+/* index dùng: .avatarWrap .avatar .decor */
+
+.avatarWrap{
+  position:absolute;
+  left:28px;
+  top:-88px;
+  width:160px;
+  height:160px;
+  border-radius:999px;
+  z-index:5;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.45));
 }
 
-.avatar{
+/* ring nhịp nhẹ phía sau avatar (remix nhẹ) */
+.avatarWrap::before{
+  content:"";
   position:absolute;
-  inset:28px;
-  width:154px;
-  height:154px;
-  border-radius:50%;
-  object-fit:cover;
-  z-index:2;
-  background:#0b1220;
-  box-shadow: 0 18px 50px rgba(0,0,0,.38);
-}
-
-/* PNG effect (Discord decoration) */
-.frame{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:3;
-  pointer-events:none;
-  filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
-}
-
-/* Ring “remix nhẹ” phía sau */
-.ring{
-  position:absolute;
-  inset:-12px;
-  border-radius:50%;
-  z-index:1;
+  inset:-14px;
+  border-radius:999px;
+  z-index:0;
   pointer-events:none;
   background:
     radial-gradient(circle at 30% 30%, rgba(56,189,248,.34), transparent 48%),
@@ -44,20 +27,39 @@
   opacity:.85;
   animation: ringPulse 2.8s ease-in-out infinite;
 }
-.ring::before,
-.ring::after{
+
+/* 2 vòng gợn gợn như remix (nhẹ thôi) */
+.avatarWrap::after{
   content:"";
   position:absolute;
-  inset:16px;
-  border-radius:50%;
-  border:2px solid rgba(56,189,248,.18);
-  animation: wave 2.2s ease-in-out infinite;
+  inset:-6px;
+  border-radius:999px;
+  z-index:1;
+  pointer-events:none;
+  border:2px solid rgba(56,189,248,.16);
+  animation: wave 2.4s ease-in-out infinite;
 }
-.ring::after{
-  inset:26px;
-  border-color: rgba(99,102,241,.14);
-  animation-duration: 3.1s;
-  animation-direction: reverse;
+
+/* avatar chính */
+.avatar{
+  width:100%;
+  height:100%;
+  border-radius:999px;
+  overflow:hidden;
+  position:relative;
+  z-index:2;
+}
+
+/* decoration PNG (discord) */
+.decor{
+  position:absolute;
+  inset:-22px;
+  background: url("decor.png") center/contain no-repeat;
+  pointer-events:none;
+  z-index:3;
+  filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
+  animation: floaty 2.4s ease-in-out infinite;
+  transform-origin: 50% 60%;
 }
 
 @keyframes ringPulse{
@@ -65,11 +67,21 @@
   50%{ transform:scale(1.04); opacity:.95; }
 }
 @keyframes wave{
-  0%,100%{ transform:scale(1); opacity:.52; }
-  50%{ transform:scale(1.08); opacity:.88; }
+  0%,100%{ transform:scale(1); opacity:.50; }
+  50%{ transform:scale(1.08); opacity:.85; }
+}
+@keyframes floaty{
+  0%,100%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-4px) scale(1.01); }
 }
 
-/* Mobile: nhỏ lại cho vừa */
+/* Mobile: avatar về giữa nên hiệu ứng scale lại */
 @media (max-width:820px){
-  .avatar-wrap{ transform: scale(.88); margin-left:0; }
+  .avatarWrap{
+    left:50%;
+    transform: translateX(-50%);
+    top:-78px;
+    width:140px;
+    height:140px;
+  }
 }
