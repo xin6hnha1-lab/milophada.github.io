@@ -1,422 +1,361 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
 
-  <!-- File css hiệu ứng riêng (bạn có thể bỏ trống cũng được) -->
+  <!-- file effect của bạn -->
   <link rel="stylesheet" href="effect.css" />
 
   <style>
     :root{
-      --bg: #071024;
-      --text: #e8edf7;
-      --muted: rgba(232,237,247,.70);
-      --card: rgba(18, 33, 55, .55);
-      --stroke: rgba(255,255,255,.12);
-      --shadow: 0 24px 70px rgba(0,0,0,.45);
-      --pill: rgba(0,0,0,.24);
-      --accent: #3bbcff;
-      --radius: 26px;
+      --radius: 22px;
+      --cardW: 980px;
+      --glass: rgba(20,32,50,.58);
+      --glass2: rgba(20,32,50,.40);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --chip: rgba(0,0,0,.25);
+      --shadow: 0 20px 70px rgba(0,0,0,.45);
     }
 
-    /* Light theme */
-    [data-theme="light"]{
-      --bg: #f3f6ff;
-      --text: #0b1220;
-      --muted: rgba(11,18,32,.65);
-      --card: rgba(255,255,255,.72);
-      --stroke: rgba(11,18,32,.12);
-      --shadow: 0 22px 60px rgba(0,0,0,.18);
-      --pill: rgba(0,0,0,.10);
-      --accent: #1479ff;
+    html[data-theme="light"]{
+      --glass: rgba(255,255,255,.78);
+      --glass2: rgba(255,255,255,.62);
+      --border: rgba(0,0,0,.10);
+      --text: rgba(10,14,18,.92);
+      --muted: rgba(10,14,18,.70);
+      --chip: rgba(0,0,0,.06);
+      --shadow: 0 18px 70px rgba(0,0,0,.18);
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg);
-      overflow-x:hidden;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: url("bg.gif") center/cover no-repeat fixed;
+      display:flex;
+      justify-content:center;
+      padding: 26px 14px;
     }
 
-    /* Background GIF toàn trang */
-    .bg{
+    /* overlay để nền nhìn “net” hơn ở light mode */
+    body::before{
+      content:"";
       position:fixed;
       inset:0;
-      z-index:-2;
-      background: url("bg.gif") center/cover no-repeat fixed;
-      filter: saturate(1.05);
-      transform: translateZ(0);
+      pointer-events:none;
+      z-index:-1;
+      background: rgba(0,0,0,.50);
+      backdrop-filter: blur(10px);
     }
-    .bg::after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 20% 15%, rgba(0,140,255,.18), transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(120,255,220,.12), transparent 50%),
-        linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.55));
-    }
-    [data-theme="light"] .bg::after{
-      background:
-        radial-gradient(circle at 20% 15%, rgba(20,121,255,.12), transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(0,160,120,.10), transparent 50%),
-        linear-gradient(to bottom, rgba(255,255,255,.35), rgba(255,255,255,.60));
+    html[data-theme="light"] body::before{
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(2px);
     }
 
-    /* Layout container */
     .wrap{
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding: 24px 16px 50px;
+      width:min(var(--cardW), 100%);
     }
 
-    .profile{
-      width: min(1100px, 96vw);
+    .card{
       border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
       overflow:hidden;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position:relative;
     }
 
-    /* Cover kiểu Facebook */
+    /* COVER kiểu FB: full width, crop vừa phải */
     .cover{
-      height: clamp(220px, 28vw, 360px);
-      background: url("cover.gif") center top / cover no-repeat;
+      height: 320px;
+      background: url("cover.gif") center/cover no-repeat;
       position:relative;
     }
     .cover::after{
       content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.45));
-      pointer-events:none;
-    }
-
-    /* Top controls */
-    .topbar{
       position:absolute;
-      top:14px; right:14px;
-      display:flex;
-      gap:10px;
-      z-index:3;
+      inset:0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.55));
     }
-    .btn{
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.30);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 999px;
-      font-size:14px;
-      cursor:pointer;
-      backdrop-filter: blur(10px);
-      display:flex; align-items:center; gap:8px;
-      user-select:none;
-    }
-    [data-theme="light"] .btn{ background: rgba(255,255,255,.55); }
 
-    /* Header (phần avatar + info) */
+    /* header kiểu FB: avatar trái - text phải */
     .header{
       position:relative;
-      padding: 18px 26px 22px;
+      display:grid;
+      grid-template-columns: 240px 1fr;
+      gap: 14px;
+      padding: 18px 22px 18px 22px;
+      margin-top: -86px; /* kéo lên đè cover */
+      align-items:end;
     }
 
-    /* Avatar block: absolute đè lên cover (FB style) */
-    .avatarWrap{
-      position:absolute;
-      left: 28px;
-      top: -88px; /* ✅ kéo lên cover */
-      width: 160px;
-      height: 160px;
-      border-radius: 999px;
-      z-index:5;
-      filter: drop-shadow(0 18px 40px rgba(0,0,0,.45));
+    /* CỤM AVATAR (dùng effect.css) */
+    .avatar-zone{
+      display:flex;
+      justify-content:flex-start;
+      padding-left: 6px;
     }
 
-    .avatar{
-      width:100%;
-      height:100%;
-      border-radius:999px;
-      background: url("avatar.jpg") center/cover no-repeat;
-      border: 6px solid rgba(0,0,0,.28);
-      outline: 1px solid var(--stroke);
-      position:relative;
-      overflow:hidden;
-    }
-    [data-theme="light"] .avatar{
-      border: 6px solid rgba(255,255,255,.75);
-    }
-
-    /* Decoration PNG đè lên avatar (Discord-style) */
-    .decor{
-      position:absolute;
-      inset:-22px; /* phóng to ra ngoài tí */
-      background: url("decor.png") center/contain no-repeat;
-      pointer-events:none;
-      filter: drop-shadow(0 10px 25px rgba(0,0,0,.35));
-    }
-
-    /* Chừa khoảng để chữ không bị avatar đè */
     .info{
-      padding-left: 200px; /* ✅ chừa cho avatar bên trái */
-      padding-top: 6px;
+      padding: 6px 4px 0 4px;
     }
-    .name{
-      font-size: clamp(28px, 3vw, 42px);
-      line-height: 1.1;
-      margin: 0 0 6px;
-      letter-spacing:.2px;
-      text-shadow: 0 8px 20px rgba(0,0,0,.25);
-    }
-    .role{
+
+    h1{
       margin:0;
+      font-size: 44px;
+      line-height:1.05;
+      letter-spacing:-.5px;
+      text-shadow: 0 8px 30px rgba(0,0,0,.25);
+    }
+    .sub{
+      margin-top:6px;
       color: var(--muted);
       font-size: 14px;
     }
     .quote{
-      margin: 8px 0 0;
+      margin-top:6px;
       color: var(--muted);
       font-style: italic;
       font-size: 14px;
     }
 
-    .pills{
-      margin-top: 14px;
+    .chips{
+      margin-top: 12px;
       display:flex;
-      gap:10px;
       flex-wrap:wrap;
+      gap:10px;
     }
-    .pill{
-      background: var(--pill);
-      border: 1px solid var(--stroke);
-      padding: 9px 12px;
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 14px;
       border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--border);
+      color: var(--text);
       font-size: 13px;
-      display:flex; align-items:center; gap:8px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
     }
-    .dot{ width:8px; height:8px; border-radius:999px; background: var(--accent); display:inline-block; }
 
-    /* Content grid */
+    /* layout phần content */
     .content{
-      padding: 0 26px 26px;
+      padding: 8px 22px 22px;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
     }
-
-    .card{
-      background: rgba(0,0,0,.18);
-      border: 1px solid var(--stroke);
+    .box{
       border-radius: 18px;
+      background: var(--glass2);
+      border: 1px solid var(--border);
       padding: 16px 16px;
       backdrop-filter: blur(10px);
     }
-    [data-theme="light"] .card{ background: rgba(255,255,255,.55); }
-
-    .card h2{
-      margin: 0 0 12px;
-      font-size: 16px;
-      letter-spacing:.2px;
+    .box h2{
+      margin:0 0 10px;
+      font-size: 18px;
     }
-
-    .list{
+    ul{
       margin:0;
       padding-left: 18px;
-      color: var(--text);
+      color: var(--muted);
+      line-height: 1.6;
     }
-    .list li{ margin: 7px 0; color: var(--text); }
-    .list small{ color: var(--muted); }
 
-    .game{
+    .games .game{
       display:flex;
       justify-content:space-between;
-      align-items:center;
+      gap:14px;
       padding: 12px 12px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.04);
-      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.10);
+      margin-top: 10px;
     }
-    [data-theme="light"] .game{
-      border: 1px solid rgba(0,0,0,.08);
+    html[data-theme="light"] .games .game{
       background: rgba(0,0,0,.03);
+      border-color: rgba(0,0,0,.08);
     }
+    .gleft b{ display:block; }
+    .gleft span{ color: var(--muted); font-size: 12px; }
     .tag{
-      background: var(--accent);
-      color: #06101d;
-      padding: 6px 12px;
+      align-self:center;
+      padding: 8px 12px;
       border-radius: 999px;
+      background: rgba(56,189,248,.90);
+      color: #06121f;
       font-weight: 700;
       font-size: 12px;
     }
 
-    .links{
-      grid-column: 1 / -1;
+    .footer{
+      padding: 0 22px 22px;
     }
-    .linkRow{
+    .links{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 14px;
     }
-    .a{
+    .btn{
       display:flex;
-      align-items:center;
       justify-content:center;
+      align-items:center;
       gap:10px;
-      padding: 14px 12px;
+      padding: 14px;
       border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
       text-decoration:none;
       color: var(--text);
-      font-weight: 650;
-      transition: transform .12s ease, background .12s ease;
+      background: var(--glass2);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      transition:.2s;
     }
-    .a:hover{
-      transform: translateY(-1px);
-      background: rgba(59,188,255,.20);
+    .btn:hover{ transform: translateY(-1px); }
+
+    /* toggle theme */
+    .toggle{
+      position:absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor:pointer;
+      backdrop-filter: blur(10px);
     }
-    [data-theme="light"] .a{ background: rgba(0,0,0,.03); }
-    [data-theme="light"] .a:hover{ background: rgba(20,121,255,.12); }
 
-    /* Responsive: mobile giống FB (avatar về giữa) */
-    @media (max-width: 820px){
-      .profile{ width:min(520px, 96vw); }
-      .cover{ height: 220px; background-position: center top; }
-
-      .avatarWrap{
-        left: 50%;
-        transform: translateX(-50%);
-        top: -78px;
-        width: 140px;
-        height: 140px;
+    /* RESPONSIVE */
+    @media (max-width: 920px){
+      h1{ font-size: 34px; }
+      .header{
+        grid-template-columns: 1fr;
+        margin-top: -96px;
+        align-items:center;
       }
-
+      .avatar-zone{
+        justify-content:center;
+      }
       .info{
-        padding-left: 0;
-        padding-top: 70px; /* ✅ chừa chỗ cho avatar */
         text-align:center;
       }
-      .pills{ justify-content:center; }
-      .content{ grid-template-columns: 1fr; padding: 0 16px 18px; }
-      .header{ padding: 18px 16px 18px; }
-      .linkRow{ grid-template-columns: 1fr; }
-    }
-
-    /* giảm motion cho máy yếu */
-    @media (prefers-reduced-motion: reduce){
-      *{scroll-behavior:auto !important}
+      .chips{ justify-content:center; }
+      .content{ grid-template-columns: 1fr; }
+      .links{ grid-template-columns: 1fr; }
+      .cover{ height: 260px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="bg"></div>
+  <div class="wrap">
+    <div class="card">
+      <button class="toggle" id="toggle">🌙 Dark</button>
 
-  <main class="wrap">
-    <section class="profile" aria-label="Milo profile">
+      <div class="cover"></div>
 
-      <div class="cover">
-        <div class="topbar">
-          <button class="btn" id="themeBtn" type="button">🌙 Dark</button>
+      <div class="header">
+        <!-- AVATAR: giữ đúng class để effect.css ăn -->
+        <div class="avatar-zone">
+          <div class="avatar-wrap">
+            <div class="ring"></div>
+
+            <img class="avatar" src="avatar.jpg" alt="avatar">
+
+            <!-- KHUNG DISCORD PNG -->
+            <img class="frame" src="frame.png" alt="frame">
+          </div>
+        </div>
+
+        <div class="info">
+          <h1>Milo Pha Đá (Nhạt boy)</h1>
+          <div class="sub">IT Student • Software Engineering</div>
+          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
+
+          <div class="chips">
+            <div class="chip">📍 Hồ Chí Minh</div>
+            <div class="chip">🎂 19</div>
+            <div class="chip">💻 Dev vibes</div>
+          </div>
         </div>
       </div>
 
-      <header class="header">
-        <!-- Avatar + decor -->
-        <div class="avatarWrap">
-          <div class="avatar">
-            <!-- decor.png: bạn tải từ Discord về, đặt tên decor.png cho dễ -->
-            <div class="decor" aria-hidden="true"></div>
-          </div>
-        </div>
-
-        <!-- Info -->
-        <div class="info">
-          <h1 class="name">Milo Pha Đá (Nhạt boy)</h1>
-          <p class="role">IT Student • Software Engineering</p>
-          <p class="quote">“Một góc nhỏ trên Internet của Milo.”</p>
-
-          <div class="pills">
-            <div class="pill"><span class="dot"></span> 📍 Hồ Chí Minh</div>
-            <div class="pill">🎂 19</div>
-            <div class="pill">💻 Dev vibes</div>
-          </div>
-        </div>
-      </header>
-
-      <section class="content">
-        <div class="card">
+      <div class="content">
+        <div class="box">
           <h2>Giới thiệu</h2>
-          <ul class="list">
+          <ul>
             <li>🏃‍♂️ Chạy Ngay Đi</li>
             <li>🐧 Chạy Vào Trái Tim Em</li>
             <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
           </ul>
         </div>
 
-        <div class="card">
+        <div class="box games">
           <h2>Game mình hay chơi</h2>
 
           <div class="game">
-            <div>🕹 Roblox<br><small>chill / sandbox</small></div>
-            <span class="tag">casual</span>
+            <div class="gleft">
+              <b>🕹️ Roblox</b>
+              <span>chill / sandbox</span>
+            </div>
+            <div class="tag">casual</div>
           </div>
 
           <div class="game">
-            <div>🎯 Valorant<br><small>FPS / tryhard</small></div>
-            <span class="tag">rank</span>
+            <div class="gleft">
+              <b>🎯 Valorant</b>
+              <span>FPS / tryhard</span>
+            </div>
+            <div class="tag">rank</div>
           </div>
 
           <div class="game">
-            <div>♟ TFT<br><small>auto chess</small></div>
-            <span class="tag">brain</span>
+            <div class="gleft">
+              <b>♟️ TFT</b>
+              <span>auto chess</span>
+            </div>
+            <div class="tag">brain</div>
           </div>
         </div>
+      </div>
 
-        <div class="card links">
+      <div class="footer">
+        <div class="box" style="margin-bottom:14px;">
           <h2>Liên hệ</h2>
-          <div class="linkRow">
-            <a class="a" href="https://www.facebook.com/milo.pha.a" target="_blank" rel="noreferrer">🌐 Facebook</a>
-            <a class="a" href="https://discord.com/users/910327589309145109" target="_blank" rel="noreferrer">🎮 Discord: quan_boy</a>
+          <div class="links">
+            <a class="btn" href="#" target="_blank">🌐 Facebook</a>
+            <a class="btn" href="#" target="_blank">🎮 Discord: quan_boy</a>
           </div>
         </div>
-      </section>
-
-    </section>
-  </main>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Theme toggle (save local)
     const root = document.documentElement;
-    const btn = document.getElementById("themeBtn");
+    const btn = document.getElementById("toggle");
 
-    const saved = localStorage.getItem("theme");
-    if (saved === "light") {
-      root.setAttribute("data-theme", "light");
-      btn.textContent = "☀️ Light";
-    } else {
-      root.removeAttribute("data-theme");
-      btn.textContent = "🌙 Dark";
+    function setTheme(t){
+      root.setAttribute("data-theme", t);
+      localStorage.setItem("theme", t);
+      btn.textContent = (t === "light") ? "☀️ Light" : "🌙 Dark";
     }
 
+    const saved = localStorage.getItem("theme");
+    setTheme(saved || "dark");
+
     btn.addEventListener("click", () => {
-      const isLight = root.getAttribute("data-theme") === "light";
-      if (isLight) {
-        root.removeAttribute("data-theme");
-        localStorage.setItem("theme", "dark");
-        btn.textContent = "🌙 Dark";
-      } else {
-        root.setAttribute("data-theme", "light");
-        localStorage.setItem("theme", "light");
-        btn.textContent = "☀️ Light";
-      }
+      const cur = root.getAttribute("data-theme");
+      setTheme(cur === "dark" ? "light" : "dark");
     });
   </script>
 </body>
