@@ -7,118 +7,90 @@
 
   <style>
     :root{
-      --bg: #0b1320;
-      --bg2:#0b1320cc;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.12);
-      --txt: #eaf2ff;
-      --muted: rgba(234,242,255,.75);
-      --border: rgba(255,255,255,.12);
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
-      --btn: rgba(255,255,255,.12);
-      --btnHover: rgba(255,255,255,.18);
-      --accent: #4ea3ff;
-      --danger:#ff5b5b;
-      --ok:#39d98a;
-      --radius: 22px;
-      --radius2: 16px;
-      --max: 980px;
+      --bg:#0b1320; --txt:#eaf2ff; --muted:rgba(234,242,255,.72);
+      --card:rgba(255,255,255,.08); --border:rgba(255,255,255,.12);
+      --btn:rgba(255,255,255,.12); --btnHover:rgba(255,255,255,.18);
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --accent:#4ea3ff; --danger:#ff5b5b;
+      --radius:22px; --radius2:16px; --max:980px;
     }
-
-    /* Light theme */
     body.light{
-      --bg: #dbeeff;
-      --bg2:#dbeeffcc;
-      --card: rgba(0,0,0,.06);
-      --card2: rgba(0,0,0,.08);
-      --txt: #0e1a2a;
-      --muted: rgba(14,26,42,.68);
-      --border: rgba(0,0,0,.10);
-      --shadow: 0 18px 50px rgba(0,0,0,.18);
-      --btn: rgba(0,0,0,.06);
-      --btnHover: rgba(0,0,0,.10);
-      --accent: #0b6cff;
+      --bg:#dbeeff; --txt:#0e1a2a; --muted:rgba(14,26,42,.68);
+      --card:rgba(0,0,0,.06); --border:rgba(0,0,0,.10);
+      --btn:rgba(0,0,0,.06); --btnHover:rgba(0,0,0,.10);
+      --shadow:0 18px 50px rgba(0,0,0,.18);
+      --accent:#0b6cff;
     }
 
-    *{ box-sizing:border-box }
-    html,body{ height:100% }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color: var(--txt);
-      background: var(--bg);
+      color:var(--txt);
+      background:var(--bg);
       overflow-x:hidden;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: geometricPrecision;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:geometricPrecision;
     }
 
-    /* background gif */
+    /* Background */
     .bg{
       position:fixed; inset:0;
-      background: url("bg.gif") center/cover no-repeat;
-      filter: saturate(1.08) contrast(1.02);
+      background:url("bg.gif") center/cover no-repeat;
       z-index:-2;
     }
     .bg::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.38), rgba(0,0,0,.55));
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.58));
       z-index:-1;
     }
     body.light .bg::after{
-      background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.55));
+      background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.55));
     }
 
-    /* Top actions */
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: 12px 14px;
-      padding-top: calc(12px + env(safe-area-inset-top));
-      background: linear-gradient(180deg, var(--bg2), transparent);
-      backdrop-filter: blur(10px);
-    }
+    /* IMPORTANT: fixed top buttons, super high z-index */
     .top-actions{
-      max-width: var(--max);
-      margin: 0 auto;
+      position:fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
       display:flex;
-      justify-content:flex-end;
       gap:10px;
+      padding-top: env(safe-area-inset-top);
+      user-select:none;
     }
     .pill{
       appearance:none;
-      border: 1px solid var(--border);
-      background: var(--btn);
-      color: var(--txt);
-      padding: 10px 14px;
-      border-radius: 999px;
+      border:1px solid var(--border);
+      background:var(--btn);
+      color:var(--txt);
+      padding:10px 14px;
+      border-radius:999px;
       display:inline-flex;
       align-items:center;
       gap:10px;
-      font-weight: 700;
+      font-weight:900;
       cursor:pointer;
-      user-select:none;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      transition:transform .12s ease, background .12s ease;
     }
-    .pill:active{ transform: scale(.98) }
-    .pill:hover{ background: var(--btnHover) }
+    .pill:hover{ background:var(--btnHover) }
+    .pill:active{ transform:scale(.98) }
 
     /* Layout */
     .wrap{
-      max-width: var(--max);
+      max-width:var(--max);
       margin: 0 auto;
-      padding: 12px 14px 34px;
+      padding: 70px 14px 34px; /* chừa chỗ cho top buttons */
       padding-bottom: calc(34px + env(safe-area-inset-bottom));
     }
-
     .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
       overflow:hidden;
     }
@@ -127,387 +99,82 @@
     .cover{
       position:relative;
       height: 260px;
-      background: url("cover.gif") center/cover no-repeat;
+      background:url("cover.gif") center/cover no-repeat;
     }
     .cover::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.58));
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.58));
     }
 
-    /* Profile */
-    .profile{
-      position:relative;
-      padding: 16px;
-      padding-top: 0;
-    }
+    .profile{ padding: 16px; padding-top: 0; }
     .avatarRow{
-      display:flex;
-      align-items:flex-end;
-      gap: 14px;
-      margin-top: -52px;
-      flex-wrap: wrap;
+      display:flex; align-items:flex-end; gap:14px;
+      margin-top:-52px; flex-wrap:wrap;
     }
     .avatarWrap{
-      width: 118px;
-      height: 118px;
-      flex: 0 0 auto;
+      width:118px; height:118px; flex:0 0 auto;
       position:relative;
     }
     .avatarFrame{
       position:absolute; inset:-12px;
-      background: url("frame.png") center/contain no-repeat;
+      background:url("frame.png") center/contain no-repeat;
       pointer-events:none;
       filter: drop-shadow(0 12px 18px rgba(0,0,0,.35));
     }
     .avatar{
-      width: 100%;
-      height: 100%;
-      border-radius: 999px;
-      border: 4px solid rgba(255,255,255,.28);
-      object-fit: cover;
-      background: rgba(255,255,255,.08);
+      width:100%; height:100%;
+      border-radius:999px;
+      border:4px solid rgba(255,255,255,.28);
+      object-fit:cover;
+      background:rgba(255,255,255,.08);
     }
 
-    .who{
-      min-width: 240px;
-      flex: 1 1 260px;
-      padding-bottom: 8px;
-    }
+    .who{ flex:1 1 260px; min-width:240px; padding-bottom:8px; }
     .name{
       margin:0;
       font-size: clamp(22px, 3.8vw, 34px);
-      line-height: 1.05;
-      font-weight: 900;
-      letter-spacing: .2px;
-      text-wrap: balance;
+      line-height:1.05;
+      font-weight:1000;
     }
-    .sub{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-weight: 600;
-    }
-    .quote{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-style: italic;
-    }
+    .sub{ margin:6px 0 0; color:var(--muted); font-weight:800; }
+    .quote{ margin:8px 0 0; color:var(--muted); font-style:italic; }
 
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
+    .chips{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
     .chip{
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
       background: rgba(0,0,0,.12);
-      color: var(--txt);
-      font-weight: 700;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      font-weight:900;
+      display:inline-flex; align-items:center; gap:8px;
     }
     body.light .chip{ background: rgba(255,255,255,.55); }
 
-    /* Grid sections */
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
+      gap:14px;
+      margin-top:14px;
     }
     @media (max-width: 860px){
-      .cover{ height: 220px }
-      .grid{ grid-template-columns: 1fr }
-      .avatarWrap{ width: 108px; height:108px }
-      .avatarRow{ margin-top: -46px }
+      .grid{ grid-template-columns: 1fr; }
+      .cover{ height:220px; }
+      .avatarWrap{ width:108px; height:108px; }
+      .avatarRow{ margin-top:-46px; }
     }
 
     .section{
-      padding: 14px;
-      border-radius: var(--radius2);
-      background: var(--card);
-      border: 1px solid var(--border);
-      overflow:hidden;
-    }
-    .h{
-      margin:0 0 10px;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing:.2px;
-    }
-    .muted{ color: var(--muted); }
-
-    /* Music */
-    .musicTitle{
-      font-weight: 800;
-      margin:0 0 6px;
-    }
-    audio{
-      width: 100%;
-      border-radius: 14px;
-      outline: none;
-    }
-
-    /* Contacts */
-    .contacts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .linkBtn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--btn);
-      color: var(--txt);
-      font-weight: 900;
-      cursor:pointer;
-      text-decoration:none;
-      user-select:none;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform .12s ease, background .12s ease;
-    }
-    .linkBtn:active{ transform: scale(.985) }
-    .linkBtn:hover{ background: var(--btnHover) }
-
-    /* Tus */
-    .tusWrap{ margin-top: 14px; }
-    .tusHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap: wrap;
-    }
-    .tusList{
-      margin-top: 10px;
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .tusItem{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 12px;
+      padding:14px;
+      border-radius:var(--radius2);
+      background:var(--card);
       border:1px solid var(--border);
-      background: rgba(0,0,0,.10);
-      border-radius: 16px;
     }
-    body.light .tusItem{ background: rgba(255,255,255,.55) }
-    .tusItem a{
-      color: var(--accent);
-      text-decoration:none;
-      font-weight: 800;
-      word-break: break-word;
-    }
-    .miniBtn{
-      border:1px solid var(--border);
-      background: var(--btn);
-      color: var(--txt);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-      user-select:none;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .miniBtn:hover{ background: var(--btnHover) }
-    .miniBtn.danger{ background: rgba(255,91,91,.18); border-color: rgba(255,91,91,.35) }
+    .h{ margin:0 0 10px; font-size:18px; font-weight:1000; }
+    .hint{ margin:8px 0 0; color:var(--muted); font-weight:800; font-size:13px; }
 
-    /* Schedule */
-    .schedTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap: wrap;
-    }
-    .dayTabs{
-      display:flex;
-      gap:8px;
-      flex-wrap: wrap;
-    }
-    .tab{
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--btn);
-      color: var(--txt);
-      font-weight: 900;
-      cursor:pointer;
-      user-select:none;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .tab.active{
-      background: rgba(78,163,255,.25);
-      border-color: rgba(78,163,255,.55);
-    }
+    audio{ width:100%; border-radius:14px; }
 
-    .schedList{
-      margin-top: 10px;
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .slot{
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.10);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    body.light .slot{ background: rgba(255,255,255,.55) }
-
-    .slot strong{ font-size: 15px }
-    .slot .time{
-      color: var(--muted);
-      font-weight: 800;
-      margin-top: 2px;
-    }
-
-    /* Modal */
-    .modalOverlay{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
-    }
-    .modalOverlay.show{ display:flex }
-    .modal{
-      width: min(920px, 100%);
-      max-height: min(86vh, 760px);
-      overflow:auto;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: rgba(18,28,45,.88);
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      color: var(--txt);
-    }
-    body.light .modal{
-      background: rgba(255,255,255,.92);
-    }
-
-    .modalHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      padding: 8px 2px 10px;
-      background: linear-gradient(180deg, rgba(0,0,0,.18), transparent);
-      z-index: 2;
-    }
-    body.light .modalHead{
-      background: linear-gradient(180deg, rgba(255,255,255,.75), transparent);
-    }
-
-    .modalTitle{
-      margin:0;
-      font-size: 20px;
-      font-weight: 1000;
-    }
-    .x{
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--btn);
-      color: var(--txt);
-      cursor:pointer;
-      font-size: 18px;
-      font-weight: 900;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .x:hover{ background: var(--btnHover) }
-
-    .formGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    @media (max-width: 860px){
-      .formGrid{ grid-template-columns: 1fr; }
-    }
-
-    label{
-      display:block;
-      font-weight: 900;
-      margin: 6px 0 8px;
-    }
-    input, textarea, select{
-      width: 100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.10);
-      color: var(--txt);
-      outline:none;
-      font-weight: 700;
-    }
-    body.light input, body.light textarea, body.light select{
-      background: rgba(0,0,0,.05);
-    }
-    textarea{ min-height: 90px; resize: vertical; }
-
-    .rowBtns{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-    .bigBtn{
-      flex: 1 1 220px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(78,163,255,.22);
-      color: var(--txt);
-      font-weight: 1000;
-      cursor:pointer;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .bigBtn:hover{ background: rgba(78,163,255,.30) }
-    .bigBtn.red{
-      background: rgba(255,91,91,.18);
-      border-color: rgba(255,91,91,.35);
-    }
-    .bigBtn.red:hover{ background: rgba(255,91,91,.26) }
-
-    .hint{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    /* Rainbow text */
+    /* Rainbow */
     .rainbow-on .rainbow{
       background: linear-gradient(90deg, #ff4d4d, #ffa64d, #fff04d, #66ff66, #4dd2ff, #6f63ff, #ff4de3);
       background-size: 400% 100%;
@@ -516,9 +183,87 @@
       color: transparent !important;
       animation: rb 4.5s linear infinite;
     }
-    @keyframes rb{
-      0%{ background-position: 0% 50% }
-      100%{ background-position: 100% 50% }
+    @keyframes rb{ 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+
+    /* Modals */
+    .modalOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index: 10000; /* above buttons too */
+    }
+    .modalOverlay.show{ display:flex; }
+    .modal{
+      width:min(920px, 100%);
+      max-height:min(86vh, 760px);
+      overflow:auto;
+      border-radius:22px;
+      border:1px solid var(--border);
+      background: rgba(18,28,45,.88);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      padding:14px;
+    }
+    body.light .modal{ background: rgba(255,255,255,.92); }
+
+    .modalHead{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      position: sticky; top: 0;
+      padding: 8px 2px 10px;
+      background: linear-gradient(180deg, rgba(0,0,0,.18), transparent);
+      z-index:2;
+    }
+    body.light .modalHead{ background: linear-gradient(180deg, rgba(255,255,255,.75), transparent); }
+
+    .modalTitle{ margin:0; font-size:20px; font-weight:1000; }
+    .x{
+      width:42px; height:42px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:var(--btn);
+      color:var(--txt);
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .formGrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+    @media (max-width: 860px){ .formGrid{ grid-template-columns:1fr; } }
+
+    label{ display:block; font-weight:1000; margin:6px 0 8px; }
+    input,select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.10);
+      color:var(--txt);
+      outline:none;
+      font-weight:800;
+    }
+    body.light input, body.light select{ background: rgba(0,0,0,.05); }
+
+    .rowBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .bigBtn{
+      flex:1 1 220px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background: rgba(78,163,255,.22);
+      color:var(--txt);
+      font-weight:1000;
+      cursor:pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bigBtn.red{
+      background: rgba(255,91,91,.18);
+      border-color: rgba(255,91,91,.35);
     }
   </style>
 </head>
@@ -526,11 +271,10 @@
 <body class="dark">
   <div class="bg"></div>
 
-  <div class="topbar">
-    <div class="top-actions">
-      <button id="btnTheme" class="pill" type="button">🌙 <span id="themeText">Dark</span></button>
-      <button id="btnAdmin" class="pill" type="button">🔒 <span id="adminText">Admin</span></button>
-    </div>
+  <!-- Buttons MUST be here and fixed -->
+  <div class="top-actions">
+    <button id="btnTheme" class="pill" type="button">🌙 <span id="themeText">Dark</span></button>
+    <button id="btnAdmin" class="pill" type="button">🔒 <span id="adminText">Admin</span></button>
   </div>
 
   <main class="wrap">
@@ -540,90 +284,41 @@
       <div class="profile">
         <div class="avatarRow">
           <div class="avatarWrap">
-            <img class="avatar" src="avatar.jpg" alt="avatar" />
+            <img class="avatar" src="avatar.jpg" alt="avatar">
             <div class="avatarFrame" aria-hidden="true"></div>
           </div>
 
           <div class="who">
-            <h1 class="name rainbow" id="displayName">Milo Pha Đá (Nhat boy)</h1>
-            <div class="sub rainbow" id="displayRole">IT Student • Software Engineering</div>
-            <div class="quote rainbow" id="displayQuote">“Một góc nhỏ trên Internet của Milo.”</div>
+            <h1 class="name rainbow">Milo Pha Đá (Nhat boy)</h1>
+            <div class="sub rainbow">IT Student • Software Engineering</div>
+            <div class="quote rainbow">“Một góc nhỏ trên Internet của Milo.”</div>
 
             <div class="chips">
-              <span class="chip rainbow">📍 <span id="chipLoc">Hồ Chí Minh</span></span>
-              <span class="chip rainbow">🎂 <span id="chipAge">19</span></span>
-              <span class="chip rainbow">🎮 <span id="chipTag">gamer</span></span>
+              <span class="chip rainbow">📍 Hồ Chí Minh</span>
+              <span class="chip rainbow">🎂 19</span>
+              <span class="chip rainbow">🎮 gamer</span>
             </div>
           </div>
         </div>
 
         <div class="grid">
-          <!-- Music -->
           <div class="section">
-            <div class="musicTitle rainbow">🎧 Nhạc tôi nghe</div>
-            <div class="muted">Đang nghe:</div>
-            <div style="font-weight:1000;font-size:22px;margin:6px 0 10px" class="rainbow" id="musicLabel">Ai ngoài anh</div>
-            <audio id="audio" controls preload="metadata">
-              <source src="music.mp3" type="audio/mpeg" />
-              Trình duyệt không hỗ trợ audio.
+            <div class="h rainbow">🎧 Nhạc tôi nghe</div>
+            <div class="hint">Đang nghe: <b class="rainbow" id="musicLabel">Ai ngoài anh</b></div>
+            <audio controls>
+              <source src="music.mp3" type="audio/mpeg">
             </audio>
-            <div class="hint">Tip: đổi bài chỉ cần thay file <b>music.mp3</b> (giữ đúng tên) 😎</div>
           </div>
 
-          <!-- Intro -->
           <div class="section">
             <div class="h rainbow">📌 Giới thiệu</div>
-            <ul class="muted" style="margin:0;padding-left:18px;line-height:1.7;font-weight:800">
-              <li>✨ Chạy Ngay Đi</li>
-              <li>🧸 Chạy Vào Trái Tim Em</li>
-              <li>😮‍💨 Đưa Thôi Anh Làm Gì Có Em</li>
-            </ul>
-          </div>
-
-          <!-- Schedule -->
-          <div class="section" style="grid-column:1/-1">
-            <div class="schedTop">
-              <div>
-                <div class="h rainbow" style="margin:0">📅 Lịch bận / rảnh</div>
-                <div class="hint">Chọn ngày → xem các khung giờ. Admin có thể thêm/sửa/xoá.</div>
-              </div>
-              <button class="miniBtn" id="btnAddSlot" type="button">➕ Thêm lịch</button>
-            </div>
-
-            <div class="dayTabs" id="dayTabs" style="margin-top:10px"></div>
-            <div class="schedList" id="schedList"></div>
-          </div>
-
-          <!-- Games / Links -->
-          <div class="section">
-            <div class="h rainbow">🕹️ Game mình hay chơi</div>
-            <div class="muted" style="font-weight:800;line-height:1.7">
-              ➤ Roblox <span style="opacity:.7">chill / sandbox</span><br>
-              ➤ Valorant <span style="opacity:.7">FPS / tryhard</span><br>
-              ➤ TFT <span style="opacity:.7">auto chess</span>
-            </div>
-            <div class="hint">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
-          </div>
-
-          <div class="section">
-            <div class="h rainbow">🔗 Liên hệ</div>
-            <div class="contacts">
-              <a class="linkBtn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
-              <a class="linkBtn" id="dcBtn" href="#" target="_blank" rel="noopener">🎧 Discord</a>
-            </div>
+            <div class="hint">Thêm nội dung dưới cho đỡ trống nè bro 😎</div>
           </div>
         </div>
 
-        <!-- Tus area -->
-        <div class="tusWrap section">
-          <div class="tusHeader">
-            <div>
-              <div class="h rainbow" style="margin:0">📝 Đây là nơi check các tus của tôi</div>
-              <div class="hint">Người xem chỉ bấm link • Admin mới thêm/xoá 🔐</div>
-            </div>
-            <button class="miniBtn" id="btnAddTus" type="button">➕ Thêm tus</button>
-          </div>
-          <div class="tusList" id="tusList"></div>
+        <div class="section" style="margin-top:14px">
+          <div class="h rainbow">📅 Lịch bận / rảnh</div>
+          <div class="hint">Mình sẽ add full lịch sau khi confirm nút hoạt động ok ✅</div>
         </div>
 
       </div>
@@ -640,78 +335,127 @@
 
       <div class="formGrid">
         <div>
-          <label>Nhập mật khẩu admin</label>
-          <input id="adminPass" type="password" inputmode="numeric" placeholder="Nhập pass..." />
-          <div class="hint">Không hiện pass ra ngoài (đỡ bị “lộ” 😭)</div>
+          <label>Mật khẩu admin</label>
+          <input id="adminPass" type="password" placeholder="Nhập pass...">
+          <div class="hint">Pass demo: <b>079268</b></div>
         </div>
 
         <div>
-          <label>Trạng thái</label>
-          <input id="adminState" type="text" readonly value="Đang khoá 🔒" />
+          <label>Rainbow chữ</label>
+          <select id="setRainbow">
+            <option value="off">Tắt</option>
+            <option value="on">Bật</option>
+          </select>
+
           <div class="rowBtns">
             <button class="bigBtn" id="btnLogin" type="button">✅ Bật Admin</button>
             <button class="bigBtn red" id="btnLogout" type="button">🚪 Thoát Admin</button>
           </div>
         </div>
+      </div>
 
-        <div>
-          <label>Link Facebook (dán link profile)</label>
-          <input id="setFb" placeholder="https://facebook.com/..." />
-        </div>
-        <div>
-          <label>Discord ID (chỉ cần ID)</label>
-          <input id="setDc" placeholder="9103..." />
-          <div class="hint">Tự build link: discord.com/users/&lt;ID&gt;</div>
-        </div>
-
-        <div>
-          <label>Link Roblox (tài khoản)</label>
-          <input id="setRb" placeholder="Dán link (có thể để trống)" />
-        </div>
-        <div>
-          <label>Link Valorant (tài khoản / tracker)</label>
-          <input id="setVal" placeholder="Dán link (có thể để trống)" />
-        </div>
-
-        <div>
-          <label>Link TFT (tài khoản / tracker)</label>
-          <input id="setTft" placeholder="Dán link (có thể để trống)" />
-        </div>
-
-        <div>
-          <label>Tên bài nhạc hiển thị</label>
-          <input id="setMusicName" placeholder="Ai ngoài anh" />
-          <div class="hint">Chỉ chỉnh được khi Admin đang bật ✅</div>
-        </div>
-
-        <div style="grid-column:1/-1">
-          <label>Rainbow chữ (toàn web)</label>
-          <select id="setRainbow">
-            <option value="off">Tắt</option>
-            <option value="on">Bật</option>
-          </select>
-          <div class="hint">Bật lên thì chữ 7 sắc chạy liên tục 🌈</div>
-        </div>
-
-        <div style="grid-column:1/-1">
-          <div class="rowBtns">
-            <button class="bigBtn" id="btnSaveSettings" type="button">💾 Lưu cài đặt</button>
-          </div>
-          <div class="hint">Lưu xong nó tự nhớ (localStorage) nên lần sau khỏi nhập lại.</div>
-        </div>
+      <div class="rowBtns">
+        <button class="bigBtn" id="btnSave" type="button">💾 Lưu</button>
       </div>
     </div>
   </div>
 
-  <!-- Tus Modal -->
-  <div class="modalOverlay" id="tusOverlay" aria-hidden="true">
-    <div class="modal">
-      <div class="modalHead">
-        <h3 class="modalTitle rainbow">➕ Thêm tus</h3>
-        <button class="x" id="btnCloseTus" type="button">✕</button>
-      </div>
+  <script>
+    // If script dies, you'll see this alert
+    window.addEventListener("error", (e)=> {
+      alert("JS bị lỗi nên nút không chạy 💀\\n" + (e.message || "unknown"));
+    });
 
-      <div class="formGrid">
-        <div>
-          <label>Tên tus</label>
-          <input id="tusName
+    const $ = (id)=>document.getElementById(id);
+    const KEY="milo_fix_btns_v1";
+    const ADMIN_PASS="079268";
+
+    const state = (()=> {
+      try{
+        const raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : { theme:"dark", isAdmin:false, rainbow:"off" };
+      }catch(e){
+        return { theme:"dark", isAdmin:false, rainbow:"off" };
+      }
+    })();
+
+    function save(){
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function applyTheme(){
+      document.body.classList.toggle("light", state.theme==="light");
+      document.body.classList.toggle("dark", state.theme!=="light");
+      $("themeText").textContent = state.theme==="light" ? "Light" : "Dark";
+    }
+    function applyAdmin(){
+      $("adminText").textContent = state.isAdmin ? "Admin ON" : "Admin";
+    }
+    function applyRainbow(){
+      document.body.classList.toggle("rainbow-on", state.rainbow==="on");
+      $("setRainbow").value = state.rainbow;
+    }
+
+    // Use pointerdown for mobile reliability
+    $("btnTheme").addEventListener("pointerdown", (e)=>{
+      e.preventDefault();
+      state.theme = (state.theme==="light") ? "dark" : "light";
+      save();
+      applyTheme();
+    });
+
+    $("btnAdmin").addEventListener("pointerdown", (e)=>{
+      e.preventDefault();
+      $("adminOverlay").classList.add("show");
+      $("adminPass").value="";
+      applyRainbow();
+      applyAdmin();
+    });
+
+    $("btnCloseAdmin").addEventListener("pointerdown", (e)=>{
+      e.preventDefault();
+      $("adminOverlay").classList.remove("show");
+    });
+
+    $("adminOverlay").addEventListener("pointerdown", (e)=>{
+      if(e.target === $("adminOverlay")) $("adminOverlay").classList.remove("show");
+    });
+
+    $("btnLogin").addEventListener("pointerdown", ()=>{
+      const pass = $("adminPass").value.trim();
+      if(pass !== ADMIN_PASS){
+        alert("Sai mật khẩu 💀");
+        return;
+      }
+      state.isAdmin = true;
+      save();
+      applyAdmin();
+      alert("Admin ON ✅");
+    });
+
+    $("btnLogout").addEventListener("pointerdown", ()=>{
+      state.isAdmin = false;
+      save();
+      applyAdmin();
+      alert("Đã thoát Admin 🚪");
+    });
+
+    $("btnSave").addEventListener("pointerdown", ()=>{
+      if(!state.isAdmin){
+        alert("Bật Admin trước bro 🔒");
+        return;
+      }
+      state.rainbow = $("setRainbow").value;
+      save();
+      applyRainbow();
+      alert("Đã lưu 🌈");
+    });
+
+    // INIT
+    applyTheme();
+    applyAdmin();
+    applyRainbow();
+    console.log("buttons ok");
+  </script>
+</body>
+</html>
