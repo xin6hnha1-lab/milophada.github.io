@@ -163,11 +163,13 @@
     }
     body.light .avatar{ border-color: rgba(255,255,255,.95); }
 
-  .avatar-frame{
-  pointer-events: none;
+/* KHUNG DISCORD THẬT – KHÔNG ĐỤNG HÌNH */
+.avatar-frame{
   position: absolute;
-  inset: -10px;                 /* khung to hơn avatar */
-  border-radius: 999px;
+  inset: -18px;        /* tuỳ khung, có thể -16 / -20 */
+  pointer-events: none;
+  z-index: 5;
+}
 
   /* viền ngoài trắng */
   border: 3px solid rgba(255,255,255,.85);
@@ -541,11 +543,14 @@
     <div class="card header">
       <img class="cover" src="cover.gif" alt="Cover" />
 
-      <div class="header-inner">
-        <div class="avatar-wrap">
-          <img class="avatar" src="avatar.jpg" alt="Avatar" />
-          <div class="avatar-frame"></div>
-        </div>
+   <div class="card header">
+  <img class="cover" src="cover.gif" alt="Cover" />
+
+  <div class="header-inner">
+    <div class="avatar-wrap">
+      <img class="avatar" src="avatar.jpg" alt="Avatar">
+      <img class="avatar-frame" src="discord-frame.png" alt="">
+    </div>
 
         <div class="who">
           <h1 class="name" id="nameText">Milo Pha Đá (Nhat boy)</h1>
