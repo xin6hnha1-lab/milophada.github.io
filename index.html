@@ -2,728 +2,693 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Milo Pha Đá</title>
 
-  <!-- ✅ DÙNG effect.css của m -->
-  <link rel="stylesheet" href="effect.css">
+  <!-- Optional: giữ file effect.css của mày (nếu có) -->
+  <link rel="stylesheet" href="effect.css" />
 
   <style>
     :root{
-      --glass: rgba(255,255,255,.14);
-      --glass2: rgba(255,255,255,.10);
-      --stroke: rgba(255,255,255,.18);
-      --text: #eaf2ff;
-      --muted: rgba(255,255,255,.72);
-      --shadow: 0 22px 70px rgba(0,0,0,.35);
+      --bg: #cfe6ff;
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.58);
+      --text: #0c1b2a;
+      --muted: rgba(12,27,42,.70);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 18px 45px rgba(0,0,0,.18);
       --radius: 22px;
+      --btn: rgba(12,27,42,.10);
+      --btnText: #0c1b2a;
+      --accent: #3b82f6;
     }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      min-height:100vh;
-      color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(900px 600px at 20% 0%, rgba(99,102,241,.35), transparent 55%),
-        radial-gradient(900px 600px at 90% 10%, rgba(56,189,248,.22), transparent 55%),
-        url("bg.gif");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+    body.dark{
+      --bg: #071320;
+      --card: rgba(12,20,30,.72);
+      --card2: rgba(12,20,30,.55);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 22px 55px rgba(0,0,0,.45);
+      --btn: rgba(255,255,255,.10);
+      --btnText: rgba(255,255,255,.92);
+      --accent: #60a5fa;
     }
 
-    /* light mode */
-    body.light{
-      --glass: rgba(0,0,0,.06);
-      --glass2: rgba(0,0,0,.04);
-      --stroke: rgba(0,0,0,.10);
-      --text:#0b1220;
-      --muted: rgba(0,0,0,.62);
-      background:
-        radial-gradient(900px 600px at 20% 0%, rgba(99,102,241,.22), transparent 55%),
-        radial-gradient(900px 600px at 90% 10%, rgba(56,189,248,.16), transparent 55%),
-        url("bg.gif");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    /* background gif */
+    .bg{
+      position:fixed; inset:0;
+      background: url("bg.gif") center/cover no-repeat;
+      filter: saturate(1.05);
+      transform: scale(1.02);
+      z-index:-2;
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.18));
+      z-index:-1;
+    }
+    body.dark .bg::after{
+      background: linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.55));
     }
 
     .wrap{
-      width:min(980px, 94vw);
-      margin: 18px auto 40px;
-      position:relative;
+      width:min(980px, 100%);
+      margin: 18px auto;
+      padding: 0 12px 28px;
     }
 
-    /* top buttons */
+    /* top actions */
     .top-actions{
-      position: sticky;
-      top: 10px;
-      z-index: 50;
       display:flex;
       justify-content:flex-end;
       gap:10px;
-      padding: 10px 0;
-      pointer-events:none; /* quan trọng: để khỏi bị đè bởi overlay */
+      margin: 6px 2px 12px;
+      position:sticky;
+      top: 10px;
+      z-index: 50;
     }
-    .btn{
-      pointer-events:auto;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.18);
       backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--btnText);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 900;
       display:flex;
       align-items:center;
-      gap:8px;
+      gap:10px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
       cursor:pointer;
       user-select:none;
+      transition: transform .08s ease, opacity .2s ease;
     }
-    body.light .btn{ background: rgba(255,255,255,.42); }
+    .pill:active{ transform: scale(.98); }
+    .pill small{ opacity:.75; font-weight:800; }
 
-    /* card */
+    /* main card */
     .card{
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius);
-      overflow:hidden;
-      border:1px solid var(--stroke);
       box-shadow: var(--shadow);
-      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.22));
-      backdrop-filter: blur(14px);
-    }
-    body.light .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
+      overflow:hidden;
     }
 
-    /* cover */
     .cover{
+      height: 240px;
       position:relative;
-      height: 260px;
       background: #000;
     }
     .cover img{
       width:100%;
       height:100%;
-      object-fit: cover; /* ✅ full cover */
+      object-fit:cover;
       display:block;
-      filter: saturate(1.05) contrast(1.05);
-    }
-    .cover::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55));
-      pointer-events:none;
+      filter: saturate(1.05) contrast(1.03);
     }
 
-    /* header row */
-    .header{
+    .profileRow{
       display:flex;
-      gap: 18px;
-      padding: 18px;
+      gap:16px;
+      padding: 14px 16px 16px;
       align-items:flex-end;
-      margin-top: -64px;
-      position:relative;
-      z-index: 2;
+      flex-wrap:wrap;
     }
 
-    .title-area{
-      flex:1;
-      min-width: 0;
+    .avatarWrap{
+      width: 122px;
+      height: 122px;
+      margin-top: -60px;
+      border-radius: 999px;
+      position:relative;
+      flex: 0 0 auto;
     }
-    h1{
-      margin:0;
-      font-size: clamp(22px, 4.8vw, 42px);
-      line-height: 1.05;
+    .avatarFrame{
+      position:absolute; inset:-14px;
+      background: url("frame.png") center/contain no-repeat;
+      pointer-events:none;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.22));
+    }
+    .avatar{
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      border: 4px solid rgba(255,255,255,.75);
+      object-fit:cover;
+      display:block;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+      background:#000;
+    }
+
+    .who{
+      min-width: 220px;
+      flex: 1 1 240px;
+    }
+    .name{
+      font-size: 30px;
+      line-height: 1.1;
+      font-weight: 1000;
       letter-spacing: .2px;
-      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+      margin:0 0 6px;
     }
-    .meta{
-      margin-top: 6px;
+    .sub{
+      margin:0 0 6px;
       color: var(--muted);
-      font-weight: 600;
-      font-size: 13px;
+      font-weight: 800;
     }
     .quote{
-      margin-top: 6px;
+      margin: 0;
       color: var(--muted);
       font-style: italic;
-      font-size: 13px;
+      font-weight: 700;
     }
 
     .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 12px;
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top: 10px;
     }
     .chip{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.18);
+      padding: 8px 10px;
       border-radius: 999px;
-      border:1px solid var(--stroke);
-      background: var(--glass2);
-      backdrop-filter: blur(10px);
-      font-weight: 700;
+      font-weight: 900;
+      color: var(--btnText);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
       font-size: 13px;
-      color: var(--text);
+    }
+    body.dark .chip{
+      background: rgba(255,255,255,.08);
     }
 
-    /* sections grid */
+    /* grid sections */
     .grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      padding: 0 18px 18px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+      padding: 12px 16px 16px;
     }
-    .box{
-      border:1px solid var(--stroke);
-      background: var(--glass);
+    @media (max-width: 860px){
+      .cover{ height: 220px; }
+      .grid{ grid-template-columns: 1fr; }
+      .avatarWrap{ margin-top:-66px; }
+      .name{ font-size: 28px; }
+      .top-actions{ top: 6px; }
+    }
+
+    .panel{
+      border: 1px solid var(--border);
+      background: var(--card2);
       border-radius: 18px;
-      padding: 14px;
-      backdrop-filter: blur(12px);
-      min-width:0;
+      padding: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.08);
     }
-    .box h3{
-      margin:0 0 10px;
+    .h{
+      font-weight:1000;
       font-size: 16px;
-      letter-spacing: .2px;
+      margin: 0 0 6px;
     }
+    .hint{
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+      margin: 0 0 10px;
+      line-height: 1.35;
+    }
+
     .list{
       margin:0;
       padding-left: 18px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    /* music block */
-    .music-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .songName{
-      font-size: 20px;
-      font-weight: 900;
-      margin: 2px 0 0;
-    }
-    .rainbow{
-      background: linear-gradient(90deg, #ff3b30, #ff9500, #ffcc00, #34c759, #32ade6, #5856d6, #af52de);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    audio{ width:100%; }
-
-    /* contact buttons */
-    .contacts{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
+      gap: 6px;
+      font-weight: 850;
     }
-    .linkbtn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 14px 12px;
-      border-radius: 14px;
-      border:1px solid var(--stroke);
-      background: var(--glass2);
-      color: var(--text);
-      text-decoration:none;
-      font-weight: 800;
-    }
+    .list li{ line-height: 1.35; }
 
-    /* tus area */
-    .tusHead{
+    /* music */
+    .musicTitle{
+      font-weight: 1000;
+      font-size: 14px;
+      margin-bottom: 8px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:10px;
-    }
-    .tusList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .tusItem{
-      display:flex;
       align-items:center;
-      justify-content:space-between;
+    }
+    .musicTitle b{ font-size: 18px; }
+    audio{ width: 100%; }
+
+    /* buttons row */
+    .btnRow{
+      display:flex;
       gap:10px;
-      border:1px solid var(--stroke);
-      background: var(--glass2);
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .btn{
+      flex: 1 1 140px;
+      border: 1px solid var(--border);
+      background: var(--btn);
+      color: var(--btnText);
       border-radius: 14px;
       padding: 10px 12px;
-    }
-    .tusItem a{
-      color: var(--text);
-      font-weight: 800;
+      font-weight: 1000;
+      cursor:pointer;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      transition: transform .08s ease, opacity .2s ease;
       text-decoration:none;
-      word-break: break-word;
     }
-    .mini{
-      color: var(--muted);
-      font-weight:700;
-      font-size: 12px;
+    .btn:active{ transform: scale(.99); }
+
+    /* tus */
+    .tusBox{
+      margin-top: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .tusHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .tusItems{
+      display:grid;
+      gap: 8px;
+    }
+    .tusItem{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.14);
+      padding: 10px 12px;
+      border-radius: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    body.dark .tusItem{ background: rgba(255,255,255,.06); }
+    .tusItem a{
+      color: var(--btnText);
+      font-weight: 950;
+      text-decoration:none;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 78%;
+    }
+    .miniBtn{
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.08);
+      color: var(--btnText);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-weight: 1000;
+      cursor:pointer;
+    }
+    body.dark .miniBtn{ background: rgba(255,255,255,.08); }
+
+    /* schedule */
+    table{ color: var(--btnText); }
+    th,td{ vertical-align: top; }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.14);
+      font-weight: 950;
+      font-size: 13px;
+      margin-right: 8px;
       margin-top: 6px;
     }
 
-    /* admin modal */
-    .modal{
+    /* modal */
+    .overlay{
       position:fixed;
       inset:0;
-      background: rgba(0,0,0,.55);
+      background: rgba(0,0,0,.45);
       display:none;
       align-items:center;
       justify-content:center;
-      z-index: 999;
       padding: 14px;
+      z-index: 999;
     }
-    .modal.show{ display:flex; }
-    .modalCard{
-      width: min(920px, 96vw);
-      max-height: 88vh;
-      overflow:auto;
+    .overlay.show{ display:flex; }
+    .modal{
+      width:min(880px, 100%);
+      border: 1px solid var(--border);
+      background: var(--card);
       border-radius: 18px;
-      border:1px solid var(--stroke);
-      background: rgba(15,23,42,.92);
-      backdrop-filter: blur(16px);
       box-shadow: var(--shadow);
       padding: 14px;
-      color: #eaf2ff;
+      position:relative;
+      max-height: min(86vh, 820px);
+      overflow:auto;
+
+      /* FIX “chữ văng” */
+      line-height: 1.35;
     }
-    body.light .modalCard{ background: rgba(255,255,255,.92); color:#0b1220; }
-    .modalTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      position: sticky;
+    .modal *{
+      letter-spacing: 0 !important;
+      word-break: break-word;
+    }
+    .close{
+      position:sticky;
       top: 0;
-      padding-bottom:10px;
-      background: inherit;
-    }
-    .x{
-      border:none;
-      background: rgba(0,0,0,.18);
-      color: inherit;
-      width: 38px;
-      height: 38px;
+      float:right;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.08);
+      color: var(--btnText);
       border-radius: 12px;
+      padding: 8px 10px;
+      font-weight: 1000;
       cursor:pointer;
     }
-    .formGrid{
+    body.dark .close{ background: rgba(255,255,255,.08); }
+
+    .modalGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
       margin-top: 10px;
     }
-    label{ font-weight: 900; font-size: 13px; }
-    input, select{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(0,0,0,.15);
-      outline:none;
-      background: rgba(255,255,255,.92);
-      color:#0b1220;
-    }
-    body.dark input, body.dark select{
-      background: rgba(255,255,255,.12);
-      color: #eaf2ff;
-      border:1px solid rgba(255,255,255,.18);
-    }
-    .saveRow{
-      display:flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap:wrap;
-    }
-    .saveRow .btn2{
-      flex:1;
-      border:none;
-      border-radius: 14px;
-      padding: 12px;
-      font-weight: 900;
-      cursor:pointer;
-      background: #4aa8ff;
-      color:#08111f;
-    }
-    .btnDanger{
-      background:#ff5b5b !important;
-      color:#250000 !important;
+    @media (max-width: 860px){
+      .modalGrid{ grid-template-columns: 1fr; }
     }
 
-    /* responsive */
-    @media (max-width: 860px){
-      .header{ flex-direction: column; align-items:center; text-align:center; margin-top:-82px; }
-      .grid{ grid-template-columns: 1fr; }
-      .contacts{ grid-template-columns: 1fr 1fr; }
-      .cover{ height: 220px; }
+    label{
+      display:block;
+      font-weight: 1000;
+      margin-bottom: 6px;
     }
+    input,textarea,select{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.18);
+      color: var(--btnText);
+      outline:none;
+      font-weight: 850;
+    }
+    body.dark input, body.dark textarea, body.dark select{
+      background: rgba(255,255,255,.08);
+    }
+    textarea{ min-height: 88px; resize: vertical; }
+
+    .rowBtns{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .primary{
+      background: rgba(59,130,246,.18);
+      border-color: rgba(59,130,246,.35);
+      color: var(--btnText);
+    }
+    .danger{
+      background: rgba(239,68,68,.16);
+      border-color: rgba(239,68,68,.35);
+      color: var(--btnText);
+    }
+
+    /* rainbow text toggle */
+    .rainbow{
+      background: linear-gradient(90deg,#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#007aff,#af52de,#ff3b30);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rb 3.5s linear infinite;
+      font-weight: 1000;
+    }
+    @keyframes rb{
+      0%{ background-position:0% 50%; }
+      100%{ background-position:100% 50%; }
+    }
+
+    .rainbowOff .rainbow{
+      color: var(--btnText) !important;
+      background: none !important;
+      -webkit-background-clip: border-box !important;
+      background-clip: border-box !important;
+      animation: none !important;
+    }
+
+    .footerSpace{ height: 26px; }
   </style>
 </head>
 
-<body class="dark">
+<body class="rainbowOff">
+  <div class="bg"></div>
+
   <div class="wrap">
     <div class="top-actions">
-      <button class="btn" id="btnTheme">🌙 <span id="themeText">Dark</span></button>
-      <button class="btn" id="btnAdmin">🔒 <span id="adminText">Admin</span></button>
+      <button class="pill" id="btnTheme" type="button" aria-label="Toggle theme">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark</span>
+      </button>
+
+      <button class="pill" id="btnAdmin" type="button" aria-label="Admin">
+        <span id="adminIcon">🔒</span>
+        <span id="adminText">Admin</span>
+        <small id="adminState">OFF</small>
+      </button>
     </div>
 
-    <div class="card">
+    <main class="card">
       <div class="cover">
-        <img src="cover.gif" alt="cover">
+        <img src="cover.gif" alt="cover" />
       </div>
 
-      <div class="header">
-        <!-- ✅ Avatar Discord frame dùng effect.css + frame.png -->
-        <div class="avatar-wrap">
-          <div class="ring"></div>
-          <img class="avatar" src="avatar.jpg" alt="avatar">
-          <img class="frame" src="frame.png" alt="frame">
+      <div class="profileRow">
+        <div class="avatarWrap">
+          <img class="avatar" src="avatar.jpg" alt="avatar" />
+          <div class="avatarFrame"></div>
         </div>
 
-        <div class="title-area">
-          <h1>Milo Pha Đá (Nhạt boy)</h1>
-          <div class="meta">IT Student · Software Engineering</div>
-          <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
+        <div class="who">
+          <h1 class="name rainbow" id="nameText">Milo Pha Đá (Nhat boy)</h1>
+          <p class="sub rainbow" id="subText">IT Student • Software Engineering</p>
+          <p class="quote rainbow" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</p>
 
           <div class="chips">
-            <div class="chip">📍 Hồ Chí Minh</div>
-            <div class="chip">🎂 19</div>
-            <div class="chip">🎮 gamer</div>
+            <span class="chip rainbow" id="chipLoc">📍 Hồ Chí Minh</span>
+            <span class="chip rainbow" id="chipAge">🎂 19</span>
+            <span class="chip rainbow" id="chipTag">🎮 gamer</span>
           </div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="box" id="musicBox">
-          <div class="music-top">
-            <h3 style="margin:0">🎵 Nhạc tôi nghe</h3>
-            <div class="mini">Admin mới đổi tên & màu</div>
+        <section class="panel">
+          <div class="musicTitle">
+            <span class="rainbow">🎧 Nhạc tôi nghe</span>
+            <b class="rainbow" id="musicName">Ai ngoài anh</b>
           </div>
-          <div class="songName rainbow" id="songName">Ai ngoài anh</div>
-          <audio id="player" controls preload="metadata">
-            <source src="music.mp3" type="audio/mpeg">
+          <div class="hint rainbow">Bấm Play để nghe 🎧</div>
+          <audio controls preload="none">
+            <source src="music.mp3" type="audio/mpeg" />
           </audio>
-        </div>
+        </section>
 
-        <div class="box">
-          <h3>✨ Giới thiệu</h3>
-          <ul class="list">
-            <li>✨ Chạy Ngay Đi</li>
-            <li>🧸 Chạy Vào Trái Tim Em</li>
-            <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+        <section class="panel">
+          <div class="h rainbow">📌 Giới thiệu</div>
+          <div class="hint rainbow">Thêm nội dung dưới cho đỡ trống nè bro 🫶</div>
+          <ul class="list" id="introList">
+            <li class="rainbow">✨ Chạy Ngay Đi</li>
+            <li class="rainbow">🧸 Chạy Vào Trái Tim Em</li>
+            <li class="rainbow">😵 Đùa Thôi Anh Làm Gì Có Em</li>
           </ul>
-        </div>
+        </section>
 
-        <div class="box">
-          <h3>🎮 Game mình hay chơi</h3>
-          <div class="tusList" style="gap:8px">
-            <div class="tusItem"><span>🕹 Roblox</span><a id="robloxLink" href="#" target="_blank">Mở link</a></div>
-            <div class="tusItem"><span>🎯 Valorant</span><a id="valoLink" href="#" target="_blank">Mở link</a></div>
-            <div class="tusItem"><span>🧠 TFT</span><a id="tftLink" href="#" target="_blank">Mở link</a></div>
+        <section class="panel">
+          <div class="h rainbow">🎮 Game mình hay chơi</div>
+          <div class="hint rainbow" id="gameHint">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
+
+          <div class="tag rainbow" id="gameRoblox">🧩 Roblox <span style="opacity:.7;font-weight:900">chill / sandbox</span></div>
+          <div class="tag rainbow" id="gameValorant">🎯 Valorant <span style="opacity:.7;font-weight:900">FPS / tryhard</span></div>
+          <div class="tag rainbow" id="gameTFT">♟️ TFT <span style="opacity:.7;font-weight:900">auto chess</span></div>
+        </section>
+
+        <section class="panel">
+          <div class="h rainbow">🔗 Liên hệ</div>
+          <div class="hint rainbow">Bấm là mở link luôn.</div>
+          <div class="btnRow">
+            <a class="btn rainbow" id="btnFb" href="#" target="_blank" rel="noreferrer">🌐 Facebook</a>
+            <a class="btn rainbow" id="btnDc" href="#" target="_blank" rel="noreferrer">💬 Discord</a>
           </div>
-          <div class="mini">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
-        </div>
 
-        <div class="box">
-          <h3>📞 Liên hệ</h3>
-          <div class="contacts">
-            <a class="linkbtn" id="fbBtn" href="https://facebook.com" target="_blank">🌐 Facebook</a>
-            <a class="linkbtn" id="dcBtn" href="https://discord.com/users/910327589309145109" target="_blank">🎮 Discord</a>
-          </div>
-        </div>
-
-        <div class="box" style="grid-column: 1 / -1;">
-          <div class="tusHead">
-            <div>
-              <h3 style="margin:0">📝 Đây là nơi check các tus của tôi</h3>
-              <div class="mini">Người xem chỉ bấm link · Admin mới thêm/xoá 🔒</div>
+          <div class="tusBox">
+            <div class="tusHead">
+              <div>
+                <div class="h rainbow">🧾 Đây là nơi check các tus của tôi</div>
+                <div class="hint rainbow">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
+              </div>
+              <button class="miniBtn" id="btnAddTus" type="button" style="display:none">➕ Thêm tus</button>
             </div>
-            <button class="btn" id="btnAddTus" style="pointer-events:auto">➕ Thêm tus</button>
+            <div class="tusItems" id="tusItems"></div>
+          </div>
+        </section>
+
+        <!-- schedule section -->
+        <section class="panel" id="scheduleSection">
+          <div class="h rainbow">📅 Lịch bận / rảnh</div>
+          <div class="hint rainbow">Admin chỉnh lịch, người xem chỉ xem. (Chuẩn mobile + không văng chữ 😤)</div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <span class="chip rainbow" id="todayChip">📍 Hôm nay: ...</span>
+            <span class="chip rainbow" id="freeChip">✅ Rảnh: ...</span>
           </div>
 
-          <div class="tusList" id="tusList"></div>
-        </div>
+          <div style="margin-top:12px; overflow:auto; border-radius:16px; border:1px solid var(--border)">
+            <table style="width:100%; border-collapse:collapse; min-width:650px">
+              <thead>
+                <tr style="background:rgba(0,0,0,.10)">
+                  <th style="text-align:left; padding:12px" class="rainbow">Thứ</th>
+                  <th style="text-align:left; padding:12px" class="rainbow">Bận</th>
+                  <th style="text-align:left; padding:12px" class="rainbow">Việc</th>
+                  <th style="text-align:left; padding:12px" class="rainbow">Rảnh</th>
+                </tr>
+              </thead>
+              <tbody id="scheduleTable"></tbody>
+            </table>
+          </div>
+
+          <div class="hint" style="margin-top:10px">
+            ➤ Format giờ: <b>HH:MM-HH:MM</b> (vd <b>13:00-15:30</b>)
+          </div>
+        </section>
       </div>
-    </div>
+
+      <div class="footerSpace"></div>
+    </main>
   </div>
 
-  <!-- ADMIN MODAL -->
-  <div class="modal" id="modal">
-    <div class="modalCard">
-      <div class="modalTop">
-        <div style="font-weight:1000;font-size:18px">🔐 Admin Panel</div>
-        <button class="x" id="btnClose">✕</button>
+  <!-- Admin modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <button class="close" id="btnClose" type="button">✖</button>
+
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div class="h rainbow" style="margin:0">🔐 Admin Panel</div>
+        <div class="chip" id="adminBadge">Admin: OFF</div>
       </div>
 
-      <div class="formGrid">
+      <div class="hint rainbow">Password demo: <b id="passDemo">079268</b> (mày đổi trong code được)</div>
+
+      <div class="modalGrid">
         <div>
-          <label>Link Facebook (dán link profile)</label>
-          <input id="inFb" placeholder="https://facebook.com/..." />
-        </div>
-        <div>
-          <label>Discord ID (chỉ cần ID)</label>
-          <input id="inDc" placeholder="9103..." />
+          <label class="rainbow">Mật khẩu admin</label>
+          <input id="passInput" placeholder="Nhập pass..." type="password" />
+          <div class="rowBtns">
+            <button class="btn primary rainbow" id="btnLogin" type="button">✅ Bật Admin</button>
+            <button class="btn danger rainbow" id="btnLogout" type="button">🚪 Thoát Admin</button>
+          </div>
         </div>
 
         <div>
-          <label>Link Roblox (tài khoản)</label>
-          <input id="inRoblox" placeholder="Dán link (có thể để trống)" />
-        </div>
-        <div>
-          <label>Link Valorant (tài khoản / tracker)</label>
-          <input id="inValo" placeholder="Dán link (có thể để trống)" />
+          <label class="rainbow">Rainbow chữ</label>
+          <select id="rainbowSelect">
+            <option value="off">Tắt</option>
+            <option value="on">Bật</option>
+          </select>
+
+          <div class="hint rainbow" style="margin-top:8px">
+            Bật lên thì chữ 7 sắc đổi màu liên tục 💅
+          </div>
         </div>
 
         <div>
-          <label>Link TFT (tài khoản / tracker)</label>
-          <input id="inTft" placeholder="Dán link (có thể để trống)" />
+          <label class="rainbow">Link Facebook (profile)</label>
+          <input id="fbInput" placeholder="https://facebook.com/..." />
         </div>
         <div>
-          <label>Tên bài nhạc hiển thị</label>
-          <input id="inSong" placeholder="Ai ngoài anh" />
+          <label class="rainbow">Discord ID (chỉ cần ID)</label>
+          <input id="dcInput" placeholder="1234567890..." />
+          <div class="hint rainbow">Tự build link: discord.com/users/&lt;ID&gt;</div>
+        </div>
+
+        <div>
+          <label class="rainbow">Link Roblox (tài khoản)</label>
+          <input id="rbInput" placeholder="https://www.roblox.com/users/..." />
+        </div>
+        <div>
+          <label class="rainbow">Link Valorant (tracker...)</label>
+          <input id="vaInput" placeholder="Dán link (có thể để trống)" />
+        </div>
+
+        <div>
+          <label class="rainbow">Link TFT (tracker...)</label>
+          <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+        </div>
+        <div>
+          <label class="rainbow">Tên bài nhạc hiển thị</label>
+          <input id="musicInput" placeholder="Ví dụ: Ai ngoài anh" />
+        </div>
+
+        <div style="grid-column:1/-1">
+          <label class="rainbow">➕ Thêm tus mới</label>
+          <div class="modalGrid" style="margin-top:0">
+            <div>
+              <input id="tusName" placeholder="Tên tus (vd: Tus AV)" />
+            </div>
+            <div>
+              <input id="tusLink" placeholder="Dán link tus Facebook..." />
+            </div>
+          </div>
+
+          <div class="rowBtns">
+            <button class="btn primary rainbow" id="btnSaveSettings" type="button">💾 Lưu cài đặt</button>
+            <button class="btn rainbow" id="btnSaveTus" type="button">➕ Lưu tus</button>
+          </div>
+
+          <div class="hint rainbow" style="margin-top:8px">
+            Tus sẽ hiện cho mọi người bấm mở trực tiếp.
+          </div>
+        </div>
+
+        <div style="grid-column:1/-1">
+          <label class="rainbow">📅 Chỉnh lịch bận / rảnh</label>
+          <textarea id="scheduleInput" placeholder='Mỗi dòng 1 ngày:
+Thứ 2 | 08:00-11:30 | Học / Lab | 12:30-23:00
+Thứ 3 | 13:00-17:00 | Dự án | 08:00-12:00, 17:30-23:00'></textarea>
+          <div class="hint rainbow">Admin paste/sửa xong bấm <b>Lưu cài đặt</b> là áp dụng.</div>
         </div>
       </div>
-
-      <div class="saveRow">
-        <button class="btn2" id="btnSave">💾 Lưu cài đặt</button>
-        <button class="btn2 btnDanger" id="btnLogout">🚪 Thoát Admin</button>
-      </div>
-
-      <hr style="opacity:.2;margin:14px 0">
-
-      <div style="font-weight:1000;margin-bottom:8px">➕ Thêm tus mới</div>
-      <div class="formGrid" style="grid-template-columns:1fr 1fr">
-        <div>
-          <label>Tên tus</label>
-          <input id="inTusName" placeholder="Tus AV" />
-        </div>
-        <div>
-          <label>Link tus Facebook</label>
-          <input id="inTusLink" placeholder="https://www.facebook.com/..." />
-        </div>
-      </div>
-      <div class="saveRow">
-        <button class="btn2" id="btnSaveTus">➕ Lưu tus</button>
-      </div>
-
-      <div class="mini">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
     </div>
   </div>
 
   <script>
-    // ====== safe query
-    const $ = (s)=>document.querySelector(s);
-
-    // ====== state
-    const PASS = "079268";
-    const LS_KEY = "milo_settings_v1";
-    const LS_TUS = "milo_tus_v1";
-    let isAdmin = false;
-
-    // ====== load saved settings
-    function loadSettings(){
-      try{
-        return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
-      }catch(e){ return {}; }
-    }
-    function saveSettings(obj){
-      localStorage.setItem(LS_KEY, JSON.stringify(obj));
-    }
-
-    function loadTus(){
-      try{
-        return JSON.parse(localStorage.getItem(LS_TUS) || "[]");
-      }catch(e){ return []; }
-    }
-    function saveTus(arr){
-      localStorage.setItem(LS_TUS, JSON.stringify(arr));
-    }
-
-    // ====== apply settings to UI
-    function applySettings(){
-      const s = loadSettings();
-
-      if(s.fb) $("#fbBtn").href = s.fb;
-      if(s.discordId) $("#dcBtn").href = "https://discord.com/users/" + s.discordId;
-
-      // game links
-      $("#robloxLink").href = s.roblox || "#";
-      $("#valoLink").href = s.valo || "#";
-      $("#tftLink").href = s.tft || "#";
-
-      // song name
-      if(s.song) $("#songName").textContent = s.song;
-
-      // fill admin inputs
-      $("#inFb").value = s.fb || "";
-      $("#inDc").value = s.discordId || "910327589309145109";
-      $("#inRoblox").value = s.roblox || "";
-      $("#inValo").value = s.valo || "";
-      $("#inTft").value = s.tft || "";
-      $("#inSong").value = s.song || "Ai ngoài anh";
-    }
-
-    // ====== render tus list
-    function renderTus(){
-      const list = $("#tusList");
-      const data = loadTus();
-      list.innerHTML = "";
-
-      if(data.length === 0){
-        list.innerHTML = '<div class="mini">Chưa có tus nào. (Admin bấm Thêm tus để thêm)</div>';
-        return;
-      }
-
-      data.forEach((t, idx)=>{
-        const div = document.createElement("div");
-        div.className = "tusItem";
-        div.innerHTML = `
-          <a href="${t.link}" target="_blank">${t.name}</a>
-          ${isAdmin ? `<button data-i="${idx}" class="x" style="width:auto;padding:8px 12px;border-radius:12px">🗑 Xoá</button>` : ""}
-        `;
-        list.appendChild(div);
-      });
-
-      // bind delete
-      if(isAdmin){
-        list.querySelectorAll("button[data-i]").forEach(b=>{
-          b.onclick = ()=>{
-            const i = Number(b.dataset.i);
-            const arr = loadTus();
-            arr.splice(i,1);
-            saveTus(arr);
-            renderTus();
-          };
-        });
-      }
-    }
-
-    // ====== theme toggle (fix click on mobile)
-    function setTheme(mode){
-      if(mode === "light"){
-        document.body.classList.remove("dark");
-        document.body.classList.add("light");
-        $("#themeText").textContent = "Light";
-      }else{
-        document.body.classList.remove("light");
-        document.body.classList.add("dark");
-        $("#themeText").textContent = "Dark";
-      }
-      localStorage.setItem("milo_theme", mode);
-    }
-
-    // init theme
-    const savedTheme = localStorage.getItem("milo_theme") || "dark";
-    setTheme(savedTheme);
-
-    $("#btnTheme").addEventListener("click", (e)=>{
-      e.preventDefault();
-      const now = document.body.classList.contains("light") ? "light" : "dark";
-      setTheme(now === "dark" ? "light" : "dark");
-    }, {passive:false});
-
-    // ====== admin open/close
-    function openModal(){
-      $("#modal").classList.add("show");
-      document.body.style.overflow = "hidden";
-    }
-    function closeModal(){
-      $("#modal").classList.remove("show");
-      document.body.style.overflow = "";
-    }
-
-    $("#btnClose").onclick = closeModal;
-
-    // ✅ button admin click fix
-    $("#btnAdmin").addEventListener("click", (e)=>{
-      e.preventDefault();
-      if(isAdmin){
-        openModal();
-        return;
-      }
-      const p = prompt("Nhập mật khẩu admin:");
-      if(p === PASS){
-        isAdmin = true;
-        $("#adminText").textContent = "Admin ON";
-        openModal();
-        renderTus();
-      }else{
-        alert("Sai mật khẩu 🥲");
-      }
-    }, {passive:false});
-
-    // Add tus button: only admin
-    $("#btnAddTus").onclick = ()=>{
-      if(!isAdmin){
-        alert("Chỉ Admin mới thêm tus nha 🔒");
-        return;
-      }
-      openModal();
-      $("#inTusName").focus();
-    };
-
-    // Save settings
-    $("#btnSave").onclick = ()=>{
-      if(!isAdmin){
-        alert("Chỉ Admin mới lưu cài đặt 🔒");
-        return;
-      }
-      const s = {
-        fb: $("#inFb").value.trim(),
-        discordId: $("#inDc").value.trim(),
-        roblox: $("#inRoblox").value.trim(),
-        valo: $("#inValo").value.trim(),
-        tft: $("#inTft").value.trim(),
-        song: $("#inSong").value.trim()
-      };
-      saveSettings(s);
-      applySettings();
-      alert("Đã lưu cài đặt ✅");
-    };
-
-    // Save tus
-    $("#btnSaveTus").onclick = ()=>{
-      if(!isAdmin){
-        alert("Chỉ Admin mới thêm tus 🔒");
-        return;
-      }
-      const name = $("#inTusName").value.trim();
-      const link = $("#inTusLink").value.trim();
-      if(!name || !link){
-        alert("Nhập đủ Tên tus + Link tus nha 😅");
-        return;
-      }
-      const arr = loadTus();
-      arr.unshift({name, link});
-      saveTus(arr);
-      $("#inTusName").value = "";
-      $("#inTusLink").value = "";
-      renderTus();
-      alert("Đã thêm tus ✅");
-    };
-
-    // Logout admin
-    $("#btnLogout").onclick = ()=>{
-      isAdmin = false;
-      $("#adminText").textContent = "Admin";
-      closeModal();
-      renderTus();
-      alert("Đã thoát Admin 👋");
-    };
-
-    // init
-    applySettings();
-    renderTus();
-  </script>
-</body>
-</html>
+    // =======================
+    // ✅ CONFIG + STORAGE
+    // =======================
+    const KEY = "milo_site_v4";
+    const PASS_ADMIN = "079268"; // đổi pass ở đ
