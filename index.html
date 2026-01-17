@@ -9,30 +9,38 @@
     :root{
       --bg: #0b1220;
       --bg2:#0a0f1b;
+
       --card: rgba(255,255,255,.10);
       --card2: rgba(255,255,255,.14);
+
       --text:#e8f0ff;
       --muted: rgba(232,240,255,.70);
       --line: rgba(255,255,255,.12);
+
       --shadow: 0 14px 40px rgba(0,0,0,.35);
       --radius: 22px;
       --radius2: 16px;
+
       --accent: #4ea1ff;
-      --good: #28d17c;
       --danger: #ff4b4b;
       --chip: rgba(0,0,0,.25);
+
       --glass: blur(12px);
+
       --rainbow: 0; /* 0/1 */
     }
 
     body.light{
       --bg: #cfe7ff;
       --bg2:#e8f3ff;
+
       --card: rgba(255,255,255,.72);
       --card2: rgba(255,255,255,.82);
+
       --text:#0b1a33;
       --muted: rgba(11,26,51,.70);
       --line: rgba(11,26,51,.12);
+
       --shadow: 0 14px 40px rgba(0,0,0,.18);
       --chip: rgba(11,26,51,.10);
     }
@@ -97,34 +105,25 @@
       box-shadow: var(--shadow);
       cursor:pointer;
       user-select:none;
-      font-weight: 700;
+      font-weight: 800;
     }
     body.light .pill{ background: rgba(255,255,255,.55); }
     .pill:active{ transform: scale(.98); }
 
-    /* Card */
-   .card {
-  position: relative;
-  border-radius: 28px;
-  overflow: hidden;   /* QUAN TRỌNG – không có là vỡ layout */
-}
-.card-content,
-.profile-info {
-  padding-top: 80px; /* đủ để tránh avatar */
-}
-    h1 {
-  font-size: 22px;
-  line-height: 1.3;
-}
-
-h2, h3, p {
-  font-size: 14px;
-}
-    /* Header */
-    .header{
-      margin-top: 10px;
+    /* Card base */
+    .card{
       position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      border:1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: var(--glass);
+      -webkit-backdrop-filter: var(--glass);
     }
+
+    /* Header */
+    .header{ margin-top: 10px; }
 
     .cover{
       height: 220px;
@@ -140,25 +139,38 @@ h2, h3, p {
       padding: 14px 16px 16px;
       align-items:flex-end;
       flex-wrap:wrap;
+      position: relative;
     }
 
-    /* ===== FIX AVATAR ===== */
-.avatar,
-.profile-avatar,
-.profile img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
+    /* ===== AVATAR FIX (không che chữ + không bay ra ngoài) ===== */
+    .avatar-wrap{
+      position: relative;
+      width: 120px;
+      height: 120px;
+      flex: 0 0 auto;
+      margin-top: -70px;     /* kéo avatar lên đè nhẹ lên cover */
+      margin-left: 8px;
+    }
+    .avatar{
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display:block;
+      border: 4px solid rgba(255,255,255,.90);
+      background:#000;
+      box-shadow: 0 16px 30px rgba(0,0,0,.35);
+    }
+    body.light .avatar{ border-color: rgba(255,255,255,.95); }
 
-  position: absolute;
-  top: -60px;       /* đẩy avatar lên nửa trên card */
-  left: 24px;
-
-  border: 4px solid #fff;
-  background: #000;
-  z-index: 2;
-}
+    .avatar-frame{
+      pointer-events: none;
+      position:absolute;
+      inset:-8px;
+      border-radius: 999px;
+      border: 2px solid rgba(78,161,255,.35);
+      box-shadow: 0 0 0 6px rgba(78,161,255,.10);
+    }
 
     .who{
       min-width: 260px;
@@ -175,13 +187,13 @@ h2, h3, p {
     .subtitle{
       margin: 6px 0 0;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
     }
     .quote{
       margin: 8px 0 0;
       color: var(--muted);
       font-style: italic;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .chips{
@@ -198,7 +210,7 @@ h2, h3, p {
       border-radius: 999px;
       border: 1px solid var(--line);
       background: var(--chip);
-      font-weight: 800;
+      font-weight: 900;
       color: var(--text);
     }
 
@@ -210,9 +222,7 @@ h2, h3, p {
       margin-top: 14px;
     }
 
-    .section{
-      padding: 14px 14px 12px;
-    }
+    .section{ padding: 14px 14px 12px; }
     .h{
       display:flex;
       align-items:center;
@@ -222,22 +232,14 @@ h2, h3, p {
       font-size: 16px;
       font-weight: 900;
     }
-    .p{ margin:0; color: var(--muted); font-weight:700; }
+    .p{ margin:0; color: var(--muted); font-weight:800; }
 
     /* Music */
-    .music-title{
-      font-weight: 900;
-      margin:0 0 6px;
-    }
+    .music-title{ font-weight: 900; margin:0 0 6px; }
     audio{ width:100%; }
 
     /* List */
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top: 10px;
-    }
+    .list{ display:flex; flex-direction:column; gap:10px; margin-top: 10px; }
     .item{
       display:flex;
       justify-content:space-between;
@@ -249,6 +251,7 @@ h2, h3, p {
       border-radius: 14px;
     }
     body.light .item{ background: rgba(255,255,255,.55); }
+
     .tag{
       font-size: 12px;
       font-weight: 900;
@@ -309,10 +312,7 @@ h2, h3, p {
     .contact-btn:active{ transform: scale(.98); }
 
     /* TUS box */
-    .tus-box{
-      margin-top: 14px;
-      padding: 14px;
-    }
+    .tus-box{ margin-top: 14px; padding: 14px; }
     .tus-head{
       display:flex;
       justify-content:space-between;
@@ -320,12 +320,9 @@ h2, h3, p {
       align-items:center;
       margin-bottom: 10px;
       font-weight: 900;
+      flex-wrap: wrap;
     }
-    .tus-list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .tus-list{ display:flex; flex-direction:column; gap:10px; }
     .tus-link{
       display:flex;
       align-items:center;
@@ -342,16 +339,8 @@ h2, h3, p {
     body.light .tus-link{ background: rgba(255,255,255,.55); }
 
     /* Schedule */
-    .schedule{
-      margin-top: 14px;
-      padding: 14px;
-    }
-    .day-tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
+    .schedule{ margin-top: 14px; padding: 14px; }
+    .day-tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
     .tab{
       padding: 8px 10px;
       border-radius: 999px;
@@ -359,6 +348,7 @@ h2, h3, p {
       background: rgba(0,0,0,.12);
       font-weight: 900;
       cursor:pointer;
+      color: var(--text);
     }
     body.light .tab{ background: rgba(255,255,255,.55); }
     .tab.active{
@@ -414,6 +404,7 @@ h2, h3, p {
       -webkit-backdrop-filter: var(--glass);
       padding: 14px;
       position: relative;
+      padding-bottom: 22px; /* để không bị che nút lưu */
     }
     .modal-close{
       position:absolute;
@@ -443,12 +434,9 @@ h2, h3, p {
       gap: 12px;
       margin-top: 10px;
     }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
+    .field{ display:flex; flex-direction:column; gap:8px; }
     label{ font-weight: 900; }
+
     input, select, textarea{
       width:100%;
       border-radius: 14px;
@@ -461,6 +449,7 @@ h2, h3, p {
     }
     body.light input, body.light select, body.light textarea{ background: rgba(255,255,255,.55); }
     textarea{ min-height: 90px; resize: vertical; }
+    input::placeholder, textarea::placeholder{ color: var(--muted); }
 
     .help{ color: var(--muted); font-weight: 700; margin: 6px 0 0; }
 
@@ -469,26 +458,44 @@ h2, h3, p {
       bottom: 0;
       display:flex;
       gap: 10px;
-      padding: 12px 0 4px;
-      margin-top: 10px;
+      padding: 10px 0 4px;
+      margin-top: 12px;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.25));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
+    body.light .modal-actions{
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,.45));
+    }
 
-    /* Rainbow text */
-    .rainbow-on *{
-      background: linear-gradient(90deg,
-        #ff3b3b, #ff8c2f, #ffe94a, #35e17a, #36b9ff, #7a5cff, #ff4fd8
-      );
-      -webkit-background-clip: text;
-      background-clip:text;
-      color: transparent !important;
-      animation: rainbowMove 3.2s linear infinite;
+    /* ===== Rainbow chữ FIX (không làm transparent, không phá input/button) ===== */
+    @property --hue {
+      syntax: "<number>";
+      inherits: true;
+      initial-value: 0;
     }
-    @keyframes rainbowMove{
-      0%{ background-position: 0% 50%; }
-      100%{ background-position: 200% 50%; }
+    .rainbow-on{
+      animation: hueCycle 3.2s linear infinite;
     }
+    @keyframes hueCycle{
+      from{ --hue: 0; }
+      to{ --hue: 360; }
+    }
+    /* Chỉ đổi màu CHỮ, không đụng background */
+    .rainbow-on :where(h1,h2,h3,p,span,a,label,strong,em,i,b,small,.h,.p,.music-title,.slot-title,.slot-time){
+      color: hsl(var(--hue) 92% 62%);
+    }
+    /* Giữ nút/controls vẫn dễ nhìn */
+    .rainbow-on .btn,
+    .rainbow-on .pill,
+    .rainbow-on input,
+    .rainbow-on textarea,
+    .rainbow-on select,
+    .rainbow-on option,
+    .rainbow-on audio{
+      color: var(--text);
+    }
+    .rainbow-on .btn-primary{ color: #fff; }
 
     /* Responsive */
     @media (max-width: 860px){
@@ -506,7 +513,7 @@ h2, h3, p {
   </style>
 </head>
 
-<body class="dark">
+<body>
   <div class="bg"></div>
 
   <div class="wrap">
@@ -546,7 +553,7 @@ h2, h3, p {
       <div class="card section">
         <div class="h">🎧 Nhạc tôi nghe</div>
         <div class="music-title">Đang nghe: <span id="songName">Ai ngoài anh</span></div>
-        <div class="p">Bấm Play để nghe 🎧</div>
+        <p class="p">Bấm Play để nghe 🎧</p>
         <div style="height:10px"></div>
         <audio id="audio" controls src="music.mp3"></audio>
       </div>
@@ -577,14 +584,14 @@ h2, h3, p {
         <div>📝 Đây là nơi check các tus của tôi</div>
         <button class="btn btn-primary" id="btnAddTus">➕ Thêm tus</button>
       </div>
-      <div class="p">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</div>
+      <p class="p">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</p>
       <div style="height:10px"></div>
       <div class="tus-list" id="tusList"></div>
     </div>
 
     <div class="card schedule">
       <div class="h">📅 Lịch bận / rảnh</div>
-      <div class="p">Mình sẽ add full lịch sau khi confirm nút hoạt động ok ✅</div>
+      <p class="p">Chọn ngày để xem lịch.</p>
       <div style="height:10px"></div>
       <div class="day-tabs" id="dayTabs"></div>
       <div id="daySlots"></div>
@@ -600,7 +607,8 @@ h2, h3, p {
       <div class="field">
         <label>Mật khẩu admin</label>
         <input id="adminPassInput" type="password" placeholder="Nhập pass..." />
-       </div>
+        <div class="help">Pass demo: <b id="passDemo"></b></div>
+      </div>
 
       <div class="modal-actions">
         <button class="btn btn-primary" id="btnLogin">✅ Bật Admin</button>
@@ -649,7 +657,7 @@ h2, h3, p {
             <option value="0">Tắt</option>
             <option value="1">Bật</option>
           </select>
-          <div class="help">Bật là toàn web đổi màu liên tục 🌈</div>
+          <div class="help">Bật là chữ trên web đổi màu liên tục 🌈 (không phá nút/input nữa)</div>
         </div>
         <div class="field">
           <label>Đổi mật khẩu admin (tuỳ chọn)</label>
@@ -689,8 +697,6 @@ h2, h3, p {
       <div class="modal-actions">
         <button class="btn btn-primary" id="btnSave">💾 Lưu cài đặt</button>
       </div>
-
-      
     </div>
   </div>
 
@@ -698,7 +704,7 @@ h2, h3, p {
     // ====== Storage helpers ======
     const KEY = "milo_site_v1";
     const defaultState = {
-      theme: "dark",            // dark/light
+      theme: "dark",
       adminPass: "079268",
       isAdmin: false,
       rainbow: 0,
@@ -706,12 +712,7 @@ h2, h3, p {
       fbLink: "https://www.facebook.com/milo.pha.a",
       discordId: "910327589309145109",
 
-      gameLinks: {
-        roblox: "",
-        valorant: "",
-        tft: ""
-      },
-
+      gameLinks: { roblox: "", valorant: "", tft: "" },
       songName: "Ai ngoài anh",
 
       intro: [
@@ -740,7 +741,6 @@ h2, h3, p {
         const raw = localStorage.getItem(KEY);
         if(!raw) return structuredClone(defaultState);
         const s = JSON.parse(raw);
-        // merge safe
         return {
           ...structuredClone(defaultState),
           ...s,
@@ -751,10 +751,7 @@ h2, h3, p {
         return structuredClone(defaultState);
       }
     }
-
-    function saveState(){
-      localStorage.setItem(KEY, JSON.stringify(state));
-    }
+    function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 
     let state = loadState();
 
@@ -767,18 +764,9 @@ h2, h3, p {
     const adminModal = $("adminModal");
     const adminClose = $("adminClose");
 
-    const nameText = $("nameText");
-    const subtitleText = $("subtitleText");
-    const quoteText = $("quoteText");
-    const cityText = $("cityText");
-    const ageText = $("ageText");
-    const tagText = $("tagText");
-    const songName = $("songName");
-
     const introList = $("introList");
     const gameList = $("gameList");
     const tusList = $("tusList");
-
     const fbBtn = $("fbBtn");
     const dcBtn = $("dcBtn");
 
@@ -808,8 +796,6 @@ h2, h3, p {
     const btnAddSlot = $("btnAddSlot");
 
     const btnSave = $("btnSave");
-
-    // User add tus button (outside)
     const btnAddTus = $("btnAddTus");
 
     // Schedule UI
@@ -829,8 +815,6 @@ h2, h3, p {
 
     function renderContacts(){
       fbBtn.href = state.fbLink || "#";
-
-      // Discord profile link
       const id = (state.discordId || "").trim();
       dcBtn.href = id ? `https://discord.com/users/${encodeURIComponent(id)}` : "#";
     }
@@ -862,7 +846,11 @@ h2, h3, p {
             <div>
               <div style="font-weight:1000">${g.name}</div>
               <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
-              ${link ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>` : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`}
+              ${
+                link
+                ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
+                : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
+              }
             </div>
           </div>
           <div class="tag">${g.tag}</div>
@@ -882,13 +870,16 @@ h2, h3, p {
         a.innerHTML = `
           <div>🔗 ${escapeHtml(t.title || "Tus")}</div>
           <div style="display:flex;gap:10px;align-items:center">
-            ${state.isAdmin ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>` : `<span style="color:var(--muted);font-weight:900">Mở</span>`}
+            ${
+              state.isAdmin
+              ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
+              : `<span style="color:var(--muted);font-weight:900">Mở</span>`
+            }
           </div>
         `;
         tusList.appendChild(a);
       });
 
-      // bind delete
       if(state.isAdmin){
         tusList.querySelectorAll("[data-del]").forEach(btn=>{
           btn.addEventListener("click", (e)=>{
@@ -917,7 +908,6 @@ h2, h3, p {
         dayTabs.appendChild(b);
       });
 
-      // fill select in admin
       daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
       daySelect.value = activeDay;
     }
@@ -962,7 +952,7 @@ h2, h3, p {
     }
 
     function renderText(){
-      songName.textContent = state.songName || "Nhạc";
+      $("songName").textContent = state.songName || "Nhạc";
       passDemo.textContent = state.adminPass;
 
       renderContacts();
@@ -995,7 +985,6 @@ h2, h3, p {
       adminModal.classList.add("show");
       fillAdminForm();
       adminPassInput.value = "";
-      // focus fix mobile
       setTimeout(()=>adminPassInput.focus(), 60);
     });
 
@@ -1039,13 +1028,10 @@ h2, h3, p {
       state.gameLinks.tft = tftInput.value.trim();
 
       state.songName = songInput.value.trim() || "Nhạc";
-
       state.rainbow = Number(rainbowSelect.value) || 0;
 
       const np = newPassInput.value.trim();
-      if(np){
-        state.adminPass = np;
-      }
+      if(np) state.adminPass = np;
 
       saveState();
       applyTheme();
@@ -1080,7 +1066,6 @@ h2, h3, p {
       }
       adminModal.classList.add("show");
       fillAdminForm();
-      // scroll to tus fields
       setTimeout(()=>{
         tusTitleInput.scrollIntoView({ behavior:"smooth", block:"center" });
         tusTitleInput.focus();
@@ -1120,6 +1105,13 @@ h2, h3, p {
       renderScheduleDay();
     });
 
+    // Fix: nếu link trống thì disable click
+    [fbBtn, dcBtn].forEach(a=>{
+      a.addEventListener("click",(e)=>{
+        if(!a.href || a.href.endsWith("#")) e.preventDefault();
+      });
+    });
+
     // ====== Utils ======
     function escapeHtml(str){
       return String(str).replace(/[&<>"']/g, s=>({
@@ -1132,13 +1124,6 @@ h2, h3, p {
     applyTheme();
     applyRainbow();
     renderText();
-
-    // Fix: nếu link trống thì disable click
-    [fbBtn, dcBtn].forEach(a=>{
-      a.addEventListener("click",(e)=>{
-        if(!a.href || a.href.endsWith("#")) e.preventDefault();
-      });
-    });
   </script>
 </body>
 </html>
