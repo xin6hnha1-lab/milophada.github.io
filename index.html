@@ -1,556 +1,700 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Profile</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milo Pha Đá</title>
+
   <style>
-    /* Basic resets and typography */
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #ffffff;
-      color: #222222;
+    :root{
+      --bg:#eaf6ff;
+      --card:rgba(255,255,255,.86);
+      --cardSolid:#ffffff;
+      --text:#0f172a;
+      --muted:rgba(15,23,42,.65);
+      --shadow:0 18px 55px rgba(0,0,0,.18);
+      --border:rgba(15,23,42,.10);
+      --pill:rgba(15,23,42,.08);
+      --btn:#2563eb;
+      --btnText:#fff;
     }
-    h1, p {
-      margin: 0;
+    body.dark{
+      --bg:#0b1220;
+      --card:rgba(17,24,39,.72);
+      --cardSolid:#111827;
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.70);
+      --shadow:0 22px 70px rgba(0,0,0,.45);
+      --border:rgba(255,255,255,.10);
+      --pill:rgba(255,255,255,.10);
+      --btn:#3b82f6;
+      --btnText:#fff;
     }
-    /* Container for main content (except cover) */
-    #main-container {
-      max-width: 600px;
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 800px at 30% 0%, rgba(59,130,246,.35), transparent 55%),
+        radial-gradient(900px 700px at 80% 30%, rgba(168,85,247,.25), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x:hidden;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      padding:10px 14px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      background:linear-gradient(to bottom, rgba(0,0,0,.12), transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:700;
+      background:rgba(255,255,255,.25);
+      color:var(--text);
+      border:1px solid var(--border);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    body.dark .btn{ background:rgba(17,24,39,.40); }
+    .btn.primary{
+      background:var(--btn);
+      color:var(--btnText);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .wrap{
+      max-width: 980px;
       margin: 0 auto;
-      padding: 0 15px 50px; /* side padding and bottom padding for spacing */
+      padding: 0 14px 24px;
     }
 
-    /* Cover image full-width container */
-    #cover-container {
-      width: 100%;
-      overflow: hidden;
-      /* (No fixed height; the image will dictate height) */
-    }
-    #cover-container img {
-      width: 100%;
-      height: auto;
-      display: block;
+    .hero{
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      border:1px solid var(--border);
+      background:var(--card);
     }
 
-    /* Avatar styling */
-    #avatar-container {
-      width: 120px;
-      height: 120px;
-      margin: -60px auto 60px auto; /* pull up over cover, and add bottom space */
-      position: relative;
-      border: 4px solid #fff;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #ccc;
+    .cover{
+      height: 220px;
+      background: url("cover.gif") center/cover no-repeat;
+      position:relative;
     }
-    #avatar-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
+    @media (min-width:900px){
+      .cover{ height: 260px; }
     }
 
-    /* Center text for profile info */
-    #profile-name {
-      text-align: center;
-      font-size: 1.8em;
-      font-weight: bold;
-      margin-top: 10px;
+    .heroBody{
+      padding: 14px;
+      position:relative;
+      background: linear-gradient(to bottom, rgba(0,0,0,.00), rgba(0,0,0,.06));
     }
-    #profile-desc {
-      text-align: center;
-      font-size: 1em;
-      color: #555555;
-      margin: 5px 0 15px 0;
+    body.dark .heroBody{
+      background: linear-gradient(to bottom, rgba(0,0,0,.00), rgba(0,0,0,.18));
     }
-    #status-content {
-      text-align: center;
+
+    .profileRow{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-top:-58px;
+    }
+
+    .avatarWrap{
+      width: 128px;
+      height: 128px;
+      border-radius:50%;
+      flex:0 0 auto;
+      border:4px solid rgba(255,255,255,.75);
+      box-shadow: 0 18px 50px rgba(0,0,0,.28);
+      background:
+        url("avatar.jpg") center/cover no-repeat;
+      overflow:hidden;
+    }
+    body.dark .avatarWrap{
+      border:4px solid rgba(17,24,39,.75);
+    }
+
+    .info{
+      flex: 1 1 240px;
+      min-width: 220px;
+      padding-top: 6px;
+    }
+
+    .name{
+      font-size: 26px;
+      font-weight: 900;
+      line-height:1.1;
+      margin: 4px 0 6px;
+      text-shadow: 0 2px 10px rgba(0,0,0,.12);
+    }
+    .subtitle{
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .quote{
+      color: var(--muted);
       font-style: italic;
-      margin: 10px 0;
-    }
-    #song-content {
-      text-align: center;
-      margin: 10px 0 20px 0;
-    }
-    #song-content span {
-      /* inherits font styling, just a placeholder span for song name */
+      margin-bottom: 10px;
     }
 
-    /* Social links section */
-    #social-links {
-      text-align: center;
-      margin: 10px 0;
+    .pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
     }
-    #social-links a {
-      display: inline-block;
-      margin: 0 10px;
-      text-decoration: none;
-    }
-    /* Game links list */
-    #game-links {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0 0 0;
-      text-align: center;
-    }
-    #game-links li {
-      margin: 5px 0;
-    }
-    #game-links a {
-      color: #1a0dab; /* default link color (blue) or choose an accent color */
-      text-decoration: underline;
+    .pill{
+      background: var(--pill);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius:999px;
+      font-weight: 700;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
-    /* Toggle buttons (Dark mode & Admin) */
-    #toggle-container {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 9999;
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
     }
-    .toggle-btn {
-      width: 40px;
-      height: 40px;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
+    @media (min-width:900px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 12px 35px rgba(0,0,0,.10);
+      backdrop-filter: blur(10px);
+    }
+    .card h3{
+      margin:0 0 10px;
       font-size: 18px;
-      margin-left: 5px;
-      /* Light mode default style */
-      background: #eeeeee;
-      color: #000000;
-    }
-    .toggle-btn:focus { outline: none; }
-
-    /* Dark mode styles */
-    body.dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-    body.dark-mode #profile-desc {
-      color: #bbbbbb;
-    }
-    body.dark-mode a {
-      color: #81a1ff; /* slightly lighter blue for links on dark */
-    }
-    body.dark-mode .toggle-btn {
-      background: #333333;
-      color: #ffffff;
+      letter-spacing:.2px;
     }
 
-    /* Admin panel styles */
-    #admin-panel {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 9998;
-      padding: 20px;
-      overflow-y: auto;
+    /* MUSIC */
+    .musicRow{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
     }
-    #admin-panel .panel-content {
-      background: #f9f9f9;
-      color: #000;
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 20px;
-      border-radius: 8px;
+    .musicLeft{
+      flex:1 1 220px;
+      min-width: 200px;
     }
-    #admin-panel h2 {
-      margin-top: 0;
-      text-align: center;
+    .musicLabel{
+      font-weight: 900;
+      opacity:.8;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom: 6px;
     }
-    #admin-panel label {
-      display: block;
-      margin: 8px 0 4px;
-      font-weight: bold;
-    }
-    #admin-panel input[type="text"] {
-      width: 100%;
-      padding: 6px 8px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    #admin-panel #game-inputs .game-input-row {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 8px;
-    }
-    #admin-panel #game-inputs .game-input-row input {
-      flex: 1;
-      padding: 6px 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    #admin-panel #add-game-btn {
-      display: inline-block;
-      margin: 5px 0 15px;
-      padding: 6px 12px;
-      font-size: 0.9em;
-      cursor: pointer;
-    }
-    #admin-panel #save-btn {
-      display: block;
-      width: 100%;
-      padding: 8px;
-      font-size: 1em;
-      font-weight: bold;
-      color: #fff;
-      background: #007acc;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #admin-panel #save-btn:focus {
-      outline: none;
+    .musicTitle{
+      font-size: 22px;
+      font-weight: 1000;
+      line-height:1.1;
+      margin: 0 0 6px;
+      word-break: break-word;
     }
 
-    /* Responsive adjustments */
-    @media (min-width: 600px) {
-      #avatar-container {
-        width: 150px;
-        height: 150px;
-        margin-top: -75px;
-        margin-bottom: 75px;
-        border-width: 5px;
-      }
-      #profile-name {
-        font-size: 2.2em;
-      }
-      #profile-desc {
-        font-size: 1.1em;
-      }
-      .toggle-btn {
-        font-size: 20px;
-        width: 40px; height: 40px;
-      }
+    .title-normal{ color: var(--text); }
+    .title-white{ color: #fff; text-shadow: 0 3px 16px rgba(0,0,0,.35); }
+    .title-black{ color: #000; text-shadow: 0 3px 16px rgba(255,255,255,.20); }
+    .title-rainbow{
+      background: linear-gradient(90deg, #ff2d55, #ff9500, #ffd60a, #34c759, #00c7ff, #0a84ff, #bf5af2);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,.18));
     }
-    @media (min-width: 1000px) {
-      #avatar-container {
-        width: 180px;
-        height: 180px;
-        margin-top: -90px;
-        margin-bottom: 90px;
-        border-width: 6px;
-      }
-      #profile-name {
-        font-size: 2.5em;
-      }
-      #profile-desc {
-        font-size: 1.2em;
-      }
+
+    audio{
+      width: min(520px, 100%);
+      height: 42px;
     }
+
+    /* LINKS */
+    .linkRow{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top: 14px;
+    }
+    @media (max-width:520px){
+      .linkRow{ grid-template-columns:1fr; }
+    }
+    .bigLink{
+      text-decoration:none;
+      color: var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--cardSolid);
+      border:1px solid var(--border);
+      font-weight: 900;
+    }
+    body.dark .bigLink{ background: rgba(17,24,39,.55); }
+
+    .muted{ color: var(--muted); font-weight:600; font-size: 13px; }
+
+    /* POSTS */
+    .postsHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .postsList{
+      margin-top: 10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .postItem{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      padding: 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.55);
+    }
+    body.dark .postItem{ background: rgba(17,24,39,.45); }
+    .postItem a{
+      color: var(--text);
+      font-weight: 800;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .postLeft{
+      min-width: 200px;
+      flex:1 1 240px;
+    }
+    .danger{
+      background:#ef4444;
+      color:white;
+      border:none;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+    }
+
+    /* ADMIN MODAL */
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding: 16px;
+    }
+    .modal{
+      width: min(920px, 100%);
+      max-height: 86vh;
+      overflow:auto;
+      background: var(--cardSolid);
+      border-radius: 18px;
+      border:1px solid var(--border);
+      box-shadow: 0 24px 90px rgba(0,0,0,.35);
+      padding: 14px;
+    }
+    body.dark .modal{ background: rgba(17,24,39,.92); }
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      position:sticky;
+      top:0;
+      background: inherit;
+      padding-bottom: 10px;
+      z-index:2;
+    }
+    .modalTop h2{ margin:0; }
+    .xbtn{
+      border:none;
+      background: rgba(0,0,0,.08);
+      color: var(--text);
+      border:1px solid var(--border);
+      width:40px;
+      height:40px;
+      border-radius: 12px;
+      font-size:18px;
+      font-weight:900;
+    }
+    body.dark .xbtn{ background: rgba(255,255,255,.08); }
+
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width:860px){
+      .formGrid{ grid-template-columns: 1fr 1fr; }
+    }
+    .field{
+      background: rgba(255,255,255,.60);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    body.dark .field{ background: rgba(255,255,255,.06); }
+    .field label{
+      font-weight: 900;
+      display:block;
+      margin-bottom: 6px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.92);
+      outline:none;
+      font-size: 14px;
+    }
+    body.dark .field input, body.dark .field select{
+      background: rgba(17,24,39,.70);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+    }
+
+    .adminActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+
+    .smallNote{ font-size: 12px; color: var(--muted); margin-top:6px; }
+
   </style>
 </head>
+
 <body>
-
-  <!-- Cover section -->
-  <div id="cover-container">
-    <img id="cover" src="cover.jpg" alt="Cover Image">
+  <div class="topbar">
+    <button id="darkBtn" class="btn" type="button">🌙 Dark</button>
+    <button id="adminBtn" class="btn primary" type="button">🔒 Admin</button>
   </div>
 
-  <!-- Main content container (avatar, text, links) -->
-  <div id="main-container">
-    <div id="avatar-container">
-      <img id="avatar" src="avatar.jpg" alt="Avatar">
-    </div>
-    <h1 id="profile-name">Your Name</h1>
-    <p id="profile-desc">Mô tả ngắn gọn của bạn</p>
+  <div class="wrap">
+    <div class="hero">
+      <div class="cover"></div>
 
-    <div id="social-links">
-      <!-- Facebook and Discord icons as SVG -->
-      <a id="fb-link" href="#" target="_blank" title="Facebook">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
-          <path fill="#1877F2" d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0 -0.002 3.603 -0.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-        </svg>
-      </a>
-      <a id="discord-link" href="#" target="_blank" title="Discord">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
-          <path fill="#5865F2" d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
-        </svg>
-      </a>
-    </div>
+      <div class="heroBody">
+        <div class="profileRow">
+          <div class="avatarWrap" aria-label="avatar"></div>
 
-    <p id="status-content"></p>
-    <p id="song-content">Đang nghe: <span id="song-name-display"></span></p>
+          <div class="info">
+            <div class="name">Milo Pha Đá (Nhật boy)</div>
+            <div class="subtitle">IT Student • Software Engineering</div>
+            <div class="quote">“Một góc nhỏ trên Internet của Milo.”</div>
 
-    <ul id="game-links"></ul>
-  </div>
+            <div class="pills">
+              <div class="pill">📍 Hồ Chí Minh</div>
+              <div class="pill">🎂 19</div>
+              <div class="pill">🎮 gamer</div>
+            </div>
+          </div>
+        </div>
 
-  <!-- Toggle buttons -->
-  <div id="toggle-container">
-    <button id="dark-toggle" class="toggle-btn" title="Toggle Dark Mode">🌙</button>
-    <button id="admin-toggle" class="toggle-btn" title="Admin Mode (Edit)">⚙️</button>
-  </div>
+        <div class="grid">
+          <div class="card">
+            <h3>🎧 Nhạc tôi nghe</h3>
+            <div class="musicRow">
+              <div class="musicLeft">
+                <div class="musicLabel">Đang nghe:</div>
+                <div id="musicTitle" class="musicTitle title-rainbow">Ai ngoài anh</div>
+                <div class="muted">Bấm Play để nghe 🎧</div>
+              </div>
+              <audio id="audio" controls preload="metadata">
+                <source src="music.mp3" type="audio/mpeg">
+              </audio>
+            </div>
+          </div>
 
-  <!-- Admin edit panel -->
-  <div id="admin-panel">
-    <div class="panel-content">
-      <h2>Admin Edit Mode</h2>
-      <label for="fb-input">Facebook URL hoặc ID:</label>
-      <input type="text" id="fb-input" placeholder="https://facebook.com/YourID hoặc tên ID" />
+          <div class="card">
+            <h3>📌 Giới thiệu</h3>
+            <ul style="margin:0; padding-left:18px; font-weight:700;">
+              <li>✨ Chạy Ngay Đi</li>
+              <li>🐻 Chạy Vào Trái Tim Em</li>
+              <li>😵 Đùa Thôi Anh Làm Gì Có Em</li>
+            </ul>
+          </div>
 
-      <label for="discord-input">Discord liên kết hoặc mã:</label>
-      <input type="text" id="discord-input" placeholder="https://discord.gg/Invite hoặc mã Invite" />
+          <div class="card">
+            <h3>🎮 Game mình hay chơi</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div class="pill" style="justify-content:space-between;">
+                <span>🧍 Roblox <span class="muted">chill / sandbox</span></span>
+                <a id="robloxLink" href="#" class="pill" style="padding:6px 10px; text-decoration:none;">casual</a>
+              </div>
 
-      <label for="status-input">Trạng thái (Tus):</label>
-      <input type="text" id="status-input" placeholder="Nhập status của bạn" />
+              <div class="pill" style="justify-content:space-between;">
+                <span>🎯 Valorant <span class="muted">FPS / tryhard</span></span>
+                <a id="valoLink" href="#" class="pill" style="padding:6px 10px; text-decoration:none;">rank</a>
+              </div>
 
-      <label for="song-input">Tên bài nhạc:</label>
-      <input type="text" id="song-input" placeholder="Nhập tên bài hát" />
+              <div class="pill" style="justify-content:space-between;">
+                <span>🧠 TFT <span class="muted">auto chess</span></span>
+                <a id="tftLink" href="#" class="pill" style="padding:6px 10px; text-decoration:none;">brain</a>
+              </div>
 
-      <label>Link game:</label>
-      <div id="game-inputs">
-        <!-- Game input rows will be added here -->
+              <div class="muted">Admin có thể dán link tài khoản game để người xem bấm vào.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🔗 Liên hệ</h3>
+            <div class="linkRow">
+              <a id="fbBtn" class="bigLink" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
+              <a id="dcBtn" class="bigLink" href="#" target="_blank" rel="noopener">🎮 Discord</a>
+            </div>
+          </div>
+
+          <div class="card" style="grid-column: 1 / -1;">
+            <div class="postsHead">
+              <div>
+                <h3 style="margin:0;">📝 Đây là nơi check các tus của tôi</h3>
+                <div class="muted">Người xem chỉ bấm link • Admin mới thêm/xóa 🔒</div>
+              </div>
+              <button id="addPostBtn" class="btn primary" type="button">➕ Thêm tus</button>
+            </div>
+            <div id="posts" class="postsList"></div>
+          </div>
+        </div>
       </div>
-      <button type="button" id="add-game-btn">+ Thêm game</button>
-
-      <button type="button" id="save-btn">Lưu & Thoát Admin</button>
     </div>
   </div>
 
-  <script>
-    // Admin password (change as needed)
-    const ADMIN_PASSWORD = "admin";
+  <!-- ADMIN MODAL -->
+  <div id="overlay" class="modalOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalTop">
+        <h2>🔒 Admin Panel</h2>
+        <button id="closeModal" class="xbtn" type="button">✕</button>
+      </div>
 
-    // Elements
-    const darkToggle = document.getElementById('dark-toggle');
-    const adminToggle = document.getElementById('admin-toggle');
-    const body = document.body;
-    const fbLinkAnchor = document.getElementById('fb-link');
-    const discordLinkAnchor = document.getElementById('discord-link');
-    const statusTextElem = document.getElementById('status-content');
-    const songNameElem = document.getElementById('song-name-display');
-    const gameLinksList = document.getElementById('game-links');
-    const adminPanel = document.getElementById('admin-panel');
-    const fbInput = document.getElementById('fb-input');
-    const discordInput = document.getElementById('discord-input');
-    const statusInput = document.getElementById('status-input');
-    const songInput = document.getElementById('song-input');
-    const gameInputsContainer = document.getElementById('game-inputs');
-    const addGameBtn = document.getElementById('add-game-btn');
-    const saveBtn = document.getElementById('save-btn');
+      <div id="loginBox" class="card" style="margin:0;">
+        <h3 style="margin-top:0;">Nhập mật khẩu admin</h3>
+        <div class="field" style="background:transparent; border:none; padding:0;">
+          <input id="pass" type="password" placeholder="Mật khẩu (079268)" />
+          <div class="smallNote">Mật khẩu sẽ không hiện chữ ra ngoài, chill 😎</div>
+        </div>
+        <div class="adminActions">
+          <button id="doLogin" class="btn primary" type="button">✅ Vào Admin</button>
+          <button id="doLogout" class="btn" type="button">🚪 Thoát Admin</button>
+        </div>
+      </div>
 
-    let isAdminMode = false;
+      <div id="settingsBox" class="hidden" style="margin-top:12px;">
+        <div class="formGrid">
+          <div class="field">
+            <label>Link Facebook (dán link profile)</label>
+            <input id="fbInput" placeholder="https://facebook.com/..." />
+            <div class="smallNote">Người xem bấm Facebook là mở link này.</div>
+          </div>
 
-    // Load stored settings on startup
-    function loadSettings() {
-      // Dark mode preference
-      if (localStorage.getItem('darkMode') === 'true') {
-        body.classList.add('dark-mode');
-        darkToggle.textContent = '☀';
-      } else {
-        body.classList.remove('dark-mode');
-        darkToggle.textContent = '🌙';
-      }
-      // Facebook link
-      const storedFB = localStorage.getItem('fbLink');
-      if (storedFB) {
-        updateSocialLink(fbLinkAnchor, storedFB, 'fb');
-      }
-      // Discord link
-      const storedDiscord = localStorage.getItem('discordLink');
-      if (storedDiscord) {
-        updateSocialLink(discordLinkAnchor, storedDiscord, 'discord');
-      }
-      // Status text
-      const storedStatus = localStorage.getItem('statusText');
-      if (storedStatus) {
-        statusTextElem.textContent = storedStatus;
-      }
-      // Song name
-      const storedSong = localStorage.getItem('songName');
-      if (storedSong) {
-        songNameElem.textContent = storedSong;
-      }
-      // Game links array
-      const storedGames = localStorage.getItem('gameLinks');
-      if (storedGames) {
-        try {
-          const gamesArray = JSON.parse(storedGames);
-          renderGameLinks(gamesArray);
-        } catch (e) {
-          console.error("Error parsing game links from storage:", e);
-        }
-      }
-    }
+          <div class="field">
+            <label>Discord ID (chỉ cần ID)</label>
+            <input id="dcInput" placeholder="910327589309145109" />
+            <div class="smallNote">Tự build: discord.com/users/&lt;ID&gt;</div>
+          </div>
 
-    // Render game links to the #game-links list
-    function renderGameLinks(gamesArray) {
-      gameLinksList.innerHTML = '';
-      if (gamesArray && gamesArray.length > 0) {
-        gamesArray.forEach(game => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = game.url;
-          a.target = "_blank";
-          a.textContent = game.name;
-          li.appendChild(a);
-          gameLinksList.appendChild(li);
-        });
-      }
-    }
+          <div class="field">
+            <label>Link Roblox (tài khoản)</label>
+            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
+          </div>
 
-    // Helper to update anchor href based on input (handles prefixing)
-    function updateSocialLink(anchorElem, userInput, type) {
-      let href = userInput.trim();
-      if (!href) {
-        anchorElem.href = "#";
-        return;
-      }
-      if (!href.startsWith('http')) {
-        // If userInput is not a full URL, prefix based on type
-        if (type === 'fb') {
-          if (href.indexOf('facebook.com') !== -1) {
-            // user included "facebook.com" but no protocol
-            href = 'https://' + href;
-          } else {
-            href = 'https://facebook.com/' + href;
-          }
-        } else if (type === 'discord') {
-          if (href.indexOf('discord.gg') !== -1 || href.indexOf('discord.com') !== -1) {
-            href = 'https://' + href;
-          } else {
-            href = 'https://discord.gg/' + href;
-          }
-        }
-      }
-      anchorElem.href = href;
-    }
+          <div class="field">
+            <label>Link Valorant (tài khoản / tracker...)</label>
+            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
+          </div>
 
-    // Enter admin mode: show panel with current values
-    function enterAdminMode() {
-      isAdminMode = true;
-      // Populate inputs with current data
-      fbInput.value = localStorage.getItem('fbLink') || '';
-      discordInput.value = localStorage.getItem('discordLink') || '';
-      statusInput.value = localStorage.getItem('statusText') || '';
-      songInput.value = localStorage.getItem('songName') || '';
-      // Populate game links inputs
-      gameInputsContainer.innerHTML = '';
-      const storedGames = localStorage.getItem('gameLinks');
-      let gamesArray = [];
-      try {
-        gamesArray = storedGames ? JSON.parse(storedGames) : [];
-      } catch {
-        gamesArray = [];
-      }
-      // Create an input row for each existing game link
-      gamesArray.forEach((game, idx) => {
-        addGameInputRow(game.name, game.url);
-      });
-      // Add one empty row for new entry
-      addGameInputRow('', '');
-      // Show admin panel
-      adminPanel.style.display = 'block';
-    }
+          <div class="field">
+            <label>Link TFT (tài khoản / tracker...)</label>
+            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+          </div>
 
-    // Exit admin mode: hide panel and optionally save changes
-    function exitAdminMode(saveChanges = true) {
-      isAdminMode = false;
-      adminPanel.style.display = 'none';
-      if (saveChanges) {
-        // Save all input values to localStorage and update UI
-        const newFB = fbInput.value.trim();
-        const newDiscord = discordInput.value.trim();
-        const newStatus = statusInput.value.trim();
-        const newSong = songInput.value.trim();
-        // Gather game links from inputs
-        const gameRows = gameInputsContainer.querySelectorAll('.game-input-row');
-        const newGames = [];
-        gameRows.forEach(row => {
-          const nameInput = row.querySelector('input[name="game-name"]');
-          const urlInput = row.querySelector('input[name="game-url"]');
-          if (!nameInput || !urlInput) return;
-          const nameVal = nameInput.value.trim();
-          const urlVal = urlInput.value.trim();
-          if (nameVal && urlVal) {
-            newGames.push({ name: nameVal, url: urlVal });
-          }
-        });
-        // Save to localStorage
-        localStorage.setItem('fbLink', newFB);
-        localStorage.setItem('discordLink', newDiscord);
-        localStorage.setItem('statusText', newStatus);
-        localStorage.setItem('songName', newSong);
-        localStorage.setItem('gameLinks', JSON.stringify(newGames));
-        // Update UI elements
-        updateSocialLink(fbLinkAnchor, newFB, 'fb');
-        updateSocialLink(discordLinkAnchor, newDiscord, 'discord');
-        statusTextElem.textContent = newStatus;
-        songNameElem.textContent = newSong;
-        renderGameLinks(newGames);
-      }
-    }
+          <div class="field">
+            <label>Tên bài nhạc hiển thị</label>
+            <input id="musicInput" placeholder="Ai ngoài anh" />
+          </div>
 
-    // Add a row of inputs for a game link in admin panel
-    function addGameInputRow(nameVal, urlVal) {
-      const rowDiv = document.createElement('div');
-      rowDiv.className = 'game-input-row';
-      const nameInput = document.createElement('input');
-      nameInput.type = 'text';
-      nameInput.name = 'game-name';
-      nameInput.placeholder = 'Tên Game';
-      nameInput.value = nameVal || '';
-      const urlInput = document.createElement('input');
-      urlInput.type = 'text';
-      urlInput.name = 'game-url';
-      urlInput.placeholder = 'URL Game';
-      urlInput.value = urlVal || '';
-      rowDiv.appendChild(nameInput);
-      rowDiv.appendChild(urlInput);
-      gameInputsContainer.appendChild(rowDiv);
-    }
+          <div class="field">
+            <label>Màu chữ tên nhạc</label>
+            <select id="colorMode">
+              <option value="rainbow">7 sắc cầu vồng 🌈</option>
+              <option value="white">Trắng</option>
+              <option value="black">Đen</option>
+              <option value="normal">Theo theme</option>
+            </select>
+          </div>
+        </div>
 
-    // Event Listeners
-    darkToggle.addEventListener('click', () => {
-      if (body.classList.contains('dark-mode')) {
-        body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'false');
-        darkToggle.textContent = '🌙';
-      } else {
-        body.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'true');
-        darkToggle.textContent = '☀';
-      }
-    });
+        <div class="adminActions">
+          <button id="saveSettings" class="btn primary" type="button">💾 Lưu cài đặt</button>
+          <button id="closeSettings" class="btn" type="button">✅ Xong (đóng)</button>
+        </div>
 
-    adminToggle.addEventListener('click', () => {
-      if (!isAdminMode) {
-        const pwd = prompt("Nhập mật khẩu Admin:");
-        if (pwd !== null && pwd === ADMIN_PASSWORD) {
-          enterAdminMode();
-        } else if (pwd !== null) {
-          alert("Mật khẩu không đúng!");
-        }
-      } else {
-        // If already in admin mode, clicking again will exit (without saving by default)
-        exitAdminMode(false);
-      }
-    });
+        <div class="smallNote">Tip: Lưu xong thì người xem bấm Roblox/Valorant/TFT sẽ nhảy đúng link bạn set.</div>
+      </div>
 
-    addGameBtn.addEventListener('click', () => {
-      addGameInputRow('', '');
-    });
+      <div id="postBox" class="hidden" style="margin-top:12px;">
+        <div class="card" style="margin:0;">
+          <h3 style="margin-top:0;">➕ Thêm tus mới</h3>
+          <div class="field">
+            <label>Tên tus</label>
+            <input id="postName" placeholder="Tus AV" />
+          </div>
+          <div class="field">
+            <label>Link tus Facebook</label>
+            <input id="postLink" placeholder="https://www.facebook.com/..." />
+          </div>
+          <div class="adminActions">
+            <button id="savePost" class="btn primary" type="button">✅ Lưu tus</button>
+            <button id="cancelPost" class="btn" type="button">✖ Hủy</button>
+          </div>
+          <div class="smallNote">Tus sẽ hiện cho mọi người bấm mở trực tiếp.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    saveBtn.addEventListener('click', () => {
-      exitAdminMode(true);
-    });
+<script>
+/* =========================
+   FIX NÚT KHÔNG BẤM ĐƯỢC:
+   - dùng addEventListener
+   - đảm bảo DOM ready (script ở cuối body)
+   - không có element overlay đè lên
+========================= */
 
-    // Clicking outside the panel content closes admin mode (optional)
-    adminPanel.addEventListener('click', (e) => {
-      if (e.target === adminPanel) {
-        // Clicked on overlay, close without saving
-        exitAdminMode(false);
-      }
-    });
+const PASS = "079268";
+const KEY_SETTINGS = "milo_settings_v1";
+const KEY_POSTS = "milo_posts_v1";
+const KEY_DARK = "milo_dark_v1";
+const KEY_ADMIN = "milo_admin_v1";
 
-    // Initialize on load
-    loadSettings();
-  </script>
-</body>
-</html>
+const $ = (id) => document.getElementById(id);
+
+function safeUrl(url){
+  if(!url) return "";
+  url = url.trim();
+  if(!url) return "";
+  if(!/^https?:\/\//i.test(url)) url = "https://" + url;
+  return url;
+}
+
+function buildDiscordUrl(id){
+  const v = (id || "").trim();
+  if(!v) return "";
+  return "https://discord.com/users/" + encodeURIComponent(v);
+}
+
+function setMusicColor(mode){
+  const el = $("musicTitle");
+  el.classList.remove("title-rainbow","title-white","title-black","title-normal");
+  if(mode==="rainbow") el.classList.add("title-rainbow");
+  else if(mode==="white") el.classList.add("title-white");
+  else if(mode==="black") el.classList.add("title-black");
+  else el.classList.add("title-normal");
+}
+
+function applySettings(){
+  const s = JSON.parse(localStorage.getItem(KEY_SETTINGS) || "{}");
+
+  // Facebook / Discord
+  const fb = safeUrl(s.facebook || "");
+  const dc = buildDiscordUrl(s.discordId || "");
+
+  $("fbBtn").href = fb || "#";
+  $("dcBtn").href = dc || "#";
+
+  // Game links
+  const rbx = safeUrl(s.roblox || "");
+  const valo = safeUrl(s.valorant || "");
+  const tft = safeUrl(s.tft || "");
+
+  $("robloxLink").href = rbx || "#";
+  $("valoLink").href = valo || "#";
+  $("tftLink").href = tft || "#";
+
+  // Music title + color
+  $("musicTitle").textContent = (s.musicName || "Ai ngoài anh").trim() || "Ai ngoài anh";
+  setMusicColor(s.musicColor || "rainbow");
+
+  // Fill admin inputs if present
+  $("fbInput").value = s.facebook || "";
+  $("dcInput").value = s.discordId || "910327589309145109";
+  $("robloxInput").value = s.roblox || "";
+  $("valoInput").value = s.valorant || "";
+  $("tftInput").value = s.tft || "";
+  $("musicInput").value = s.musicName || "Ai ngoài anh";
+  $("colorMode").value = s.musicColor || "rainbow";
+}
+
+function renderPosts(){
+  const list = JSON.parse(localStorage.getItem(KEY_POSTS) || "[]");
+  const wrap = $("posts");
+  wrap.innerHTML = "";
+
+  if(list.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "muted";
+    empty.textContent = "Chưa có tus nào. (Admin vào thêm là auto hiện 😎)";
+    wrap.appendChild(empty);
+    return;
+  }
+
+  const isAdmin = localStorage.getItem(KEY_ADMIN) === "1";
+
+  list.forEach((p, idx) => {
+    const item = document.createElement("div");
+    item.className = "postItem";
+
+    const left = document.createElement("div");
+    left.className = "postLeft";
+    const title = document.createElement("div");
+    title.style.fontWeight = "900";
+    title.textContent = p.name || "Tus";
+    const a = document.createElement("a");
+    a.href = safeUrl(p.link);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = safeUrl(p.link);
+    left.appendChild(t
