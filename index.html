@@ -8,6 +8,33 @@
   <link rel="stylesheet" href="effect.css" />
 
   <style>
+    /* FIX: mobile click + always clickable */
+.top-actions, .top-actions *{
+  pointer-events:auto !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* FIX: avoid text overflow on PC */
+.name{
+  font-size: clamp(26px, 3.2vw, 40px);
+  word-break: break-word;
+}
+.music{
+  flex-wrap: wrap;
+}
+.music audio{
+  width: 100%;
+  max-width: 560px;
+}
+.song-name{
+  word-break: break-word;
+}
+
+/* Make sure nothing overlays the buttons */
+.bg, .cover, .cover::after, .ring, .frame{
+  pointer-events: none !important;
+}
     :root{
       --card-w: 1040px;
       --radius: 22px;
