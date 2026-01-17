@@ -524,7 +524,32 @@
       <div id="loginBox">
         <div class="field" style="max-width:420px;">
           <label>Nhập mật khẩu admin</label>
-          <input id="passInput" type="password" placeholder="079268" />
+          <!-- Step 1: login -->
+<div id="loginBox">
+  <div class="field" style="max-width:420px;">
+    <label>Nhập mật khẩu admin</label>
+
+    <div style="display:flex; gap:10px; align-items:center;">
+      <input
+        id="passInput"
+        type="password"
+        placeholder="Nhập mật khẩu…"
+        autocomplete="current-password"
+        style="flex:1;"
+      />
+      <button class="btn" id="togglePass" type="button" aria-label="toggle password">
+        👁️
+      </button>
+    </div>
+  </div>
+
+  <div class="rowBtns" style="justify-content:flex-start;">
+    <button class="btn" id="loginBtn">✅ Vào Admin</button>
+  </div>
+
+  <div class="hint" id="loginHint" style="margin-top:8px;"></div>
+</div>
+
         </div>
         <div class="rowBtns" style="justify-content:flex-start;">
           <button class="btn" id="loginBtn">✅ Vào Admin</button>
@@ -714,6 +739,10 @@
       closeModal();
       renderTus();
     }
+$("togglePass").addEventListener("click", () => {
+  const inp = $("passInput");
+  inp.type = (inp.type === "password") ? "text" : "password";
+});
 
     $("loginBtn").addEventListener("click", () => {
       const pass = $("passInput").value.trim();
