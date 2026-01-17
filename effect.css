@@ -1,18 +1,17 @@
-/* ===== Avatar + Discord-style frame ===== */
+/* ===== Avatar + Discord-style frame (ring remix nhẹ) ===== */
 .avatar-wrap{
   position:relative;
   width:220px;
   height:220px;
   flex:0 0 auto;
-  overflow: visible;
 }
 
-/* avatar tròn */
+/* ảnh avatar thật */
 .avatar{
   position:absolute;
-  inset:34px;                 /* chừa chỗ cho frame */
-  width:152px;
-  height:152px;
+  inset:32px;
+  width:156px;
+  height:156px;
   border-radius:50%;
   object-fit:cover;
   z-index:2;
@@ -28,53 +27,50 @@
   height:100%;
   z-index:3;
   pointer-events:none;
-  object-fit:contain;
   filter: drop-shadow(0 0 14px rgba(120,180,255,.45));
 }
 
 /* Ring “remix nhẹ” phía sau */
 .ring{
   position:absolute;
-  inset:-14px;
+  inset:-10px;
   border-radius:50%;
   z-index:1;
   pointer-events:none;
   background:
-    radial-gradient(circle at 30% 30%, rgba(56,189,248,.32), transparent 48%),
-    radial-gradient(circle at 70% 70%, rgba(99,102,241,.22), transparent 55%);
+    radial-gradient(circle at 30% 30%, rgba(56,189,248,.34), transparent 48%),
+    radial-gradient(circle at 70% 70%, rgba(99,102,241,.26), transparent 55%);
   filter: blur(7px);
-  opacity:.9;
+  opacity:.85;
   animation: ringPulse 2.8s ease-in-out infinite;
 }
-
 .ring::before,
 .ring::after{
   content:"";
   position:absolute;
-  inset:18px;
+  inset:16px;
   border-radius:50%;
-  border:2px solid rgba(56,189,248,.16);
-  animation: wave 2.3s ease-in-out infinite;
+  border:2px solid rgba(56,189,248,.18);
+  animation: wave 2.2s ease-in-out infinite;
 }
-
 .ring::after{
-  inset:30px;
-  border-color: rgba(99,102,241,.12);
+  inset:26px;
+  border-color: rgba(99,102,241,.14);
   animation-duration: 3.1s;
   animation-direction: reverse;
 }
 
 @keyframes ringPulse{
-  0%,100%{ transform:scale(1); opacity:.72; }
-  50%{ transform:scale(1.04); opacity:.98; }
+  0%,100%{ transform:scale(1); opacity:.70; }
+  50%{ transform:scale(1.04); opacity:.95; }
 }
-
 @keyframes wave{
-  0%,100%{ transform:scale(1); opacity:.45; }
-  50%{ transform:scale(1.09); opacity:.82; }
+  0%,100%{ transform:scale(1); opacity:.52; }
+  50%{ transform:scale(1.08); opacity:.88; }
 }
 
 /* Mobile: nhỏ lại cho vừa */
-@media (max-width:820px){
-  .avatar-wrap{ transform: scale(.92); }
+@media (max-width: 920px){
+  .avatar-wrap{ width:200px; height:200px; }
+  .avatar{ inset:30px; width:140px; height:140px; }
 }
