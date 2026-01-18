@@ -3,9 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Milo Pha Đá</title>
-
-  <!-- DÙNG CSS BẠN ĐÃ CÓ -->
+  <title>Milo Pha Đá ✅ RESET</title>
   <link rel="stylesheet" href="effect.css" />
 </head>
 
@@ -13,27 +11,17 @@
   <div class="bg"></div>
 
   <div class="wrap">
-    <!-- TOP BUTTONS -->
     <div class="top-actions">
-      <!-- Dark/Light KHÔNG cần admin -->
-      <div class="pill" id="btnTheme" role="button" aria-label="Toggle theme">
-        🌙 <span id="themeText">Dark</span>
-      </div>
-
-      <!-- Admin vẫn giữ (nếu bạn muốn dùng admin modal) -->
-      <div class="pill" id="btnAdmin" role="button" aria-label="Open admin">
-        🔒 <span id="adminText">Admin</span>
-      </div>
+      <div class="pill" id="btnTheme" role="button">🌙 <span id="themeText">Dark</span></div>
+      <div class="pill" id="btnAdmin" role="button">🔒 <span>Admin</span></div>
     </div>
 
-    <!-- HEADER CARD -->
     <div class="card header">
       <img class="cover" src="cover.gif" alt="Cover" />
 
       <div class="header-inner">
         <div class="avatar-wrap">
           <img class="avatar" src="avatar.jpg" alt="Avatar" />
-          <!-- frame.png của bạn -->
           <img class="avatar-frame" src="frame.png" alt="" />
         </div>
 
@@ -51,9 +39,7 @@
       </div>
     </div>
 
-    <!-- MAIN GRID -->
     <div class="grid">
-      <!-- MUSIC -->
       <div class="card section">
         <div class="h">🎧 Nhạc tôi nghe</div>
         <div class="music-title">Đang nghe: <span id="songName">Ai ngoài anh</span></div>
@@ -62,31 +48,26 @@
         <audio id="audio" controls src="music.mp3"></audio>
       </div>
 
-      <!-- INTRO -->
       <div class="card section">
         <div class="h">📌 Giới thiệu</div>
         <div class="list" id="introList"></div>
       </div>
 
-      <!-- GAMES -->
       <div class="card section">
         <div class="h">🎮 Game mình hay chơi</div>
         <div class="list" id="gameList"></div>
         <p class="help">Admin có thể dán link tài khoản game để người xem bấm vào.</p>
       </div>
 
-      <!-- CONTACTS -->
       <div class="card section">
         <div class="h">🔗 Liên hệ</div>
         <div class="contacts">
           <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
           <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
         </div>
-        <p class="help">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </div>
 
-    <!-- TUS -->
     <div class="card tus-box">
       <div class="tus-head">
         <div>📝 Đây là nơi check các tus của tôi</div>
@@ -97,7 +78,6 @@
       <div class="tus-list" id="tusList"></div>
     </div>
 
-    <!-- SCHEDULE -->
     <div class="card schedule">
       <div class="h">📅 Lịch bận / rảnh</div>
       <div class="p">Set theo từng ngày trong tuần ✅</div>
@@ -107,7 +87,7 @@
     </div>
   </div>
 
-  <!-- ADMIN MODAL (giữ nguyên, nhưng phần dưới sẽ ẩn nếu chưa login) -->
+  <!-- Admin Modal -->
   <div class="modal" id="adminModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <button class="modal-close" id="adminClose" aria-label="Close">✕</button>
@@ -125,37 +105,37 @@
 
       <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
 
-      <!-- TẤT CẢ PHẦN DƯỚI CHỈ HIỆN KHI ADMIN ON -->
-      <div class="admin-locked" id="adminLocked">
+      <!-- Phần dưới chỉ hiện khi đúng pass -->
+      <div id="adminLocked">
         <div class="row">
           <div class="field">
-            <label>Link Facebook (dán link profile)</label>
+            <label>Link Facebook</label>
             <input id="fbInput" placeholder="https://facebook.com/..." />
           </div>
           <div class="field">
-            <label>Discord ID (chỉ cần ID)</label>
+            <label>Discord ID</label>
             <input id="dcIdInput" placeholder="9103..." />
           </div>
         </div>
 
         <div class="row">
           <div class="field">
-            <label>Link Roblox (tài khoản)</label>
-            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
+            <label>Link Roblox</label>
+            <input id="robloxInput" placeholder="Dán link..." />
           </div>
           <div class="field">
-            <label>Link Valorant (tài khoản / tracker)</label>
-            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
+            <label>Link Valorant</label>
+            <input id="valoInput" placeholder="Dán link..." />
           </div>
         </div>
 
         <div class="row">
           <div class="field">
-            <label>Link TFT (tài khoản / tracker)</label>
-            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
+            <label>Link TFT</label>
+            <input id="tftInput" placeholder="Dán link..." />
           </div>
           <div class="field">
-            <label>Tên bài nhạc hiển thị</label>
+            <label>Tên bài nhạc</label>
             <input id="songInput" placeholder="Ai ngoài anh" />
           </div>
         </div>
@@ -167,7 +147,7 @@
           </div>
           <div class="field">
             <label>—</label>
-            <div class="help">🌈 Rainbow đã bỏ nút. Máy tính bấm phím <b>R</b> để bật/tắt.</div>
+            <div class="p">💾 Lưu xong là người xem bấm link được.</div>
           </div>
         </div>
 
@@ -175,9 +155,9 @@
 
         <div class="row">
           <div class="field">
-            <label>➕ Thêm tus mới</label>
-            <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
-            <input id="tusLinkInput" placeholder="Dán link tus Facebook..." />
+            <label>➕ Thêm tus</label>
+            <input id="tusTitleInput" placeholder="Tên tus" />
+            <input id="tusLinkInput" placeholder="Link tus Facebook" />
             <button class="btn btn-ghost" id="btnAddTusAdmin">➕ Thêm tus</button>
           </div>
 
@@ -194,7 +174,7 @@
                 <input id="toInput" placeholder="11:30" />
               </div>
             </div>
-            <textarea id="taskInput" placeholder="Việc gì? (vd: Học / đi gym / làm bài...)"></textarea>
+            <textarea id="taskInput" placeholder="Việc gì?"></textarea>
             <button class="btn btn-ghost" id="btnAddSlot">➕ Thêm lịch</button>
           </div>
         </div>
@@ -207,18 +187,13 @@
   </div>
 
   <script>
-    // ====== Desktop check (để chặn rainbow trên điện thoại) ======
-    const isDesktop = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+    // ====== Nếu bạn dán đúng code này, trang sẽ hiện title "✅ RESET" ======
+    const KEY = "milo_site_reset_v1";
 
-    // ====== Storage ======
-    const KEY = "milo_site_v2";
     const defaultState = {
-      theme: "dark",         // dark/light (mặc định dark + chữ trắng)
+      theme: "dark",
       adminPass: "079268",
       isAdmin: false,
-
-      // rainbow vẫn tồn tại nhưng chỉ desktop mới apply (không có nút)
-      rainbowDesktop: 0,
 
       fbLink: "https://www.facebook.com/milo.pha.a",
       discordId: "910327589309145109",
@@ -258,27 +233,24 @@
     function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
     let state = loadState();
 
-    // ====== Elements ======
     const $ = (id)=>document.getElementById(id);
 
+    // Buttons
     const btnTheme = $("btnTheme");
     const themeText = $("themeText");
     const btnAdmin = $("btnAdmin");
+
+    // Modal
     const adminModal = $("adminModal");
     const adminClose = $("adminClose");
-
-    const songName = $("songName");
-    const introList = $("introList");
-    const gameList = $("gameList");
-    const tusList = $("tusList");
-    const fbBtn = $("fbBtn");
-    const dcBtn = $("dcBtn");
-
-    // Admin
     const adminLocked = $("adminLocked");
+
+    // Admin login
     const adminPassInput = $("adminPassInput");
     const btnLogin = $("btnLogin");
     const btnLogout = $("btnLogout");
+
+    // Inputs
     const fbInput = $("fbInput");
     const dcIdInput = $("dcIdInput");
     const robloxInput = $("robloxInput");
@@ -286,42 +258,47 @@
     const tftInput = $("tftInput");
     const songInput = $("songInput");
     const newPassInput = $("newPassInput");
-    const tusTitleInput = $("tusTitleInput");
-    const tusLinkInput = $("tusLinkInput");
-    const btnAddTusAdmin = $("btnAddTusAdmin");
+
+    // Render targets
+    const songNameEl = $("songName");
+    const introList = $("introList");
+    const gameList = $("gameList");
+    const tusList = $("tusList");
+    const fbBtn = $("fbBtn");
+    const dcBtn = $("dcBtn");
+
+    const dayTabs = $("dayTabs");
+    const daySlots = $("daySlots");
     const daySelect = $("daySelect");
     const fromInput = $("fromInput");
     const toInput = $("toInput");
     const taskInput = $("taskInput");
     const btnAddSlot = $("btnAddSlot");
-    const btnSave = $("btnSave");
-    const btnAddTus = $("btnAddTus");
 
-    // Schedule UI
-    const dayTabs = $("dayTabs");
-    const daySlots = $("daySlots");
+    const tusTitleInput = $("tusTitleInput");
+    const tusLinkInput = $("tusLinkInput");
+    const btnAddTusAdmin = $("btnAddTusAdmin");
+    const btnAddTus = $("btnAddTus");
+    const btnSave = $("btnSave");
+
     let activeDay = "Thứ 2";
 
-    // ====== Theme ======
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
+    function escapeAttr(str){ return escapeHtml(str); }
+
     function applyTheme(){
-      // mặc định dark nếu state.theme sai
-      if(state.theme !== "light") state.theme = "dark";
       document.body.classList.toggle("light", state.theme === "light");
       themeText.textContent = state.theme === "light" ? "Light" : "Dark";
     }
 
-    // ====== Rainbow (chỉ desktop, không có nút) ======
-    function applyRainbowDesktop(){
-      // Điện thoại: luôn tắt
-      if(!isDesktop){
-        document.body.classList.remove("rainbow-on");
-        return;
-      }
-      // Desktop: bật/tắt theo state
-      document.body.classList.toggle("rainbow-on", Number(state.rainbowDesktop) === 1);
+    function setAdminGate(){
+      adminLocked.style.display = state.isAdmin ? "block" : "none";
     }
 
-    // ====== Render ======
     function renderContacts(){
       fbBtn.href = state.fbLink || "#";
       const id = (state.discordId || "").trim();
@@ -357,8 +334,8 @@
               <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
               ${
                 link
-                  ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
-                  : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
+                ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
+                : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
               }
             </div>
           </div>
@@ -381,8 +358,8 @@
           <div style="display:flex;gap:10px;align-items:center">
             ${
               state.isAdmin
-                ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
-                : `<span style="color:var(--muted);font-weight:900">Mở</span>`
+              ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
+              : `<span style="color:var(--muted);font-weight:900">Mở</span>`
             }
           </div>
         `;
@@ -407,7 +384,7 @@
       dayTabs.innerHTML = "";
       days.forEach(d=>{
         const b = document.createElement("button");
-        b.className = "tab" + (d === activeDay ? " active" : "");
+        b.className = "tab" + (d===activeDay ? " active" : "");
         b.textContent = d;
         b.addEventListener("click", ()=>{
           activeDay = d;
@@ -417,16 +394,14 @@
         dayTabs.appendChild(b);
       });
 
-      // admin select
-      if(daySelect){
-        daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
-        daySelect.value = activeDay;
-      }
+      daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
+      daySelect.value = activeDay;
     }
 
     function renderScheduleDay(){
       const items = state.schedule[activeDay] || [];
       daySlots.innerHTML = "";
+
       if(items.length === 0){
         const p = document.createElement("div");
         p.className = "item";
@@ -440,7 +415,7 @@
         div.className = "slot";
         div.innerHTML = `
           <div class="slot-left">
-            <div class="slot-title">${escapeHtml(it.task || "Việc")}</div>
+            <div class="slot-title">${escapeHtml(it.task)}</div>
             <div class="slot-time">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
           </div>
           <div style="display:flex;gap:10px;align-items:center">
@@ -463,24 +438,7 @@
       }
     }
 
-    function renderAll(){
-      songName.textContent = state.songName || "Nhạc";
-      renderContacts();
-      renderIntro();
-      renderGames();
-      renderTus();
-      renderScheduleTabs();
-      renderScheduleDay();
-    }
-
-    function setAdminGateUI(){
-      // phần dưới chỉ hiện khi admin on
-      if(adminLocked){
-        adminLocked.style.display = state.isAdmin ? "block" : "none";
-      }
-    }
-
-    function fillAdminForm(){
+    function fillAdmin(){
       if(!state.isAdmin) return;
       fbInput.value = state.fbLink || "";
       dcIdInput.value = state.discordId || "";
@@ -491,7 +449,19 @@
       newPassInput.value = "";
     }
 
-    // ====== Events ======
+    function renderAll(){
+      songNameEl.textContent = state.songName || "Nhạc";
+      applyTheme();
+      setAdminGate();
+      renderContacts();
+      renderIntro();
+      renderGames();
+      renderTus();
+      renderScheduleTabs();
+      renderScheduleDay();
+    }
+
+    // ====== EVENTS ======
     btnTheme.addEventListener("click", ()=>{
       state.theme = (state.theme === "light") ? "dark" : "light";
       saveState();
@@ -501,21 +471,21 @@
     btnAdmin.addEventListener("click", ()=>{
       adminModal.classList.add("show");
       adminPassInput.value = "";
-      setAdminGateUI();
-      if(state.isAdmin) fillAdminForm();
-      setTimeout(()=>adminPassInput.focus(), 60);
+      setAdminGate();
+      if(state.isAdmin) fillAdmin();
+      setTimeout(()=>adminPassInput.focus(), 50);
     });
 
     adminClose.addEventListener("click", ()=> adminModal.classList.remove("show"));
-    adminModal.addEventListener("click", (e)=>{ if(e.target === adminModal) adminModal.classList.remove("show"); });
+    adminModal.addEventListener("click",(e)=>{ if(e.target===adminModal) adminModal.classList.remove("show"); });
 
     btnLogin.addEventListener("click", ()=>{
       const pass = adminPassInput.value.trim();
       if(pass === state.adminPass){
         state.isAdmin = true;
         saveState();
-        setAdminGateUI();
-        fillAdminForm();
+        setAdminGate();
+        fillAdmin();
         renderTus();
         renderScheduleDay();
         alert("Admin ON ✅");
@@ -527,7 +497,7 @@
     btnLogout.addEventListener("click", ()=>{
       state.isAdmin = false;
       saveState();
-      setAdminGateUI();
+      setAdminGate();
       renderTus();
       renderScheduleDay();
       alert("Đã thoát Admin ✅");
@@ -555,7 +525,7 @@
       if(!state.isAdmin){ alert("Đăng nhập Admin trước 🔒"); return; }
       const title = tusTitleInput.value.trim();
       const link = tusLinkInput.value.trim();
-      if(!title || !link){ alert("Nhập đủ Tên tus + Link 😭"); return; }
+      if(!title || !link){ alert("Nhập đủ tên + link 😭"); return; }
       state.tus.unshift({ title, link });
       tusTitleInput.value = "";
       tusLinkInput.value = "";
@@ -567,12 +537,9 @@
     btnAddTus.addEventListener("click", ()=>{
       if(!state.isAdmin){ alert("Chỉ Admin mới thêm tus 🔒"); return; }
       adminModal.classList.add("show");
-      setAdminGateUI();
-      fillAdminForm();
-      setTimeout(()=>{
-        tusTitleInput.scrollIntoView({ behavior:"smooth", block:"center" });
-        tusTitleInput.focus();
-      }, 120);
+      setAdminGate();
+      fillAdmin();
+      setTimeout(()=>{ tusTitleInput.scrollIntoView({behavior:"smooth", block:"center"}); tusTitleInput.focus(); },120);
     });
 
     btnAddSlot.addEventListener("click", ()=>{
@@ -581,9 +548,34 @@
       const from = fromInput.value.trim();
       const to = toInput.value.trim();
       const task = taskInput.value.trim();
-      if(!day || !from || !to || !task){ alert("Nhập đủ thông tin 😭"); return; }
+      if(!from || !to || !task){ alert("Nhập đủ giờ + việc 😭"); return; }
 
       state.schedule[day].push({ from, to, task });
-      fromInput.value = "";
-      toInput.value = "";
-      taskInput.valu
+      fromInput.value = ""; toInput.value = ""; taskInput.value = "";
+
+      activeDay = day;
+      saveState();
+      renderScheduleTabs();
+      renderScheduleDay();
+      alert("Đã thêm lịch ✅");
+    });
+
+    daySelect.addEventListener("change", ()=>{
+      activeDay = daySelect.value;
+      renderScheduleTabs();
+      renderScheduleDay();
+    });
+
+    // chặn click khi link rỗng
+    [fbBtn, dcBtn].forEach(a=>{
+      a.addEventListener("click",(e)=>{
+        if(!a.href || a.href.endsWith("#")) e.preventDefault();
+      });
+    });
+
+    // INIT: mặc định dark + chữ trắng
+    if(state.theme !== "light") state.theme = "dark";
+    renderAll();
+  </script>
+</body>
+</html>
