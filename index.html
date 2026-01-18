@@ -11,7 +11,6 @@
   <div class="bg"></div>
 
   <main class="wrap">
-    <!-- top buttons -->
     <div class="top-actions">
       <button class="pill" id="btnTheme" type="button" aria-label="Toggle theme">
         🌙 <span id="themeText">Dark</span>
@@ -22,7 +21,6 @@
       </button>
     </div>
 
-    <!-- header -->
     <section class="card header">
       <img class="cover" src="cover.gif" alt="Cover" />
 
@@ -46,7 +44,6 @@
       </div>
     </section>
 
-    <!-- grid -->
     <section class="grid">
       <div class="card section">
         <div class="h">🎧 Nhạc tôi nghe</div>
@@ -77,7 +74,6 @@
       </div>
     </section>
 
-    <!-- tus -->
     <section class="card tus-box">
       <div class="tus-head">
         <div>📝 Đây là nơi check các tus của tôi</div>
@@ -87,7 +83,6 @@
       <div class="tus-list" id="tusList"></div>
     </section>
 
-    <!-- schedule -->
     <section class="card schedule">
       <div class="h">📅 Lịch bận / rảnh</div>
       <div class="p">Set theo từng ngày trong tuần ✅</div>
@@ -96,7 +91,6 @@
     </section>
   </main>
 
-  <!-- Admin Modal -->
   <div class="modal" id="adminModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <button class="modal-close" id="adminClose" aria-label="Close">✕</button>
@@ -114,7 +108,6 @@
 
       <hr class="hr">
 
-      <!-- phần này bị khóa cho tới khi login -->
       <div id="adminLocked" class="admin-locked">
         <div class="row">
           <div class="field">
@@ -195,23 +188,17 @@
         </div>
       </div>
 
-      <!-- hint khi chưa login -->
       <div id="adminHint" class="help">
         Nhập đúng mật khẩu thì phần cài đặt phía dưới mới hiện ra.
       </div>
-
     </div>
   </div>
 
   <script>
     // =========================
-    // ✅ CLOUD STORAGE (Google Sheets via Apps Script)
+    // ✅ Cloud API (Apps Script)
     // =========================
-    // ➤ Dán URL Web App ở đây (từ popup Deploy của Apps Script)
     const API_URL = "https://script.google.com/macros/s/AKfycbyfWD-Fcm5uaTqPmnA_ShICsLCEO88xudh3h7Fc53l2gXtmz5oJO4Ygje4cK4xOiDF7AA/exec";
-
-    // (Giữ lại cho đồng bộ logic cũ)
-    const KEY = "miloph_profile_v9";
 
     // ====== default data ======
     const DEFAULT = {
@@ -224,9 +211,7 @@
         valo: "",
         tft: ""
       },
-      tus: [
-        // { title:"Tus AV", url:"https://facebook.com/..." }
-      ],
+      tus: [],
       intro: ["✨ Chạy Ngay Đi", "🔥 Chạy Vào Trái Tim Em", "😶 Đùa Thôi Anh Làm Gì Có Em"],
       games: [
         { name:"Roblox", desc:"chill / sandbox", tag:"casual", url:"" },
@@ -247,27 +232,19 @@
 
     // ====== helpers ======
     const $ = (id) => document.getElementById(id);
-    const safeParse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 
     async function loadData(){
-      if (!API_URL || API_URL.includes("PASTE_")) return structuredClone(DEFAULT);
-
-      const res = await fetch(API_URL, { method: "GET", redirect: "follow" });
-      const text = await res.text();
-      const saved = safeParse(text);
-
-      return saved && Object.keys(saved).length
-        ? { ...DEFAULT, ...saved }
+      const res = await fetch(API_URL, { method: "GET" });
+      const dataCloud = await res.json();
+      return dataCloud && Object.keys(dataCloud).length
+        ? { ...DEFAULT, ...dataCloud }
         : structuredClone(DEFAULT);
     }
 
     async function saveData(data){
-      if (!API_URL || API_URL.includes("PASTE_")) return;
-
+      // ✅ đừng set headers để tránh preflight/CORS drama
       await fetch(API_URL, {
         method: "POST",
-        redirect: "follow",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
     }
@@ -290,7 +267,7 @@
       applyTheme();
     });
 
-    // ====== render intro ======
+    // ====== intro ======
     function renderIntro(){
       const box = $("introList");
       box.innerHTML = "";
@@ -302,21 +279,21 @@
       });
     }
 
-    // ====== render games ======
+    // ====== games ======
     function renderGames(){
       const box = $("gameList");
       box.innerHTML = "";
       data.games.forEach(g => {
-        const a = document.createElement(g.url ? "a" : "div");
-        a.className = "item";
+        const el = document.createElement(g.url ? "a" : "div");
+        el.className = "item";
         if (g.url){
-          a.href = g.url;
-          a.target = "_blank";
-          a.rel = "noopener";
-          a.style.textDecoration = "none";
-          a.style.color = "inherit";
+          el.href = g.url;
+          el.target = "_blank";
+          el.rel = "noopener";
+          el.style.textDecoration = "none";
+          el.style.color = "inherit";
         }
-        a.innerHTML = `
+        el.innerHTML = `
           <div>
             <div style="font-weight:1000">${g.name}</div>
             <div class="p" style="margin-top:2px">${g.desc}</div>
@@ -324,7 +301,7 @@
           </div>
           <span class="tag">${g.tag}</span>
         `;
-        box.appendChild(a);
+        box.appendChild(el);
       });
     }
 
@@ -339,6 +316,7 @@
     function renderTus(){
       const box = $("tusList");
       box.innerHTML = "";
+
       if (!data.tus.length){
         const empty = document.createElement("div");
         empty.className = "item";
@@ -346,6 +324,7 @@
         box.appendChild(empty);
         return;
       }
+
       data.tus.forEach((t, i) => {
         const a = document.createElement("a");
         a.className = "tus-link";
@@ -356,11 +335,12 @@
           <span>🔗 ${t.title || "Tus"}</span>
           <span class="tag">${isAdmin ? "xoá" : "mở"}</span>
         `;
+
         if (isAdmin){
           a.addEventListener("click", async (e) => {
             e.preventDefault();
             if (confirm("Xoá tus này?")) {
-              data.tus.splice(i,1);
+              data.tus.splice(i, 1);
               await saveData(data);
               renderTus();
             }
@@ -379,7 +359,7 @@
       DAYS.forEach(d => {
         const b = document.createElement("button");
         b.type = "button";
-        b.className = "tab" + (d===activeDay ? " active" : "");
+        b.className = "tab" + (d === activeDay ? " active" : "");
         b.textContent = d;
         b.addEventListener("click", () => {
           activeDay = d;
@@ -394,6 +374,7 @@
       const box = $("daySlots");
       box.innerHTML = "";
       const slots = data.schedule[activeDay] || [];
+
       if (!slots.length){
         const div = document.createElement("div");
         div.className = "item";
@@ -414,11 +395,12 @@
             <span class="tag">${isAdmin ? "xoá" : "bận"}</span>
           </div>
         `;
+
         if (isAdmin){
           row.style.cursor = "pointer";
           row.addEventListener("click", async () => {
             if (confirm("Xoá lịch này?")){
-              data.schedule[activeDay].splice(idx,1);
+              data.schedule[activeDay].splice(idx, 1);
               await saveData(data);
               renderSlots();
             }
@@ -428,7 +410,7 @@
       });
     }
 
-    // ====== Admin modal open/close ======
+    // ====== Admin modal ======
     function openAdmin(){
       $("adminModal").classList.add("show");
       $("adminModal").setAttribute("aria-hidden","false");
@@ -455,7 +437,19 @@
       renderSlots();
     }
 
-    // login/logout
+    function fillAdminInputs(){
+      $("fbInput").value = data.links.fb || "";
+      $("dcIdInput").value = data.links.dcId || "";
+      $("robloxInput").value = data.links.roblox || "";
+      $("valoInput").value = data.links.valo || "";
+      $("tftInput").value = data.links.tft || "";
+      $("songInput").value = data.songName || "";
+      $("newPassInput").value = "";
+
+      $("daySelect").innerHTML = DAYS.map(d => `<option value="${d}">${d}</option>`).join("");
+      $("daySelect").value = activeDay;
+    }
+
     $("btnLogin").addEventListener("click", () => {
       const pass = $("adminPassInput").value.trim();
       if (pass === data.adminPass){
@@ -474,21 +468,6 @@
       syncAdminUI();
       alert("Đã thoát admin.");
     });
-
-    // ====== Admin inputs ======
-    function fillAdminInputs(){
-      $("fbInput").value = data.links.fb || "";
-      $("dcIdInput").value = data.links.dcId || "";
-      $("robloxInput").value = data.links.roblox || "";
-      $("valoInput").value = data.links.valo || "";
-      $("tftInput").value = data.links.tft || "";
-      $("songInput").value = data.songName || "";
-      $("newPassInput").value = "";
-
-      // day select
-      $("daySelect").innerHTML = DAYS.map(d => `<option value="${d}">${d}</option>`).join("");
-      $("daySelect").value = activeDay;
-    }
 
     $("daySelect").addEventListener("change", (e) => {
       activeDay = e.target.value;
@@ -561,11 +540,10 @@
 
       renderDayTabs();
       renderSlots();
-
-      syncAdminUI(); // hide add tus button for non-admin
+      syncAdminUI();
     }
 
-    // ✅ BOOT: load cloud data first, then init UI
+    // ✅ BOOT: load cloud data first
     async function boot(){
       data = await loadData();
       init();
