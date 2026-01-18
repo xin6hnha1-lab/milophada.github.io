@@ -204,7 +204,13 @@
   </div>
 
   <script>
-    // ====== storage keys ======
+    // =========================
+    // ✅ CLOUD STORAGE (Google Sheets via Apps Script)
+    // =========================
+    // ➤ Dán URL Web App ở đây (từ popup Deploy của Apps Script)
+    const API_URL = "https://script.google.com/macros/s/AKfycbyfWD-Fcm5uaTqPmnA_ShICsLCEO88xudh3h7Fc53l2gXtmz5oJO4Ygje4cK4xOiDF7AA/exec";
+
+    // (Giữ lại cho đồng bộ logic cũ)
     const KEY = "miloph_profile_v9";
 
     // ====== default data ======
@@ -243,15 +249,31 @@
     const $ = (id) => document.getElementById(id);
     const safeParse = (s) => { try { return JSON.parse(s); } catch { return null; } };
 
-    function loadData(){
-      const saved = safeParse(localStorage.getItem(KEY));
-      return saved ? { ...DEFAULT, ...saved } : structuredClone(DEFAULT);
-    }
-    function saveData(data){
-      localStorage.setItem(KEY, JSON.stringify(data));
+    async function loadData(){
+      if (!API_URL || API_URL.includes("PASTE_")) return structuredClone(DEFAULT);
+
+      const res = await fetch(API_URL, { method: "GET", redirect: "follow" });
+      const text = await res.text();
+      const saved = safeParse(text);
+
+      return saved && Object.keys(saved).length
+        ? { ...DEFAULT, ...saved }
+        : structuredClone(DEFAULT);
     }
 
-    let data = loadData();
+    async function saveData(data){
+      if (!API_URL || API_URL.includes("PASTE_")) return;
+
+      await fetch(API_URL, {
+        method: "POST",
+        redirect: "follow",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+
+    // ====== state ======
+    let data = structuredClone(DEFAULT);
     let isAdmin = false;
     let activeDay = "Thứ 2";
 
@@ -262,9 +284,9 @@
       $("themeText").textContent = data.theme === "light" ? "Light" : "Dark";
     }
 
-    $("btnTheme").addEventListener("click", () => {
+    $("btnTheme").addEventListener("click", async () => {
       data.theme = (data.theme === "light") ? "dark" : "light";
-      saveData(data);
+      await saveData(data);
       applyTheme();
     });
 
@@ -335,11 +357,11 @@
           <span class="tag">${isAdmin ? "xoá" : "mở"}</span>
         `;
         if (isAdmin){
-          a.addEventListener("click", (e) => {
+          a.addEventListener("click", async (e) => {
             e.preventDefault();
             if (confirm("Xoá tus này?")) {
               data.tus.splice(i,1);
-              saveData(data);
+              await saveData(data);
               renderTus();
             }
           });
@@ -394,10 +416,10 @@
         `;
         if (isAdmin){
           row.style.cursor = "pointer";
-          row.addEventListener("click", () => {
+          row.addEventListener("click", async () => {
             if (confirm("Xoá lịch này?")){
               data.schedule[activeDay].splice(idx,1);
-              saveData(data);
+              await saveData(data);
               renderSlots();
             }
           });
@@ -480,7 +502,7 @@
       setTimeout(()=> $("tusTitleInput").focus(), 80);
     });
 
-    $("btnAddTusAdmin").addEventListener("click", () => {
+    $("btnAddTusAdmin").addEventListener("click", async () => {
       if (!isAdmin) return;
       const title = $("tusTitleInput").value.trim();
       const url = $("tusLinkInput").value.trim();
@@ -488,11 +510,11 @@
       data.tus.unshift({ title, url });
       $("tusTitleInput").value = "";
       $("tusLinkInput").value = "";
-      saveData(data);
+      await saveData(data);
       renderTus();
     });
 
-    $("btnAddSlot").addEventListener("click", () => {
+    $("btnAddSlot").addEventListener("click", async () => {
       if (!isAdmin) return;
       const day = $("daySelect").value;
       const from = $("fromInput").value.trim();
@@ -502,13 +524,13 @@
       if (!data.schedule[day]) data.schedule[day] = [];
       data.schedule[day].unshift({ from, to, task });
       $("taskInput").value = "";
-      saveData(data);
+      await saveData(data);
       activeDay = day;
       renderDayTabs();
       renderSlots();
     });
 
-    $("btnSave").addEventListener("click", () => {
+    $("btnSave").addEventListener("click", async () => {
       if (!isAdmin) return;
 
       data.links.fb = $("fbInput").value.trim();
@@ -521,7 +543,7 @@
       const newPass = $("newPassInput").value.trim();
       if (newPass) data.adminPass = newPass;
 
-      saveData(data);
+      await saveData(data);
       renderContacts();
       $("songName").textContent = data.songName;
       renderGames();
@@ -533,7 +555,6 @@
       applyTheme();
       $("songName").textContent = data.songName;
 
-      // default show: intro
       renderIntro();
       renderGames();
       renderContacts();
@@ -544,7 +565,12 @@
       syncAdminUI(); // hide add tus button for non-admin
     }
 
-    init();
+    // ✅ BOOT: load cloud data first, then init UI
+    async function boot(){
+      data = await loadData();
+      init();
+    }
+    boot();
   </script>
 </body>
 </html>
