@@ -455,3 +455,76 @@ textarea{ min-height: 90px; resize: vertical; }
   .contacts{ grid-template-columns: 1fr; }
   .pill{ padding: 10px 12px; }
 }
+/* ===== FIX HEADER SPACING (PC + MOBILE) ===== */
+
+/* 1) Desktop: kéo chữ lên gần cover hơn + avatar to hơn 1 chút */
+.header-inner{
+  /* trước đây: padding: 66px 18px 18px; */
+  padding: 44px 18px 18px;   /* GIẢM khoảng trống */
+  align-items: flex-end;
+}
+
+/* avatar to + đè cover nhiều hơn */
+.avatar-wrap{
+  /* trước đây: top:-60px; width/height:140px */
+  top: -86px;                /* ĐÈ LÊN COVER nhiều hơn */
+  width: 152px;
+  height: 152px;
+}
+
+.avatar{
+  width: 152px;
+  height: 152px;
+  border-width: 5px;
+}
+
+.avatar-frame{
+  inset: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+}
+
+/* chữ dịch trái vừa đủ theo avatar mới */
+.who{
+  /* trước đây: padding-left:170px */
+  padding-left: 188px;
+}
+
+/* 2) Mobile/tablet: cũng kéo chữ lên, nhưng vẫn né avatar */
+@media (max-width: 860px){
+  .header-inner{
+    /* trước đây: padding-top: 92px */
+    padding-top: 72px; /* KÉO CHỮ LÊN */
+  }
+
+  .who{
+    /* trước đây: padding-top:64px */
+    padding-top: 52px; /* ít trống hơn */
+  }
+
+  .avatar-wrap{
+    /* trước đây: top:-58px width/height:120px */
+    top: -70px;
+    width: 128px;
+    height: 128px;
+  }
+
+  .avatar{
+    width: 128px;
+    height: 128px;
+    border-width: 4px;
+  }
+
+  .avatar-frame{
+    inset:-18px;
+    width: calc(100% + 36px);
+    height: calc(100% + 36px);
+  }
+}
+
+/* 3) Điện thoại nhỏ: tránh avatar che chữ nếu màn quá hẹp */
+@media (max-width: 420px){
+  .who{
+    padding-top: 58px;
+  }
+}
