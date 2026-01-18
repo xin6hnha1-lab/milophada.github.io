@@ -70,7 +70,7 @@
           <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
           <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
         </div>
-        <p class="help" id="dcHint">Discord: nhập ID là tự tạo link profile.</p>
+        <p class="help">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </section>
 
@@ -122,18 +122,18 @@
 
         <div class="row">
           <div class="field">
-            <label>Link Roblox (tài khoản)</label>
+            <label>Link Roblox</label>
             <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
           </div>
           <div class="field">
-            <label>Link Valorant (tài khoản / tracker)</label>
+            <label>Link Valorant</label>
             <input id="valoInput" placeholder="Dán link (có thể để trống)" />
           </div>
         </div>
 
         <div class="row">
           <div class="field">
-            <label>Link TFT (tài khoản / tracker)</label>
+            <label>Link TFT</label>
             <input id="tftInput" placeholder="Dán link (có thể để trống)" />
           </div>
           <div class="field">
@@ -166,7 +166,6 @@
           <div class="field">
             <label>📅 Thêm lịch bận / rảnh</label>
             <select id="daySelect"></select>
-
             <div class="row" style="margin-top:0">
               <div class="field">
                 <label>Từ giờ</label>
@@ -177,7 +176,6 @@
                 <input id="toInput" placeholder="11:30" />
               </div>
             </div>
-
             <textarea id="taskInput" placeholder="Việc gì? (vd: Học PRF192 / đi gym / làm bài...)"></textarea>
             <button class="btn btn-ghost" id="btnAddSlot" type="button">➕ Thêm lịch</button>
           </div>
@@ -188,19 +186,14 @@
         </div>
       </div>
 
-      <div id="adminHint" class="help">
-        Nhập đúng mật khẩu thì phần cài đặt phía dưới mới hiện ra.
-      </div>
+      <div id="adminHint" class="help">Nhập đúng mật khẩu thì phần cài đặt phía dưới mới hiện ra.</div>
     </div>
   </div>
 
   <script>
-    // =========================
-    // ✅ Cloud API (Apps Script)
-    // =========================
+    // ✅ API /exec của bro
     const API_URL = "https://script.google.com/macros/s/AKfycbyfWD-Fcm5uaTqPmnA_ShICsLCEO88xudh3h7Fc53l2gXtmz5oJO4Ygje4cK4xOiDF7AA/exec";
 
-    // ====== default data ======
     const DEFAULT = {
       theme: "dark",
       songName: "Ai ngoài anh",
@@ -230,56 +223,56 @@
       adminPass: "079268"
     };
 
-    // ====== helpers ======
+    const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
     const $ = (id) => document.getElementById(id);
 
     async function loadData(){
-      const res = await fetch(API_URL, { method: "GET" });
-      const dataCloud = await res.json();
-      return dataCloud && Object.keys(dataCloud).length
-        ? { ...DEFAULT, ...dataCloud }
+      const res = await fetch(API_URL + "?t=" + Date.now(), { method: "GET", cache: "no-store" });
+      const text = await res.text();
+      let cloud = {};
+      try { cloud = JSON.parse(text); } catch { cloud = {}; }
+
+      return cloud && Object.keys(cloud).length
+        ? { ...DEFAULT, ...cloud }
         : structuredClone(DEFAULT);
     }
 
+    // ✅ no-cors để khỏi bị CORS chặn
     async function saveData(data){
-      // ✅ đừng set headers để tránh preflight/CORS drama
       await fetch(API_URL, {
         method: "POST",
+        mode: "no-cors",
         body: JSON.stringify(data)
       });
     }
 
-    // ====== state ======
     let data = structuredClone(DEFAULT);
     let isAdmin = false;
     let activeDay = "Thứ 2";
 
-    // ====== theme ======
     function applyTheme(){
       document.body.classList.toggle("light", data.theme === "light");
       document.body.classList.toggle("dark", data.theme !== "light");
-      $("themeText").textContent = data.theme === "light" ? "Light" : "Dark";
+      $("themeText").textContent = (data.theme === "light") ? "Light" : "Dark";
     }
 
-    $("btnTheme").addEventListener("click", async () => {
+    async function toggleTheme(){
       data.theme = (data.theme === "light") ? "dark" : "light";
-      await saveData(data);
       applyTheme();
-    });
+      await saveData(data);
+    }
 
-    // ====== intro ======
     function renderIntro(){
       const box = $("introList");
       box.innerHTML = "";
       data.intro.forEach(t => {
         const div = document.createElement("div");
         div.className = "item";
-        div.innerHTML = `<span>${t}</span>`;
+        div.textContent = t;
         box.appendChild(div);
       });
     }
 
-    // ====== games ======
     function renderGames(){
       const box = $("gameList");
       box.innerHTML = "";
@@ -287,11 +280,8 @@
         const el = document.createElement(g.url ? "a" : "div");
         el.className = "item";
         if (g.url){
-          el.href = g.url;
-          el.target = "_blank";
-          el.rel = "noopener";
-          el.style.textDecoration = "none";
-          el.style.color = "inherit";
+          el.href = g.url; el.target = "_blank"; el.rel = "noopener";
+          el.style.textDecoration = "none"; el.style.color = "inherit";
         }
         el.innerHTML = `
           <div>
@@ -305,22 +295,19 @@
       });
     }
 
-    // ====== contacts ======
     function renderContacts(){
       $("fbBtn").href = data.links.fb || "#";
       const dcId = (data.links.dcId || "").trim();
       $("dcBtn").href = dcId ? `https://discord.com/users/${dcId}` : "#";
     }
 
-    // ====== tus ======
     function renderTus(){
       const box = $("tusList");
       box.innerHTML = "";
-
       if (!data.tus.length){
         const empty = document.createElement("div");
         empty.className = "item";
-        empty.innerHTML = "Chưa có tus nào 🥲";
+        empty.textContent = "Chưa có tus nào 🥲";
         box.appendChild(empty);
         return;
       }
@@ -339,8 +326,8 @@
         if (isAdmin){
           a.addEventListener("click", async (e) => {
             e.preventDefault();
-            if (confirm("Xoá tus này?")) {
-              data.tus.splice(i, 1);
+            if (confirm("Xoá tus này?")){
+              data.tus.splice(i,1);
               await saveData(data);
               renderTus();
             }
@@ -349,9 +336,6 @@
         box.appendChild(a);
       });
     }
-
-    // ====== schedule ======
-    const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
 
     function renderDayTabs(){
       const tabs = $("dayTabs");
@@ -391,26 +375,24 @@
             <div class="slot-title">${s.task}</div>
             <div class="slot-time">⏰ ${s.from} - ${s.to}</div>
           </div>
-          <div>
-            <span class="tag">${isAdmin ? "xoá" : "bận"}</span>
-          </div>
+          <div><span class="tag">${isAdmin ? "xoá" : "bận"}</span></div>
         `;
 
         if (isAdmin){
           row.style.cursor = "pointer";
           row.addEventListener("click", async () => {
             if (confirm("Xoá lịch này?")){
-              data.schedule[activeDay].splice(idx, 1);
+              data.schedule[activeDay].splice(idx,1);
               await saveData(data);
               renderSlots();
             }
           });
         }
+
         box.appendChild(row);
       });
     }
 
-    // ====== Admin modal ======
     function openAdmin(){
       $("adminModal").classList.add("show");
       $("adminModal").setAttribute("aria-hidden","false");
@@ -421,14 +403,7 @@
       $("adminModal").setAttribute("aria-hidden","true");
     }
 
-    $("btnAdmin").addEventListener("click", openAdmin);
-    $("adminClose").addEventListener("click", closeAdmin);
-    $("adminModal").addEventListener("click", (e) => {
-      if (e.target.id === "adminModal") closeAdmin();
-    });
-
     function syncAdminUI(){
-      document.body.classList.toggle("admin-on", isAdmin);
       $("adminLocked").style.display = isAdmin ? "block" : "none";
       $("adminHint").style.display = isAdmin ? "none" : "block";
       $("adminText").textContent = isAdmin ? "Admin ✓" : "Admin";
@@ -445,91 +420,97 @@
       $("tftInput").value = data.links.tft || "";
       $("songInput").value = data.songName || "";
       $("newPassInput").value = "";
-
       $("daySelect").innerHTML = DAYS.map(d => `<option value="${d}">${d}</option>`).join("");
       $("daySelect").value = activeDay;
     }
 
-    $("btnLogin").addEventListener("click", () => {
-      const pass = $("adminPassInput").value.trim();
-      if (pass === data.adminPass){
-        isAdmin = true;
-        $("adminPassInput").value = "";
-        fillAdminInputs();
+    function wireEvents(){
+      $("btnTheme").addEventListener("click", toggleTheme);
+
+      $("btnAdmin").addEventListener("click", openAdmin);
+      $("adminClose").addEventListener("click", closeAdmin);
+      $("adminModal").addEventListener("click", (e) => {
+        if (e.target.id === "adminModal") closeAdmin();
+      });
+
+      $("btnLogin").addEventListener("click", () => {
+        const pass = $("adminPassInput").value.trim();
+        if (pass === data.adminPass){
+          isAdmin = true;
+          $("adminPassInput").value = "";
+          fillAdminInputs();
+          syncAdminUI();
+          alert("Đăng nhập thành công ✅");
+        } else alert("Sai mật khẩu 😭");
+      });
+
+      $("btnLogout").addEventListener("click", () => {
+        isAdmin = false;
         syncAdminUI();
-        alert("Đăng nhập thành công ✅");
-      } else {
-        alert("Sai mật khẩu 😭");
-      }
-    });
+        alert("Đã thoát admin.");
+      });
 
-    $("btnLogout").addEventListener("click", () => {
-      isAdmin = false;
-      syncAdminUI();
-      alert("Đã thoát admin.");
-    });
+      $("btnAddTus").addEventListener("click", () => {
+        if (!isAdmin) return alert("Chỉ admin mới thêm được 😭");
+        openAdmin();
+        setTimeout(()=> $("tusTitleInput").focus(), 60);
+      });
 
-    $("daySelect").addEventListener("change", (e) => {
-      activeDay = e.target.value;
-      renderDayTabs();
-      renderSlots();
-    });
+      $("btnAddTusAdmin").addEventListener("click", async () => {
+        if (!isAdmin) return;
+        const title = $("tusTitleInput").value.trim();
+        const url = $("tusLinkInput").value.trim();
+        if (!title || !url) return alert("Nhập đủ Tên tus + Link 😭");
+        data.tus.unshift({ title, url });
+        $("tusTitleInput").value = "";
+        $("tusLinkInput").value = "";
+        await saveData(data);
+        renderTus();
+      });
 
-    $("btnAddTus").addEventListener("click", () => {
-      if (!isAdmin) return alert("Chỉ admin mới thêm được 😭");
-      openAdmin();
-      setTimeout(()=> $("tusTitleInput").focus(), 80);
-    });
+      $("btnAddSlot").addEventListener("click", async () => {
+        if (!isAdmin) return;
+        const day = $("daySelect").value;
+        const from = $("fromInput").value.trim();
+        const to = $("toInput").value.trim();
+        const task = $("taskInput").value.trim();
+        if (!from || !to || !task) return alert("Nhập đủ từ/đến/việc 😭");
+        if (!data.schedule[day]) data.schedule[day] = [];
+        data.schedule[day].unshift({ from, to, task });
+        $("taskInput").value = "";
+        await saveData(data);
+        activeDay = day;
+        renderDayTabs();
+        renderSlots();
+      });
 
-    $("btnAddTusAdmin").addEventListener("click", async () => {
-      if (!isAdmin) return;
-      const title = $("tusTitleInput").value.trim();
-      const url = $("tusLinkInput").value.trim();
-      if (!title || !url) return alert("Nhập đủ Tên tus + Link 😭");
-      data.tus.unshift({ title, url });
-      $("tusTitleInput").value = "";
-      $("tusLinkInput").value = "";
-      await saveData(data);
-      renderTus();
-    });
+      $("btnSave").addEventListener("click", async () => {
+        if (!isAdmin) return;
 
-    $("btnAddSlot").addEventListener("click", async () => {
-      if (!isAdmin) return;
-      const day = $("daySelect").value;
-      const from = $("fromInput").value.trim();
-      const to = $("toInput").value.trim();
-      const task = $("taskInput").value.trim();
-      if (!from || !to || !task) return alert("Nhập đủ từ giờ / đến giờ / việc 😭");
-      if (!data.schedule[day]) data.schedule[day] = [];
-      data.schedule[day].unshift({ from, to, task });
-      $("taskInput").value = "";
-      await saveData(data);
-      activeDay = day;
-      renderDayTabs();
-      renderSlots();
-    });
+        data.links.fb = $("fbInput").value.trim();
+        data.links.dcId = $("dcIdInput").value.trim();
+        data.links.roblox = $("robloxInput").value.trim();
+        data.links.valo = $("valoInput").value.trim();
+        data.links.tft = $("tftInput").value.trim();
+        data.songName = $("songInput").value.trim() || DEFAULT.songName;
 
-    $("btnSave").addEventListener("click", async () => {
-      if (!isAdmin) return;
+        const newPass = $("newPassInput").value.trim();
+        if (newPass) data.adminPass = newPass;
 
-      data.links.fb = $("fbInput").value.trim();
-      data.links.dcId = $("dcIdInput").value.trim();
-      data.links.roblox = $("robloxInput").value.trim();
-      data.links.valo = $("valoInput").value.trim();
-      data.links.tft = $("tftInput").value.trim();
-      data.songName = $("songInput").value.trim() || DEFAULT.songName;
+        await saveData(data);
+        $("songName").textContent = data.songName;
+        renderContacts();
+        renderGames();
+        alert("Đã lưu ✅");
+      });
 
-      const newPass = $("newPassInput").value.trim();
-      if (newPass) data.adminPass = newPass;
+      $("daySelect").addEventListener("change", (e) => {
+        activeDay = e.target.value;
+        renderDayTabs();
+        renderSlots();
+      });
+    }
 
-      await saveData(data);
-      renderContacts();
-      $("songName").textContent = data.songName;
-      renderGames();
-      alert("Đã lưu ✅");
-    });
-
-    // ====== init ======
     function init(){
       applyTheme();
       $("songName").textContent = data.songName;
@@ -537,15 +518,20 @@
       renderIntro();
       renderGames();
       renderContacts();
-
+      renderTus();
       renderDayTabs();
       renderSlots();
       syncAdminUI();
     }
 
-    // ✅ BOOT: load cloud data first
     async function boot(){
+      // bind events trước => dark mode bấm luôn được
+      wireEvents();
+
+      // load cloud data
       data = await loadData();
+
+      // render
       init();
     }
     boot();
