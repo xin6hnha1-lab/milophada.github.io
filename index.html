@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Milo Pha Đá</title>
   <link rel="stylesheet" href="effect.css" />
 </head>
@@ -48,7 +48,7 @@
     <div class="grid">
       <div class="card section">
         <div class="h">🎧 Nhạc tôi nghe</div>
-        <div class="music-title">Đang nghe: <span id="songName">Ai ngoài anh</span></div>
+        <div class="music-title"><span>Đang nghe:</span> <span id="songName">Ai ngoài anh</span></div>
         <p class="p">Bấm Play để nghe 🎧</p>
         <div style="height:10px"></div>
         <audio id="audio" controls src="music.mp3"></audio>
@@ -71,7 +71,7 @@
           <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
           <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
         </div>
-        <p class="help" id="dcHint">Discord: nhập ID là tự tạo link profile.</p>
+        <p class="help" id="dcHelp">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </div>
 
@@ -106,14 +106,14 @@
       </div>
 
       <div class="modal-actions">
-        <button class="btn btn-primary" id="btnLogin">✅ Bật Admin</button>
+        <button class="btn btn-primary" id="btnLogin">✅ Đăng nhập</button>
         <button class="btn btn-danger" id="btnLogout">🚪 Thoát Admin</button>
       </div>
 
       <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
 
-      <!-- PHẦN DƯỚI CHỈ HIỆN KHI ĐÃ ĐĂNG NHẬP -->
-      <div id="adminLocked" class="admin-locked">
+      <!-- PHẦN NÀY CHỈ HIỆN KHI ĐÃ LOGIN -->
+      <div id="adminLocked">
         <div class="row">
           <div class="field">
             <label>Link Facebook (dán link profile)</label>
@@ -153,8 +153,19 @@
             <input id="newPassInput" placeholder="Để trống nếu không đổi" />
           </div>
           <div class="field">
-            <label>—</label>
-            <div class="help">Tip: chỉ cần đổi khi bạn muốn.</div>
+            <label>Tên hiển thị</label>
+            <input id="nameInput" placeholder="Milo Pha Đá (Nhat boy)" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Subtitle</label>
+            <input id="subInput" placeholder="IT Student • Software Engineering" />
+          </div>
+          <div class="field">
+            <label>Quote</label>
+            <input id="quoteInput" placeholder="Một góc nhỏ..." />
           </div>
         </div>
 
@@ -164,12 +175,12 @@
           <div class="field">
             <label>➕ Thêm tus mới (Admin only)</label>
             <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
-            <input id="tusLinkInput" placeholder="Dán link tus Facebook..." />
+            <input id="tusLinkInput" placeholder="Dán link tus..." />
             <button class="btn btn-ghost" id="btnAddTusAdmin">➕ Thêm tus</button>
           </div>
 
           <div class="field">
-            <label>📅 Chỉnh lịch bận / rảnh (Admin only)</label>
+            <label>📅 Thêm lịch bận/rảnh (Admin only)</label>
             <select id="daySelect"></select>
             <div class="row" style="margin-top:0">
               <div class="field">
@@ -190,34 +201,39 @@
           <button class="btn btn-primary" id="btnSave">💾 Lưu cài đặt</button>
         </div>
       </div>
-
     </div>
   </div>
 
-  <script>
-    // ====== STORAGE ======
-    const LS_KEY = "milo_profile_v1";
-    const loadState = () => {
-      try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }
-      catch(e){ return {}; }
-    };
-    const saveState = (s) => localStorage.setItem(LS_KEY, JSON.stringify(s));
+<script>
+(() => {
+  const LS_KEY = "milo_profile_v3";
 
-    const DEFAULT = {
-      theme: "dark",
-      adminOn: false,
-      adminPass: "1234",
-      fb: "https://facebook.com/milo.pha.a",
-      dcId: "910327589309145109",
-      roblox: "",
-      valo: "",
-      tft: "",
+  const $ = (id) => document.getElementById(id);
+
+  const defaultState = {
+    theme: "dark",
+    adminOn: false,
+    adminPass: "079268",
+
+    profile: {
+      name: "Milo Pha Đá (Nhat boy)",
+      subtitle: "IT Student • Software Engineering",
+      quote: "“Một góc nhỏ trên Internet của Milo.”",
+      city: "Hồ Chí Minh",
+      age: "19",
+      tag: "gamer",
       songName: "Ai ngoài anh",
-      intro: ["✨ Chạy Ngay Đi", "🐻 Chạy Vào Trái Tim Em", "😳 Đùa Thôi Anh Làm Gì Có Em"],
-      games: [
-        { name:"Roblox", desc:"chill / sandbox", tag:"casual", link:"" },
-        { name:"Valorant", desc:"FPS / tryhard", tag:"rank", link:"" },
-        { name:"TFT", desc:"auto chess", tag:"brain", link:"" }
+      facebook: "https://www.facebook.com/milo.pha.a",
+      discordId: "910327589309145109",
+      games: {
+        roblox: "",
+        valorant: "",
+        tft: ""
+      },
+      intro: [
+        "✨ Chạy Ngay Đi",
+        "🧸 Chạy Vào Trái Tim Em",
+        "😳 Đùa Thôi Anh Làm Gì Có Em"
       ],
       tus: [],
       schedule: {
@@ -229,355 +245,357 @@
         "Thứ 7": [],
         "Chủ nhật": []
       }
-    };
+    }
+  };
 
-    let state = { ...DEFAULT, ...loadState() };
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return structuredClone(defaultState);
+      const s = JSON.parse(raw);
 
-    // ====== ELEMENTS ======
-    const $ = (id) => document.getElementById(id);
+      // merge nhẹ để không lỗi khi thiếu field
+      const merged = structuredClone(defaultState);
+      Object.assign(merged, s);
+      merged.profile = Object.assign(structuredClone(defaultState.profile), s.profile || {});
+      merged.profile.games = Object.assign(structuredClone(defaultState.profile.games), (s.profile && s.profile.games) || {});
+      merged.profile.schedule = Object.assign(structuredClone(defaultState.profile.schedule), (s.profile && s.profile.schedule) || {});
+      if(!Array.isArray(merged.profile.intro)) merged.profile.intro = structuredClone(defaultState.profile.intro);
+      if(!Array.isArray(merged.profile.tus)) merged.profile.tus = [];
+      return merged;
+    }catch(e){
+      return structuredClone(defaultState);
+    }
+  }
 
-    const btnTheme = $("btnTheme");
-    const themeText = $("themeText");
-    const btnAdmin = $("btnAdmin");
-    const adminModal = $("adminModal");
-    const adminClose = $("adminClose");
-    const btnLogin = $("btnLogin");
-    const btnLogout = $("btnLogout");
-    const adminPassInput = $("adminPassInput");
-    const adminLocked = $("adminLocked");
+  function saveState(){
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }
 
-    const fbBtn = $("fbBtn");
-    const dcBtn = $("dcBtn");
-    const dcHint = $("dcHint");
+  function dcLinkFromId(id){
+    const clean = (id||"").trim().replace(/\s+/g,"");
+    if(!clean) return "#";
+    return "https://discord.com/users/" + clean;
+  }
 
-    const introList = $("introList");
-    const gameList = $("gameList");
-    const tusList = $("tusList");
-    const btnAddTus = $("btnAddTus");
+  function renderIntro(){
+    const box = $("introList");
+    box.innerHTML = "";
+    state.profile.intro.forEach((t) => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `<span>${escapeHtml(t)}</span>`;
+      box.appendChild(div);
+    });
+  }
 
-    const dayTabs = $("dayTabs");
-    const daySlots = $("daySlots");
+  function renderGames(){
+    const box = $("gameList");
+    box.innerHTML = "";
 
-    // admin inputs
-    const fbInput = $("fbInput");
-    const dcIdInput = $("dcIdInput");
-    const robloxInput = $("robloxInput");
-    const valoInput = $("valoInput");
-    const tftInput = $("tftInput");
-    const songInput = $("songInput");
-    const newPassInput = $("newPassInput");
-    const btnSave = $("btnSave");
+    const items = [
+      { key:"roblox", name:"Roblox", sub:"chill / sandbox", tag:"casual" },
+      { key:"valorant", name:"Valorant", sub:"FPS / tryhard", tag:"rank" },
+      { key:"tft", name:"TFT", sub:"auto chess", tag:"brain" }
+    ];
 
-    const tusTitleInput = $("tusTitleInput");
-    const tusLinkInput = $("tusLinkInput");
-    const btnAddTusAdmin = $("btnAddTusAdmin");
+    items.forEach(it => {
+      const link = (state.profile.games[it.key] || "").trim();
+      const div = document.createElement("div");
+      div.className = "item";
+      const left = `
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="font-weight:950">${it.name}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:800">${it.sub}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:800">${link ? "Có link ✅" : "Chưa có link"}</div>
+        </div>
+      `;
+      const right = `<span class="tag">${it.tag}</span>`;
+      div.innerHTML = left + right;
+
+      if(link){
+        div.style.cursor = "pointer";
+        div.addEventListener("click", () => window.open(link, "_blank", "noopener"));
+      }
+      box.appendChild(div);
+    });
+  }
+
+  function renderContacts(){
+    const fb = (state.profile.facebook || "").trim();
+    $("fbBtn").href = fb ? fb : "#";
+
+    const dc = dcLinkFromId(state.profile.discordId);
+    $("dcBtn").href = dc;
+  }
+
+  function renderTus(){
+    const box = $("tusList");
+    box.innerHTML = "";
+
+    if(state.profile.tus.length === 0){
+      const empty = document.createElement("div");
+      empty.className = "tus-link";
+      empty.href = "#";
+      empty.innerHTML = `<span>Chưa có tus nào 😳</span><span class="tag">trống</span>`;
+      box.appendChild(empty);
+      return;
+    }
+
+    state.profile.tus.forEach((t, idx) => {
+      const a = document.createElement("a");
+      a.className = "tus-link";
+      a.href = t.link || "#";
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.innerHTML = `<span>🔗 ${escapeHtml(t.title || ("Tus "+(idx+1)))}</span><span class="tag">Mở</span>`;
+      box.appendChild(a);
+    });
+  }
+
+  function renderScheduleTabs(){
+    const days = Object.keys(state.profile.schedule);
+    const tabs = $("dayTabs");
+    tabs.innerHTML = "";
+    days.forEach((d) => {
+      const b = document.createElement("div");
+      b.className = "tab";
+      b.textContent = d;
+      b.addEventListener("click", () => {
+        state.currentDay = d;
+        renderSchedule();
+      });
+      tabs.appendChild(b);
+    });
+    if(!state.currentDay) state.currentDay = days[0];
+  }
+
+  function renderSchedule(){
+    const days = Object.keys(state.profile.schedule);
+    const tabs = $("dayTabs").querySelectorAll(".tab");
+    tabs.forEach((t, i) => {
+      t.classList.toggle("active", days[i] === state.currentDay);
+    });
+
+    const slotsBox = $("daySlots");
+    slotsBox.innerHTML = "";
+
+    const arr = state.profile.schedule[state.currentDay] || [];
+    if(arr.length === 0){
+      const div = document.createElement("div");
+      div.className = "slot";
+      div.innerHTML = `<div class="slot-left">
+        <div class="slot-title">😴 Chưa có lịch cho ${escapeHtml(state.currentDay)}.</div>
+        <div class="slot-time">Bạn đang rảnh đó ✅</div>
+      </div>`;
+      slotsBox.appendChild(div);
+      return;
+    }
+
+    arr.forEach((s) => {
+      const div = document.createElement("div");
+      div.className = "slot";
+      div.innerHTML = `
+        <div class="slot-left">
+          <div class="slot-title">${escapeHtml(s.task || "Việc bận")}</div>
+          <div class="slot-time">${escapeHtml(s.from || "--:--")} → ${escapeHtml(s.to || "--:--")}</div>
+        </div>
+        <span class="tag">bận</span>
+      `;
+      slotsBox.appendChild(div);
+    });
+  }
+
+  function applyProfileToUI(){
+    $("nameText").textContent = state.profile.name || "";
+    $("subtitleText").textContent = state.profile.subtitle || "";
+    $("quoteText").textContent = state.profile.quote || "";
+    $("cityText").textContent = state.profile.city || "";
+    $("ageText").textContent = state.profile.age || "";
+    $("tagText").textContent = state.profile.tag || "";
+    $("songName").textContent = state.profile.songName || "";
+
+    renderIntro();
+    renderGames();
+    renderContacts();
+    renderTus();
+    renderScheduleTabs();
+    renderSchedule();
+  }
+
+  function applyTheme(){
+    document.body.classList.toggle("light", state.theme === "light");
+    document.body.classList.toggle("dark", state.theme !== "light");
+    $("themeText").textContent = (state.theme === "light") ? "Light" : "Dark";
+  }
+
+  function setAdmin(on){
+    state.adminOn = !!on;
+    document.body.classList.toggle("admin-on", state.adminOn);
+  }
+
+  function openModal(){
+    $("adminModal").classList.add("show");
+    $("adminModal").setAttribute("aria-hidden", "false");
+  }
+  function closeModal(){
+    $("adminModal").classList.remove("show");
+    $("adminModal").setAttribute("aria-hidden", "true");
+  }
+
+  function fillAdminInputs(){
+    $("fbInput").value = state.profile.facebook || "";
+    $("dcIdInput").value = state.profile.discordId || "";
+    $("robloxInput").value = state.profile.games.roblox || "";
+    $("valoInput").value = state.profile.games.valorant || "";
+    $("tftInput").value = state.profile.games.tft || "";
+    $("songInput").value = state.profile.songName || "";
+    $("nameInput").value = state.profile.name || "";
+    $("subInput").value = state.profile.subtitle || "";
+    $("quoteInput").value = state.profile.quote || "";
 
     const daySelect = $("daySelect");
-    const fromInput = $("fromInput");
-    const toInput = $("toInput");
-    const taskInput = $("taskInput");
-    const btnAddSlot = $("btnAddSlot");
-
-    const songName = $("songName");
-
-    // ====== THEME ======
-    function applyTheme(){
-      document.body.classList.toggle("light", state.theme === "light");
-      document.body.classList.toggle("dark", state.theme !== "light");
-      themeText.textContent = state.theme === "light" ? "Light" : "Dark";
-    }
-
-    btnTheme.addEventListener("click", () => {
-      state.theme = (state.theme === "light") ? "dark" : "light";
-      saveState(state);
-      applyTheme();
+    daySelect.innerHTML = "";
+    Object.keys(state.profile.schedule).forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.textContent = d;
+      daySelect.appendChild(opt);
     });
+  }
 
-    // ====== ADMIN MODAL OPEN/CLOSE ======
-    function openAdmin(){
-      adminModal.classList.add("show");
-      adminModal.setAttribute("aria-hidden","false");
-      adminPassInput.focus();
+  function saveFromAdmin(){
+    state.profile.facebook = $("fbInput").value.trim();
+    state.profile.discordId = $("dcIdInput").value.trim();
+    state.profile.games.roblox = $("robloxInput").value.trim();
+    state.profile.games.valorant = $("valoInput").value.trim();
+    state.profile.games.tft = $("tftInput").value.trim();
+    state.profile.songName = $("songInput").value.trim() || state.profile.songName;
+
+    state.profile.name = $("nameInput").value.trim() || state.profile.name;
+    state.profile.subtitle = $("subInput").value.trim() || state.profile.subtitle;
+    state.profile.quote = $("quoteInput").value.trim() || state.profile.quote;
+
+    const newPass = $("newPassInput").value.trim();
+    if(newPass) state.adminPass = newPass;
+
+    saveState();
+    applyProfileToUI();
+  }
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // ---------------- init ----------------
+  let state = loadState();
+
+  // theme button
+  $("btnTheme").addEventListener("click", () => {
+    state.theme = (state.theme === "light") ? "dark" : "light";
+    applyTheme();
+    saveState();
+  });
+
+  // admin open
+  $("btnAdmin").addEventListener("click", () => {
+    openModal();
+    fillAdminInputs();
+    $("adminPassInput").value = "";
+  });
+
+  $("adminClose").addEventListener("click", closeModal);
+  $("adminModal").addEventListener("click", (e) => {
+    if(e.target === $("adminModal")) closeModal();
+  });
+
+  // login/logout
+  $("btnLogin").addEventListener("click", () => {
+    const pass = $("adminPassInput").value.trim();
+    if(pass === state.adminPass){
+      setAdmin(true);
+      fillAdminInputs();
+    }else{
+      alert("Sai mật khẩu 😭");
+      setAdmin(false);
     }
-    function closeAdmin(){
-      adminModal.classList.remove("show");
-      adminModal.setAttribute("aria-hidden","true");
+  });
+
+  $("btnLogout").addEventListener("click", () => {
+    setAdmin(false);
+    $("adminPassInput").value = "";
+  });
+
+  // save settings
+  $("btnSave").addEventListener("click", () => {
+    if(!state.adminOn){
+      alert("Bạn chưa đăng nhập admin 🔒");
+      return;
     }
+    saveFromAdmin();
+    alert("Đã lưu ✅");
+  });
 
-    btnAdmin.addEventListener("click", openAdmin);
-    adminClose.addEventListener("click", closeAdmin);
-    adminModal.addEventListener("click", (e) => {
-      if(e.target === adminModal) closeAdmin();
-    });
-
-    // ====== ADMIN LOGIN ======
-    function applyAdminUI(){
-      document.body.classList.toggle("admin-on", !!state.adminOn);
-      adminLocked.style.display = state.adminOn ? "block" : "none";
+  // add tus (admin only)
+  $("btnAddTusAdmin").addEventListener("click", () => {
+    if(!state.adminOn){
+      alert("Cần quyền admin 🔒");
+      return;
     }
-
-    btnLogin.addEventListener("click", () => {
-      const pass = adminPassInput.value.trim();
-      if(pass && pass === state.adminPass){
-        state.adminOn = true;
-        saveState(state);
-        applyAdminUI();
-      }else{
-        alert("Sai mật khẩu 😭");
-      }
-    });
-
-    btnLogout.addEventListener("click", () => {
-      state.adminOn = false;
-      saveState(state);
-      applyAdminUI();
-    });
-
-    // ====== RENDER INTRO ======
-    function renderIntro(){
-      introList.innerHTML = "";
-      state.intro.forEach(t => {
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<div>${escapeHtml(t)}</div>`;
-        introList.appendChild(div);
-      });
+    const title = $("tusTitleInput").value.trim();
+    const link = $("tusLinkInput").value.trim();
+    if(!title || !link){
+      alert("Nhập đủ tên tus + link nha 😅");
+      return;
     }
+    state.profile.tus.unshift({ title, link });
+    $("tusTitleInput").value = "";
+    $("tusLinkInput").value = "";
+    saveState();
+    renderTus();
+  });
 
-    // ====== RENDER GAMES ======
-    function renderGames(){
-      gameList.innerHTML = "";
-      state.games.forEach(g => {
-        const a = document.createElement(g.link ? "a" : "div");
-        a.className = "item";
-        if(g.link){
-          a.href = g.link;
-          a.target = "_blank";
-          a.rel = "noopener";
-          a.style.textDecoration = "none";
-          a.style.color = "inherit";
-        }
-        a.innerHTML = `
-          <div>
-            <div style="font-weight:900">${escapeHtml(g.name)}</div>
-            <div class="p" style="font-size:12px;margin-top:2px">${escapeHtml(g.desc || "")}</div>
-            <div class="p" style="font-size:12px;margin-top:2px">${g.link ? "" : "Chưa có link"}</div>
-          </div>
-          <div class="tag">${escapeHtml(g.tag || "")}</div>
-        `;
-        gameList.appendChild(a);
-      });
+  // viewer add tus button (admin only)
+  $("btnAddTus").addEventListener("click", () => {
+    if(!state.adminOn){
+      alert("Chỉ admin mới thêm được 🔒");
+      return;
     }
+    openModal();
+    fillAdminInputs();
+  });
 
-    // ====== CONTACTS ======
-    function renderContacts(){
-      fbBtn.href = state.fb || "#";
-      if(!state.fb) fbBtn.style.opacity = ".6";
-
-      // Discord by ID
-      const id = (state.dcId || "").trim();
-      if(id){
-        dcBtn.href = `https://discord.com/users/${encodeURIComponent(id)}`;
-        dcHint.textContent = "Discord: nhập ID là tự tạo link profile.";
-        dcBtn.style.opacity = "1";
-      }else{
-        dcBtn.href = "#";
-        dcBtn.style.opacity = ".6";
-        dcHint.textContent = "Discord: chưa có ID.";
-      }
+  // add schedule (admin only)
+  $("btnAddSlot").addEventListener("click", () => {
+    if(!state.adminOn){
+      alert("Cần quyền admin 🔒");
+      return;
     }
-
-    // ====== TUS ======
-    function renderTus(){
-      tusList.innerHTML = "";
-      if(!state.tus.length){
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<div class="p">Chưa có tus nào 😴</div>`;
-        tusList.appendChild(div);
-        return;
-      }
-
-      state.tus.forEach((t, idx) => {
-        const a = document.createElement("a");
-        a.className = "tus-link";
-        a.href = t.link || "#";
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.innerHTML = `
-          <div>🔗 ${escapeHtml(t.title || "Tus")}</div>
-          <div class="tag">Mở</div>
-        `;
-        tusList.appendChild(a);
-      });
+    const day = $("daySelect").value;
+    const from = $("fromInput").value.trim();
+    const to = $("toInput").value.trim();
+    const task = $("taskInput").value.trim();
+    if(!day || !from || !to || !task){
+      alert("Nhập đủ ngày + từ giờ + đến giờ + việc 😅");
+      return;
     }
+    if(!Array.isArray(state.profile.schedule[day])) state.profile.schedule[day] = [];
+    state.profile.schedule[day].push({ from, to, task });
+    $("taskInput").value = "";
+    saveState();
+    renderSchedule();
+  });
 
-    btnAddTus.addEventListener("click", () => {
-      if(!state.adminOn){
-        alert("Chỉ Admin mới thêm tus nhé 🔒");
-        return;
-      }
-      openAdmin();
-      tusTitleInput.focus();
-    });
-
-    btnAddTusAdmin.addEventListener("click", () => {
-      const title = tusTitleInput.value.trim();
-      const link = tusLinkInput.value.trim();
-      if(!title || !link){
-        alert("Nhập đủ Tên tus + Link 😭");
-        return;
-      }
-      state.tus.unshift({ title, link });
-      tusTitleInput.value = "";
-      tusLinkInput.value = "";
-      saveState(state);
-      renderTus();
-    });
-
-    // ====== SCHEDULE ======
-    const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
-    let activeDay = DAYS[0];
-
-    function renderDayTabs(){
-      dayTabs.innerHTML = "";
-      DAYS.forEach(d => {
-        const b = document.createElement("div");
-        b.className = "tab" + (d === activeDay ? " active" : "");
-        b.textContent = d;
-        b.addEventListener("click", () => {
-          activeDay = d;
-          renderDayTabs();
-          renderDaySlots();
-        });
-        dayTabs.appendChild(b);
-      });
-    }
-
-    function renderDaySlots(){
-      daySlots.innerHTML = "";
-      const slots = state.schedule[activeDay] || [];
-      if(!slots.length){
-        const empty = document.createElement("div");
-        empty.className = "slot";
-        empty.innerHTML = `<div class="p">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
-        daySlots.appendChild(empty);
-        return;
-      }
-
-      slots.forEach(s => {
-        const div = document.createElement("div");
-        div.className = "slot";
-        div.innerHTML = `
-          <div class="slot-left">
-            <div class="slot-title">${escapeHtml(s.task || "Bận")}</div>
-            <div class="slot-time">⏰ ${escapeHtml(s.from)} - ${escapeHtml(s.to)}</div>
-          </div>
-          <div class="tag">bận</div>
-        `;
-        daySlots.appendChild(div);
-      });
-    }
-
-    function fillDaySelect(){
-      daySelect.innerHTML = "";
-      DAYS.forEach(d => {
-        const opt = document.createElement("option");
-        opt.value = d; opt.textContent = d;
-        daySelect.appendChild(opt);
-      });
-    }
-
-    btnAddSlot.addEventListener("click", () => {
-      const d = daySelect.value;
-      const from = fromInput.value.trim();
-      const to = toInput.value.trim();
-      const task = taskInput.value.trim();
-      if(!d || !from || !to || !task){
-        alert("Nhập đủ: ngày + từ giờ + đến giờ + việc 😭");
-        return;
-      }
-      if(!state.schedule[d]) state.schedule[d] = [];
-      state.schedule[d].push({ from, to, task });
-      fromInput.value = "";
-      toInput.value = "";
-      taskInput.value = "";
-      saveState(state);
-      activeDay = d;
-      renderDayTabs();
-      renderDaySlots();
-    });
-
-    // ====== SAVE SETTINGS ======
-    function loadAdminInputs(){
-      fbInput.value = state.fb || "";
-      dcIdInput.value = state.dcId || "";
-      robloxInput.value = state.roblox || "";
-      valoInput.value = state.valo || "";
-      tftInput.value = state.tft || "";
-      songInput.value = state.songName || "";
-      newPassInput.value = "";
-    }
-
-    btnSave.addEventListener("click", () => {
-      if(!state.adminOn){
-        alert("Bạn chưa bật Admin 🔒");
-        return;
-      }
-
-      state.fb = fbInput.value.trim();
-      state.dcId = dcIdInput.value.trim();
-      state.roblox = robloxInput.value.trim();
-      state.valo = valoInput.value.trim();
-      state.tft = tftInput.value.trim();
-      state.songName = songInput.value.trim() || DEFAULT.songName;
-
-      const np = newPassInput.value.trim();
-      if(np) state.adminPass = np;
-
-      // update game links
-      state.games = state.games.map(g => {
-        if(g.name === "Roblox") return { ...g, link: state.roblox };
-        if(g.name === "Valorant") return { ...g, link: state.valo };
-        if(g.name === "TFT") return { ...g, link: state.tft };
-        return g;
-      });
-
-      saveState(state);
-      renderAll();
-      alert("Đã lưu ✅");
-    });
-
-    // ====== UTILS ======
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    // ====== RENDER ALL ======
-    function renderAll(){
-      applyTheme();
-      applyAdminUI();
-      loadAdminInputs();
-
-      songName.textContent = state.songName || DEFAULT.songName;
-
-      renderIntro();
-      renderGames();
-      renderContacts();
-      renderTus();
-
-      fillDaySelect();
-      renderDayTabs();
-      renderDaySlots();
-    }
-
-    // ====== INIT ======
-    renderAll();
-  </script>
+  // initial apply
+  applyTheme();
+  setAdmin(!!state.adminOn);
+  applyProfileToUI();
+})();
+</script>
 </body>
 </html>
