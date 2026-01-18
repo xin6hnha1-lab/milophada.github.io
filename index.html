@@ -3,33 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Milo Pha Đá ✅ RESET</title>
-  <link rel="stylesheet" href="effect.css" />
+  <title>Milo Pha Đá</title>
+  <link rel="stylesheet" href="effect.css">
 </head>
 
-<body>
+<body class="dark">
   <div class="bg"></div>
 
   <div class="wrap">
     <div class="top-actions">
-      <div class="pill" id="btnTheme" role="button">🌙 <span id="themeText">Dark</span></div>
-      <div class="pill" id="btnAdmin" role="button">🔒 <span>Admin</span></div>
+      <div class="pill" id="btnTheme" role="button" aria-label="Đổi giao diện">🌙 <span id="themeText">Dark</span></div>
+      <div class="pill" id="btnAdmin" role="button" aria-label="Mở Admin">🔒 <span id="adminText">Admin</span></div>
     </div>
 
     <div class="card header">
       <img class="cover" src="cover.gif" alt="Cover" />
-
       <div class="header-inner">
         <div class="avatar-wrap">
           <img class="avatar" src="avatar.jpg" alt="Avatar" />
-          <img class="avatar-frame" src="frame.png" alt="" />
+          <img class="avatar-frame" src="frame.png" alt="">
         </div>
 
         <div class="who">
           <h1 class="name" id="nameText">Milo Pha Đá (Nhat boy)</h1>
           <div class="subtitle" id="subtitleText">IT Student • Software Engineering</div>
           <div class="quote" id="quoteText">“Một góc nhỏ trên Internet của Milo.”</div>
-
           <div class="chips">
             <div class="chip">📍 <span id="cityText">Hồ Chí Minh</span></div>
             <div class="chip">🎂 <span id="ageText">19</span></div>
@@ -65,23 +63,22 @@
           <a class="contact-btn" id="fbBtn" href="#" target="_blank" rel="noopener">🌐 Facebook</a>
           <a class="contact-btn" id="dcBtn" href="#" target="_blank" rel="noopener">💬 Discord</a>
         </div>
+        <p class="help">Discord: nhập ID là tự tạo link profile.</p>
       </div>
     </div>
 
     <div class="card tus-box">
       <div class="tus-head">
         <div>📝 Đây là nơi check các tus của tôi</div>
-        <button class="btn btn-primary" id="btnAddTus">➕ Thêm tus</button>
+        <button class="btn btn-primary admin-locked" id="btnAddTus">➕ Thêm tus</button>
       </div>
       <div class="p">Người xem chỉ bấm link • Admin mới thêm/xoá 🔒</div>
-      <div style="height:10px"></div>
       <div class="tus-list" id="tusList"></div>
     </div>
 
     <div class="card schedule">
       <div class="h">📅 Lịch bận / rảnh</div>
       <div class="p">Set theo từng ngày trong tuần ✅</div>
-      <div style="height:10px"></div>
       <div class="day-tabs" id="dayTabs"></div>
       <div id="daySlots"></div>
     </div>
@@ -99,21 +96,20 @@
       </div>
 
       <div class="modal-actions">
-        <button class="btn btn-primary" id="btnLogin">✅ Đăng nhập</button>
+        <button class="btn btn-primary" id="btnLogin">✅ Bật Admin</button>
         <button class="btn btn-danger" id="btnLogout">🚪 Thoát Admin</button>
       </div>
 
       <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
 
-      <!-- Phần dưới chỉ hiện khi đúng pass -->
-      <div id="adminLocked">
+      <div id="adminLocked" class="admin-locked">
         <div class="row">
           <div class="field">
-            <label>Link Facebook</label>
+            <label>Link Facebook (dán link profile)</label>
             <input id="fbInput" placeholder="https://facebook.com/..." />
           </div>
           <div class="field">
-            <label>Discord ID</label>
+            <label>Discord ID (chỉ cần ID)</label>
             <input id="dcIdInput" placeholder="9103..." />
           </div>
         </div>
@@ -121,21 +117,21 @@
         <div class="row">
           <div class="field">
             <label>Link Roblox</label>
-            <input id="robloxInput" placeholder="Dán link..." />
+            <input id="robloxInput" placeholder="Dán link (có thể để trống)" />
           </div>
           <div class="field">
             <label>Link Valorant</label>
-            <input id="valoInput" placeholder="Dán link..." />
+            <input id="valoInput" placeholder="Dán link (có thể để trống)" />
           </div>
         </div>
 
         <div class="row">
           <div class="field">
             <label>Link TFT</label>
-            <input id="tftInput" placeholder="Dán link..." />
+            <input id="tftInput" placeholder="Dán link (có thể để trống)" />
           </div>
           <div class="field">
-            <label>Tên bài nhạc</label>
+            <label>Tên bài nhạc hiển thị</label>
             <input id="songInput" placeholder="Ai ngoài anh" />
           </div>
         </div>
@@ -145,24 +141,20 @@
             <label>Đổi mật khẩu admin (tuỳ chọn)</label>
             <input id="newPassInput" placeholder="Để trống nếu không đổi" />
           </div>
-          <div class="field">
-            <label>—</label>
-            <div class="p">💾 Lưu xong là người xem bấm link được.</div>
-          </div>
         </div>
 
         <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
 
         <div class="row">
           <div class="field">
-            <label>➕ Thêm tus</label>
-            <input id="tusTitleInput" placeholder="Tên tus" />
-            <input id="tusLinkInput" placeholder="Link tus Facebook" />
+            <label>➕ Thêm tus mới</label>
+            <input id="tusTitleInput" placeholder="Tên tus (vd: Tus AV)" />
+            <input id="tusLinkInput" placeholder="Dán link tus Facebook..." />
             <button class="btn btn-ghost" id="btnAddTusAdmin">➕ Thêm tus</button>
           </div>
 
           <div class="field">
-            <label>📅 Thêm lịch bận</label>
+            <label>📅 Chỉnh lịch bận/rảnh</label>
             <select id="daySelect"></select>
             <div class="row" style="margin-top:0">
               <div class="field">
@@ -174,7 +166,7 @@
                 <input id="toInput" placeholder="11:30" />
               </div>
             </div>
-            <textarea id="taskInput" placeholder="Việc gì?"></textarea>
+            <textarea id="taskInput" placeholder="Việc gì? (vd: Học PRF192 / đi gym / làm bài...)"></textarea>
             <button class="btn btn-ghost" id="btnAddSlot">➕ Thêm lịch</button>
           </div>
         </div>
@@ -187,395 +179,241 @@
   </div>
 
   <script>
-    // ====== Nếu bạn dán đúng code này, trang sẽ hiện title "✅ RESET" ======
-    const KEY = "milo_site_reset_v1";
+  // ====== STATE ======
+  const KEY = "milo_site_v1";
+  const defaultState = {
+    theme: "dark",
+    adminPass: "079268",
+    isAdmin: false,
 
-    const defaultState = {
-      theme: "dark",
-      adminPass: "079268",
-      isAdmin: false,
+    fbLink: "https://www.facebook.com/milo.pha.a",
+    discordId: "910327589309145109",
 
-      fbLink: "https://www.facebook.com/milo.pha.a",
-      discordId: "910327589309145109",
+    gameLinks: { roblox:"", valorant:"", tft:"" },
+    songName: "Ai ngoài anh",
 
-      gameLinks: { roblox:"", valorant:"", tft:"" },
-      songName: "Ai ngoài anh",
+    intro: [
+      "✨ Chạy Ngay Đi",
+      "🐻 Chạy Vào Trái Tim Em",
+      "😳 Đùa Thôi Anh Làm Gì Có Em"
+    ],
 
-      intro: [
-        "✨ Chạy Ngay Đi",
-        "🐻 Chạy Vào Trái Tim Em",
-        "😳 Đùa Thôi Anh Làm Gì Có Em"
-      ],
+    tus: [{ title:"Tus AV", link:"https://www.facebook.com/" }],
 
-      tus: [{ title:"Tus AV", link:"https://www.facebook.com/" }],
-
-      schedule: {
-        "Thứ 2": [], "Thứ 3": [], "Thứ 4": [], "Thứ 5": [],
-        "Thứ 6": [], "Thứ 7": [], "Chủ nhật": []
-      }
-    };
-
-    function loadState(){
-      try{
-        const raw = localStorage.getItem(KEY);
-        if(!raw) return structuredClone(defaultState);
-        const s = JSON.parse(raw);
-        return {
-          ...structuredClone(defaultState),
-          ...s,
-          gameLinks: { ...structuredClone(defaultState.gameLinks), ...(s.gameLinks||{}) },
-          schedule: { ...structuredClone(defaultState.schedule), ...(s.schedule||{}) }
-        };
-      }catch(e){
-        return structuredClone(defaultState);
-      }
+    schedule: {
+      "Thứ 2": [], "Thứ 3": [], "Thứ 4": [], "Thứ 5": [],
+      "Thứ 6": [], "Thứ 7": [], "Chủ nhật": []
     }
-    function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
-    let state = loadState();
+  };
 
-    const $ = (id)=>document.getElementById(id);
+  const $ = (id)=>document.getElementById(id);
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return structuredClone(defaultState);
+      const s = JSON.parse(raw);
+      return {
+        ...structuredClone(defaultState),
+        ...s,
+        gameLinks: { ...defaultState.gameLinks, ...(s.gameLinks||{}) },
+        schedule: { ...defaultState.schedule, ...(s.schedule||{}) }
+      };
+    }catch{ return structuredClone(defaultState); }
+  }
+  let state = loadState();
+  function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 
-    // Buttons
-    const btnTheme = $("btnTheme");
-    const themeText = $("themeText");
-    const btnAdmin = $("btnAdmin");
+  // ====== EL ======
+  const btnTheme = $("btnTheme"), themeText = $("themeText");
+  const btnAdmin = $("btnAdmin"), adminModal = $("adminModal"),
+        adminClose = $("adminClose"), adminLocked = $("adminLocked");
+  const fbBtn = $("fbBtn"), dcBtn = $("dcBtn");
+  const introList=$("introList"), gameList=$("gameList"), tusList=$("tusList");
+  const dayTabs=$("dayTabs"), daySlots=$("daySlots"); let activeDay="Thứ 2";
 
-    // Modal
-    const adminModal = $("adminModal");
-    const adminClose = $("adminClose");
-    const adminLocked = $("adminLocked");
+  // Admin inputs
+  const adminPassInput=$("adminPassInput"), btnLogin=$("btnLogin"), btnLogout=$("btnLogout");
+  const fbInput=$("fbInput"), dcIdInput=$("dcIdInput"), robloxInput=$("robloxInput"),
+        valoInput=$("valoInput"), tftInput=$("tftInput"), songInput=$("songInput"),
+        newPassInput=$("newPassInput");
+  const tusTitleInput=$("tusTitleInput"), tusLinkInput=$("tusLinkInput"), btnAddTusAdmin=$("btnAddTusAdmin");
+  const daySelect=$("daySelect"), fromInput=$("fromInput"), toInput=$("toInput"),
+        taskInput=$("taskInput"), btnAddSlot=$("btnAddSlot"), btnSave=$("btnSave");
+  const btnAddTus=$("btnAddTus");
 
-    // Admin login
-    const adminPassInput = $("adminPassInput");
-    const btnLogin = $("btnLogin");
-    const btnLogout = $("btnLogout");
+  // ====== RENDER ======
+  function applyTheme(){ document.body.classList.toggle("light", state.theme==="light"); themeText.textContent=state.theme==="light"?"Light":"Dark"; }
 
-    // Inputs
-    const fbInput = $("fbInput");
-    const dcIdInput = $("dcIdInput");
-    const robloxInput = $("robloxInput");
-    const valoInput = $("valoInput");
-    const tftInput = $("tftInput");
-    const songInput = $("songInput");
-    const newPassInput = $("newPassInput");
+  function renderContacts(){
+    fbBtn.href = state.fbLink || "#";
+    const id = (state.discordId||"").trim();
+    dcBtn.href = id ? `https://discord.com/users/${encodeURIComponent(id)}` : "#";
+  }
 
-    // Render targets
-    const songNameEl = $("songName");
-    const introList = $("introList");
-    const gameList = $("gameList");
-    const tusList = $("tusList");
-    const fbBtn = $("fbBtn");
-    const dcBtn = $("dcBtn");
+  function renderIntro(){
+    introList.innerHTML="";
+    state.intro.forEach(t=>{
+      const d=document.createElement("div");
+      d.className="item"; d.innerHTML=`<div style="font-weight:900">${escapeHtml(t)}</div>`;
+      introList.appendChild(d);
+    });
+  }
 
-    const dayTabs = $("dayTabs");
-    const daySlots = $("daySlots");
-    const daySelect = $("daySelect");
-    const fromInput = $("fromInput");
-    const toInput = $("toInput");
-    const taskInput = $("taskInput");
-    const btnAddSlot = $("btnAddSlot");
-
-    const tusTitleInput = $("tusTitleInput");
-    const tusLinkInput = $("tusLinkInput");
-    const btnAddTusAdmin = $("btnAddTusAdmin");
-    const btnAddTus = $("btnAddTus");
-    const btnSave = $("btnSave");
-
-    let activeDay = "Thứ 2";
-
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s=>({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[s]));
-    }
-    function escapeAttr(str){ return escapeHtml(str); }
-
-    function applyTheme(){
-      document.body.classList.toggle("light", state.theme === "light");
-      themeText.textContent = state.theme === "light" ? "Light" : "Dark";
-    }
-
-    function setAdminGate(){
-      adminLocked.style.display = state.isAdmin ? "block" : "none";
-    }
-
-    function renderContacts(){
-      fbBtn.href = state.fbLink || "#";
-      const id = (state.discordId || "").trim();
-      dcBtn.href = id ? `https://discord.com/users/${encodeURIComponent(id)}` : "#";
-    }
-
-    function renderIntro(){
-      introList.innerHTML = "";
-      state.intro.forEach(t=>{
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `<div style="font-weight:900">${escapeHtml(t)}</div>`;
-        introList.appendChild(div);
-      });
-    }
-
-    function renderGames(){
-      const games = [
-        { key:"roblox", icon:"🕹️", name:"Roblox", desc:"chill / sandbox", tag:"casual" },
-        { key:"valorant", icon:"🎯", name:"Valorant", desc:"FPS / tryhard", tag:"rank" },
-        { key:"tft", icon:"🧠", name:"TFT", desc:"auto chess", tag:"brain" }
-      ];
-      gameList.innerHTML = "";
-      games.forEach(g=>{
-        const link = state.gameLinks[g.key] || "";
-        const row = document.createElement("div");
-        row.className = "item";
-        row.innerHTML = `
-          <div style="display:flex;gap:10px;align-items:center">
-            <div style="font-size:18px">${g.icon}</div>
-            <div>
-              <div style="font-weight:1000">${g.name}</div>
-              <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
-              ${
-                link
-                ? `<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`
-                : `<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`
-              }
-            </div>
+  function renderGames(){
+    const games = [
+      { key:"roblox", icon:"🕹️", name:"Roblox", desc:"chill / sandbox", tag:"casual" },
+      { key:"valorant", icon:"🎯", name:"Valorant", desc:"FPS / tryhard", tag:"rank" },
+      { key:"tft", icon:"🧠", name:"TFT", desc:"auto chess", tag:"brain" }
+    ];
+    gameList.innerHTML="";
+    games.forEach(g=>{
+      const link = state.gameLinks[g.key] || "";
+      const row=document.createElement("div");
+      row.className="item";
+      row.innerHTML=`
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="font-size:18px">${g.icon}</div>
+          <div>
+            <div style="font-weight:1000">${g.name}</div>
+            <div style="color:var(--muted);font-weight:800;font-size:12px">${g.desc}</div>
+            ${link?`<a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:900;text-decoration:none">Mở link tài khoản</a>`:`<div style="color:var(--muted);font-weight:800;font-size:12px">Chưa có link</div>`}
           </div>
-          <div class="tag">${g.tag}</div>
-        `;
-        gameList.appendChild(row);
+        </div>
+        <div class="tag">${g.tag}</div>`;
+      gameList.appendChild(row);
+    });
+  }
+
+  function renderTus(){
+    tusList.innerHTML="";
+    state.tus.forEach((t,idx)=>{
+      const a=document.createElement("a");
+      a.className="tus-link"; a.href=t.link||"#"; a.target="_blank"; a.rel="noopener";
+      a.innerHTML=`<div>🔗 ${escapeHtml(t.title||"Tus")}</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          ${state.isAdmin?`<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`:`<span style="color:var(--muted);font-weight:900">Mở</span>`}
+        </div>`;
+      tusList.appendChild(a);
+    });
+    if(state.isAdmin){
+      tusList.querySelectorAll("[data-del]").forEach(b=>{
+        b.addEventListener("click",(e)=>{ e.preventDefault(); state.tus.splice(Number(b.dataset.del),1); saveState(); renderTus(); });
       });
     }
+  }
 
-    function renderTus(){
-      tusList.innerHTML = "";
-      state.tus.forEach((t, idx)=>{
-        const a = document.createElement("a");
-        a.className = "tus-link";
-        a.href = t.link || "#";
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.innerHTML = `
-          <div>🔗 ${escapeHtml(t.title || "Tus")}</div>
-          <div style="display:flex;gap:10px;align-items:center">
-            ${
-              state.isAdmin
-              ? `<button class="btn btn-danger" data-del="${idx}" type="button">Xoá</button>`
-              : `<span style="color:var(--muted);font-weight:900">Mở</span>`
-            }
-          </div>
-        `;
-        tusList.appendChild(a);
+  function renderScheduleTabs(){
+    const days = Object.keys(state.schedule);
+    dayTabs.innerHTML="";
+    days.forEach(d=>{
+      const b=document.createElement("button");
+      b.className="tab"+(d===activeDay?" active":""); b.textContent=d;
+      b.addEventListener("click",()=>{ activeDay=d; renderScheduleTabs(); renderScheduleDay(); });
+      dayTabs.appendChild(b);
+    });
+    daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
+    daySelect.value = activeDay;
+  }
+
+  function renderScheduleDay(){
+    const items = state.schedule[activeDay]||[];
+    daySlots.innerHTML="";
+    if(items.length===0){
+      const p=document.createElement("div"); p.className="item";
+      p.innerHTML=`<div style="font-weight:900">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
+      daySlots.appendChild(p); return;
+    }
+    items.forEach((it,idx)=>{
+      const d=document.createElement("div"); d.className="slot";
+      d.innerHTML=`
+        <div class="slot-left">
+          <div class="slot-title">${escapeHtml(it.task||"Việc")}</div>
+          <div class="slot-time">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span class="tag">${it.type==="busy"?"bận":"rảnh"}</span>
+          ${state.isAdmin?`<button class="btn btn-danger" data-slot-del="${idx}" type="button">Xoá</button>`:""}
+        </div>`;
+      daySlots.appendChild(d);
+    });
+    if(state.isAdmin){
+      daySlots.querySelectorAll("[data-slot-del]").forEach(b=>{
+        b.addEventListener("click",()=>{ state.schedule[activeDay].splice(Number(b.dataset.slotDel),1); saveState(); renderScheduleDay(); });
       });
-
-      if(state.isAdmin){
-        tusList.querySelectorAll("[data-del]").forEach(btn=>{
-          btn.addEventListener("click", (e)=>{
-            e.preventDefault();
-            const i = Number(btn.getAttribute("data-del"));
-            state.tus.splice(i,1);
-            saveState();
-            renderTus();
-          });
-        });
-      }
     }
+  }
 
-    function renderScheduleTabs(){
-      const days = Object.keys(state.schedule);
-      dayTabs.innerHTML = "";
-      days.forEach(d=>{
-        const b = document.createElement("button");
-        b.className = "tab" + (d===activeDay ? " active" : "");
-        b.textContent = d;
-        b.addEventListener("click", ()=>{
-          activeDay = d;
-          renderScheduleTabs();
-          renderScheduleDay();
-        });
-        dayTabs.appendChild(b);
-      });
+  function renderAll(){
+    applyTheme();
+    $("songName").textContent = state.songName || "Nhạc";
+    renderContacts(); renderIntro(); renderGames(); renderTus();
+    renderScheduleTabs(); renderScheduleDay();
+    document.body.classList.toggle("admin-on", state.isAdmin);
+    adminLocked.style.display = state.isAdmin ? "block" : "none";
+    btnAddTus.style.display = state.isAdmin ? "inline-flex" : "none";
+  }
 
-      daySelect.innerHTML = days.map(d=>`<option value="${escapeAttr(d)}">${escapeHtml(d)}</option>`).join("");
-      daySelect.value = activeDay;
-    }
+  // ====== EVENTS ======
+  btnTheme.addEventListener("click", ()=>{
+    state.theme = (state.theme==="light")?"dark":"light"; saveState(); applyTheme();
+  });
 
-    function renderScheduleDay(){
-      const items = state.schedule[activeDay] || [];
-      daySlots.innerHTML = "";
+  btnAdmin.addEventListener("click", ()=>{ adminModal.classList.add("show"); adminPassInput.value=""; setTimeout(()=>adminPassInput.focus(),50); });
+  adminClose.addEventListener("click", ()=> adminModal.classList.remove("show"));
+  adminModal.addEventListener("click",(e)=>{ if(e.target===adminModal) adminModal.classList.remove("show"); });
 
-      if(items.length === 0){
-        const p = document.createElement("div");
-        p.className = "item";
-        p.innerHTML = `<div style="font-weight:900">😴 Chưa có lịch cho ${escapeHtml(activeDay)}.</div>`;
-        daySlots.appendChild(p);
-        return;
-      }
+  btnLogin.addEventListener("click", ()=>{
+    if(adminPassInput.value.trim()===state.adminPass){
+      state.isAdmin=true; saveState(); renderAll(); alert("Admin ON ✅");
+    }else alert("Sai mật khẩu 😭");
+  });
+  btnLogout.addEventListener("click", ()=>{ state.isAdmin=false; saveState(); renderAll(); alert("Đã thoát Admin ✅"); });
 
-      items.forEach((it, idx)=>{
-        const div = document.createElement("div");
-        div.className = "slot";
-        div.innerHTML = `
-          <div class="slot-left">
-            <div class="slot-title">${escapeHtml(it.task)}</div>
-            <div class="slot-time">⏰ ${escapeHtml(it.from)} → ${escapeHtml(it.to)}</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <span class="tag">bận</span>
-            ${state.isAdmin ? `<button class="btn btn-danger" data-slot-del="${idx}" type="button">Xoá</button>` : ""}
-          </div>
-        `;
-        daySlots.appendChild(div);
-      });
+  btnSave.addEventListener("click", ()=>{
+    if(!state.isAdmin) return alert("Bật Admin trước đã 🔒");
+    state.fbLink = fbInput.value.trim();
+    state.discordId = dcIdInput.value.trim();
+    state.gameLinks.roblox = robloxInput.value.trim();
+    state.gameLinks.valorant = valoInput.value.trim();
+    state.gameLinks.tft = tftInput.value.trim();
+    state.songName = songInput.value.trim() || "Nhạc";
+    const np = newPassInput.value.trim(); if(np) state.adminPass=np;
+    saveState(); renderAll(); alert("Đã lưu cài đặt 💾");
+  });
 
-      if(state.isAdmin){
-        daySlots.querySelectorAll("[data-slot-del]").forEach(btn=>{
-          btn.addEventListener("click", ()=>{
-            const i = Number(btn.getAttribute("data-slot-del"));
-            state.schedule[activeDay].splice(i,1);
-            saveState();
-            renderScheduleDay();
-          });
-        });
-      }
-    }
+  btnAddTusAdmin.addEventListener("click", ()=>{
+    if(!state.isAdmin) return alert("Bật Admin trước đã 🔒");
+    const title=tusTitleInput.value.trim(), link=tusLinkInput.value.trim();
+    if(!title||!link) return alert("Nhập đủ Tên tus + Link nha 😭");
+    state.tus.unshift({title,link}); tusTitleInput.value=""; tusLinkInput.value="";
+    saveState(); renderTus(); alert("Đã thêm tus ✅");
+  });
 
-    function fillAdmin(){
-      if(!state.isAdmin) return;
-      fbInput.value = state.fbLink || "";
-      dcIdInput.value = state.discordId || "";
-      robloxInput.value = state.gameLinks.roblox || "";
-      valoInput.value = state.gameLinks.valorant || "";
-      tftInput.value = state.gameLinks.tft || "";
-      songInput.value = state.songName || "";
-      newPassInput.value = "";
-    }
+  btnAddTus.addEventListener("click", ()=>{
+    if(!state.isAdmin){ alert("Chỉ Admin mới thêm tus 🔒"); return; }
+    adminModal.classList.add("show");
+    setTimeout(()=>{ tusTitleInput.scrollIntoView({behavior:"smooth",block:"center"}); tusTitleInput.focus(); },120);
+  });
 
-    function renderAll(){
-      songNameEl.textContent = state.songName || "Nhạc";
-      applyTheme();
-      setAdminGate();
-      renderContacts();
-      renderIntro();
-      renderGames();
-      renderTus();
-      renderScheduleTabs();
-      renderScheduleDay();
-    }
+  btnAddSlot.addEventListener("click", ()=>{
+    if(!state.isAdmin) return alert("Bật Admin trước đã 🔒");
+    const day=daySelect.value, from=fromInput.value.trim(), to=toInput.value.trim(), task=taskInput.value.trim();
+    if(!day||!from||!to||!task) return alert("Nhập đủ: ngày + từ giờ + đến giờ + việc 😭");
+    if(!state.schedule[day]) state.schedule[day]=[];
+    state.schedule[day].push({from,to,task,type:"busy"});
+    fromInput.value=""; toInput.value=""; taskInput.value="";
+    activeDay=day; saveState(); renderScheduleTabs(); renderScheduleDay(); alert("Đã thêm lịch ✅");
+  });
 
-    // ====== EVENTS ======
-    btnTheme.addEventListener("click", ()=>{
-      state.theme = (state.theme === "light") ? "dark" : "light";
-      saveState();
-      applyTheme();
-    });
+  // Utils
+  function escapeHtml(s){ return String(s).replace(/[&<>\"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+  function escapeAttr(s){ return escapeHtml(s); }
 
-    btnAdmin.addEventListener("click", ()=>{
-      adminModal.classList.add("show");
-      adminPassInput.value = "";
-      setAdminGate();
-      if(state.isAdmin) fillAdmin();
-      setTimeout(()=>adminPassInput.focus(), 50);
-    });
+  // Init
+  renderAll();
 
-    adminClose.addEventListener("click", ()=> adminModal.classList.remove("show"));
-    adminModal.addEventListener("click",(e)=>{ if(e.target===adminModal) adminModal.classList.remove("show"); });
-
-    btnLogin.addEventListener("click", ()=>{
-      const pass = adminPassInput.value.trim();
-      if(pass === state.adminPass){
-        state.isAdmin = true;
-        saveState();
-        setAdminGate();
-        fillAdmin();
-        renderTus();
-        renderScheduleDay();
-        alert("Admin ON ✅");
-      }else{
-        alert("Sai mật khẩu 😭");
-      }
-    });
-
-    btnLogout.addEventListener("click", ()=>{
-      state.isAdmin = false;
-      saveState();
-      setAdminGate();
-      renderTus();
-      renderScheduleDay();
-      alert("Đã thoát Admin ✅");
-    });
-
-    btnSave.addEventListener("click", ()=>{
-      if(!state.isAdmin){ alert("Đăng nhập Admin trước 🔒"); return; }
-
-      state.fbLink = fbInput.value.trim();
-      state.discordId = dcIdInput.value.trim();
-      state.gameLinks.roblox = robloxInput.value.trim();
-      state.gameLinks.valorant = valoInput.value.trim();
-      state.gameLinks.tft = tftInput.value.trim();
-      state.songName = songInput.value.trim() || "Nhạc";
-
-      const np = newPassInput.value.trim();
-      if(np) state.adminPass = np;
-
-      saveState();
-      renderAll();
-      alert("Đã lưu ✅💾");
-    });
-
-    btnAddTusAdmin.addEventListener("click", ()=>{
-      if(!state.isAdmin){ alert("Đăng nhập Admin trước 🔒"); return; }
-      const title = tusTitleInput.value.trim();
-      const link = tusLinkInput.value.trim();
-      if(!title || !link){ alert("Nhập đủ tên + link 😭"); return; }
-      state.tus.unshift({ title, link });
-      tusTitleInput.value = "";
-      tusLinkInput.value = "";
-      saveState();
-      renderTus();
-      alert("Đã thêm tus ✅");
-    });
-
-    btnAddTus.addEventListener("click", ()=>{
-      if(!state.isAdmin){ alert("Chỉ Admin mới thêm tus 🔒"); return; }
-      adminModal.classList.add("show");
-      setAdminGate();
-      fillAdmin();
-      setTimeout(()=>{ tusTitleInput.scrollIntoView({behavior:"smooth", block:"center"}); tusTitleInput.focus(); },120);
-    });
-
-    btnAddSlot.addEventListener("click", ()=>{
-      if(!state.isAdmin){ alert("Đăng nhập Admin trước 🔒"); return; }
-      const day = daySelect.value;
-      const from = fromInput.value.trim();
-      const to = toInput.value.trim();
-      const task = taskInput.value.trim();
-      if(!from || !to || !task){ alert("Nhập đủ giờ + việc 😭"); return; }
-
-      state.schedule[day].push({ from, to, task });
-      fromInput.value = ""; toInput.value = ""; taskInput.value = "";
-
-      activeDay = day;
-      saveState();
-      renderScheduleTabs();
-      renderScheduleDay();
-      alert("Đã thêm lịch ✅");
-    });
-
-    daySelect.addEventListener("change", ()=>{
-      activeDay = daySelect.value;
-      renderScheduleTabs();
-      renderScheduleDay();
-    });
-
-    // chặn click khi link rỗng
-    [fbBtn, dcBtn].forEach(a=>{
-      a.addEventListener("click",(e)=>{
-        if(!a.href || a.href.endsWith("#")) e.preventDefault();
-      });
-    });
-
-    // INIT: mặc định dark + chữ trắng
-    if(state.theme !== "light") state.theme = "dark";
-    renderAll();
+  // chặn click link trống
+  [fbBtn, dcBtn].forEach(a=>a.addEventListener("click",(e)=>{ if(!a.href || a.href.endsWith("#")) e.preventDefault(); }));
   </script>
 </body>
 </html>
