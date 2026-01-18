@@ -121,23 +121,7 @@ body.light .pill{ background:rgba(255,255,255,.55); }
 }
 
 /* avatar + frame */
-.avatar-wrap{
-  position:absolute;
-  left:18px;
-  top:-48px;
-  width:108px;
-  height:108px;
-  z-index:5;
-}
-.avatar{
-  width:108px;
-  height:108px;
-  border-radius:50%;
-  object-fit:cover;
-  display:block;
-  border:4px solid rgba(255,255,255,.9);
-  background:#000;
-}
+
 .avatar-frame{
   pointer-events:none;
   position:absolute;
@@ -157,7 +141,24 @@ body.light .pill{ background:rgba(255,255,255,.55); }
   margin:0;
   font-size:28px;
   line-height:1.1;
-  font-weight:900;
+  font-w.avatar-wrap{
+  position:absolute;
+  left:18px;
+  top:-62px;          /* kéo avatar lên chút cho đẹp */
+  width:132px;        /* TO HƠN */
+  height:132px;       /* TO HƠN */
+  z-index:5;
+}
+
+.avatar{
+  width:132px;        /* TO HƠN */
+  height:132px;       /* TO HƠN */
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  border:4px solid rgba(255,255,255,.9);
+  background:#000;
+}eight:900;
   letter-spacing:.2px;
 }
 .subtitle{
